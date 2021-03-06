@@ -13,8 +13,7 @@ namespace UnitTests
         [Test]
         public void Test1()
         {
-            var p = new Person();
-            Assert.IsTrue(p.Name == "fucker");
+
         }
     }
 }

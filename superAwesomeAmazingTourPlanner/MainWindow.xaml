@@ -6,20 +6,47 @@
         xmlns:local="clr-namespace:superAwesomeAmazingTourPlanner"
         xmlns:ViewModels="clr-namespace:ViewModels;assembly=ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="900">
 
     <Window.DataContext>
-        <ViewModels:MainWindowViewModel></ViewModels:MainWindowViewModel>
+        <ViewModels:TourViewModel></ViewModels:TourViewModel>
     </Window.DataContext>
 
-    <!--/*<Window.Resources>
-        <ViewModels:MainWindowViewModel x:Key="MainViewModel"/>
-    </Window.Resources> */-->
-    
-    <StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition MinWidth="200" MaxWidth="300" Width="250"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        
+        <Label Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Center"> Enter a string: </Label>
+        <TextBox Grid.Column="2" Grid.Row="2" Name="InputField" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <Button Grid.Column="2" Grid.Row="3" Margin="20" Command="{Binding CreateTourCommand}" CommandParameter="{Binding ElementName=InputField, Path=Text}">Reverse String</Button>
+        <TextBlock Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center" Text="{Binding Name}"/>
+        
+
+
+    </Grid>
+
+    <!--<StackPanel>
         <Button Content="dummy button"></Button>
         <Button Content="reverse name" Command="{Binding ShowCommand, Mode=TwoWay}"></Button>
         <TextBox Text="{Binding Name, Mode=TwoWay}"></TextBox>
         <TextBlock Text="{Binding Name, Mode=TwoWay}"></TextBlock>
-    </StackPanel>
+    </StackPanel>-->
 </Window>
