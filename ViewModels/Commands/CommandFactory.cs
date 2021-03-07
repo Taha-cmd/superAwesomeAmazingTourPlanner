@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows.Input;
+using ViewModels;
+
+namespace ViewModels.Commands
+{
+    class CommandFactory
+    {
+        public static ICommand CreateCommand<CommandType>(object viewModel) where CommandType : ICommand
+        {
+            switch (typeof(CommandType).Name)
+            {
+                case nameof(CreateTourCommand): return new CreateTourCommand(viewModel);
+                /*case nameof(UpdateTourCommand): return new UpdateTourCommand(viewModel);
+                case nameof(DeleteTourCommand): return new DeleteTourCommand(viewModel);
+                case nameof(ImportTourCommand): return new ImportTourCommand(viewModel);
+                case nameof(ExportTourCommand): return new ExportTourCommand(viewModel);
+                case nameof(CopyTourCommand): return new CopyTourCommand(viewModel); */
+            }
+
+            throw new Exception($"command type [{typeof(CommandType).Name}] unknown");
+        }
+    }
+}

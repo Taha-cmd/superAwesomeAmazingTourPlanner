@@ -9,9 +9,9 @@ namespace ViewModels.Commands
     class CreateTourCommand : CommandBase, ICommand
     {
         private TourViewModel TourViewModel { get; set; }
-        public CreateTourCommand(TourViewModel tourViewModel)
+        public CreateTourCommand(object tourViewModel)
         {
-            TourViewModel = tourViewModel;
+            TourViewModel = (TourViewModel)tourViewModel;
             RegisterSubscriptionToPropertyChanged(TourViewModel, nameof(TourViewModel.Name));
         }
 
