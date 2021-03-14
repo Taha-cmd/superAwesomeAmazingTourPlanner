@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ViewModels
 {
@@ -9,33 +12,30 @@ namespace ViewModels
         public static Config Instance { get; private set; }
         static Config() => Instance = new Config();
 
-
         public string DataBaseConnectionString { get; private set; }
+        private const string configFilePath = "../../../config.json";
+
         private Config()
         {
-            var builder = new StringBuilder();
+            if (!File.Exists(configFilePath))
+                throw new Exception($"could not find config file at {configFilePath}");
 
-            builder.Append($"Server={UserEnvVar("TourPlanner_DB_Host")};");
-            builder.Append($"Username={UserEnvVar("TourPlanner_DB_User")};");
-            builder.Append($"Database={UserEnvVar("TourPlanner_DB_Name")};");
-            builder.Append($"Port={UserEnvVar("TourPlanner_DB_Port")};");
-            builder.Append($"Password={UserEnvVar("TourPlanner_DB_Password")};");
-            builder.Append($"SSLMode=Prefer;");
-
-            DataBaseConnectionString = builder.ToString();
+            LoadAndParseConfigFile(configFilePath);
         }
-
-        #region enviroment variables
-        // the following enviroment variables need to be set on a user level
-
-        // TourPlanner_DB_Host
-        // TourPlanner_DB_Port
-        // TourPlanner_DB_Name
-        // TourPlanner_DB_User
-        // TourPlanner_DB_Password
-        #endregion
-
-        private string UserEnvVar(string varName) => Environment.GetEnvironmentVariable(varName, EnvironmentVariableTarget.User);
         
+        private void LoadAndParseConfigFile(string configFilePath)
+        {
+            string jsonString = File.ReadAllText(configFilePath);
+            var configData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(jsonString);
+            var dbConf = configData["Database"];
+
+            DataBaseConnectionString = $"Server={dbConf["Server"]};" +
+                $"Username={dbConf["User"]};" +
+                $"Database={dbConf["Name"]};" +
+                $"Port={dbConf["Port"]};" +
+                $"Password={dbConf["Password"]};" +
+                $"SSLMode=Prefer";
+
+        }
     }
 }

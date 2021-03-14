@@ -1,0 +1,9 @@
+{
+	"Database": {
+		"Server": "localhost",
+		"Port": "5432",
+		"Name": "fuck",
+		"User": "fuck",
+		"Password": "fuck"
+	}
+}
