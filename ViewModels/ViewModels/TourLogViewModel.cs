@@ -7,6 +7,10 @@ namespace ViewModels.ViewModels
 {
     public class TourLogViewModel : ViewModelBase
     {
+        public TourLogViewModel()
+        {
+            ViewName = "TourLog";
+        }
         
     }
 }

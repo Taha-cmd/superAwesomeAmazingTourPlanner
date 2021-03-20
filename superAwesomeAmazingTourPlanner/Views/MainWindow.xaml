@@ -1,0 +1,68 @@
+﻿<Window x:Class="superAwesomeAmazingTourPlanner.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:superAwesomeAmazingTourPlanner.Views"
+        xmlns:ViewModels="clr-namespace:ViewModels.ViewModels;assembly=ViewModels"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1200">
+
+    <Window.DataContext>
+        <ViewModels:MainViewModel></ViewModels:MainViewModel>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="NavigationButton"
+               TargetType="Button">
+            <Setter Property="Margin" Value="5, 10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="MaxWidth" Value="250"/>
+            <Setter Property="MinWidth" Value="200"/>
+            <Setter Property="Background" Value="Khaki"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+
+        </Style>
+        
+        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel}">
+            <local:Home/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels:ToursViewModel}">
+            <local:Tours/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels:TourViewModel}">
+            <local:Tour/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels:CreateTourViewModel}">
+            <local:CreateTour/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Background="Azure">
+            <ItemsControl ItemsSource="{Binding ViewModels}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button 
+                            Content="{Binding ViewName}"
+                            Command="{Binding DataContext.ChangePageCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            CommandParameter="{Binding }"
+                            Style="{StaticResource NavigationButton}"
+                            />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+            
+        </StackPanel>
+
+        <ContentControl Background="Wheat" Grid.Column="1" Content="{Binding CurrentViewModel}"></ContentControl>
+    </Grid>
+</Window>

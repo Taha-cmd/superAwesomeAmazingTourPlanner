@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\config.json = ..\config.json
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "..\BusinessLogic\BusinessLogic.csproj", "{1FDB36C8-B22B-436E-8A25-F30B47221249}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "..\DataAccess\DataAccess.csproj", "{1261A07D-AEA2-4F10-9D47-324ADC5FD9D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,14 @@ Global
 		{5F110C5F-6911-4341-86FF-CA668311DA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F110C5F-6911-4341-86FF-CA668311DA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F110C5F-6911-4341-86FF-CA668311DA12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FDB36C8-B22B-436E-8A25-F30B47221249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FDB36C8-B22B-436E-8A25-F30B47221249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FDB36C8-B22B-436E-8A25-F30B47221249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FDB36C8-B22B-436E-8A25-F30B47221249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1261A07D-AEA2-4F10-9D47-324ADC5FD9D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1261A07D-AEA2-4F10-9D47-324ADC5FD9D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1261A07D-AEA2-4F10-9D47-324ADC5FD9D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1261A07D-AEA2-4F10-9D47-324ADC5FD9D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

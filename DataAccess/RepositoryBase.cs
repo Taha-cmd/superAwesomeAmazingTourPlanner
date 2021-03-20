@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ViewModels.Repositories
+namespace DataAccess
 {
     class RepositoryBase
     {
+        protected Database database;
     }
 }

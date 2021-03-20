@@ -6,11 +6,11 @@ using System.Windows.Input;
 using Models;
 using ViewModels.Commands;
 
-namespace ViewModels
+namespace ViewModels.ViewModels
 {
     public class TourViewModel : ViewModelBase
     {
-        private Tour tour = new Tour();
+        private readonly Tour tour = new Tour();
 
         #region Properties
         public string Name
@@ -22,6 +22,7 @@ namespace ViewModels
                 TriggerPropertyChangedEvent(nameof(Name));
             }
         }
+
 
         public string Description
         {
@@ -47,10 +48,18 @@ namespace ViewModels
 
         public ICommand CreateTourCommand { get; set; }
 
+        public TourViewModel(Tour tour)
+        {
+            this.tour = tour;
+            ViewName = "Tour";
+            CreateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
+        }
+
         public TourViewModel()
         {
+            ViewName = "Tour";
             CreateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
-            Console.WriteLine(Config.Instance.DataBaseConnectionString);
+
         }
     }
 }

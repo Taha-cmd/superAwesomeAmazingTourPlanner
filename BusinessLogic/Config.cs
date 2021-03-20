@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ViewModels
+namespace BusinessLogic
 {
     public class Config // singleton
     {
@@ -36,6 +36,9 @@ namespace ViewModels
                 $"Password={dbConf["Password"]};" +
                 $"SSLMode=Prefer";
 
+            Console.WriteLine(DataBaseConnectionString);
         }
+
+        
     }
 }
