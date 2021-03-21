@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Extensions;
 
 namespace BusinessLogic
 {
@@ -10,13 +11,16 @@ namespace BusinessLogic
         private ToursRepository toursRepo = new ToursRepository();
         public void CreateTour(Tour tour)
         {
+            if (!ValidateTour(tour))
+                throw new Exception("invalid tour!");
+
             Console.WriteLine("manager creating tour");
             toursRepo.SaveTour(tour);
         }
 
         public ToursManager()
         {
-            Console.WriteLine(Config.Instance.DataBaseConnectionString);
+            //Console.WriteLine(Config.Instance.DataBaseConnectionString);
         }
 
         public Tour GetTour(string name)
@@ -37,6 +41,17 @@ namespace BusinessLogic
         public Tour UpdateTour(string currentName, Tour tour)
         {
             throw new NotImplementedException();
+        }
+
+
+
+        private bool ValidateTour(Tour tour)
+        {
+            return
+                !tour.Name.IsEmptyOrWhiteSpace() &&
+                !tour.Description.IsEmptyOrWhiteSpace() &&
+                !tour.Distance.IsNull();
+
         }
     }
 }

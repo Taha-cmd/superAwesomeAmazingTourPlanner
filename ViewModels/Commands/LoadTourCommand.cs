@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
@@ -16,9 +17,8 @@ namespace ViewModels.Commands
         public bool CanExecute(object parameter) => true;
         public void Execute(object parameter)
         {
-            string tourName = (string)parameter;
-            Console.WriteLine(tourName);
-            mainViewModel.LoadTourByName(tourName);
+            Console.WriteLine($"MainViewModel with id ({mainViewModel.GetHashCode()}) loading tour: " + ((Tour)parameter).Name);
+            mainViewModel.LoadTour((Tour)parameter);
         }
     }
 }

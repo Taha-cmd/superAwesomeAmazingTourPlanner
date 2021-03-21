@@ -24,5 +24,10 @@ namespace ViewModels.ViewModels
         public ToursManager Manager { get; private set; } = Application.GetToursManager();
         public string ViewName { get; protected set; }
         public string Title { get; protected set; }
+
+        public virtual void Init(object parameter)
+        {
+            // do nothing as default behavior
+        }
     }
 }

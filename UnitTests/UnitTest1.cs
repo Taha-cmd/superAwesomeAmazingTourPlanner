@@ -1,5 +1,8 @@
+using Models;
 using NUnit.Framework;
+using System;
 using ViewModels;
+using ViewModels.ViewModels;
 
 namespace UnitTests
 {
@@ -11,8 +14,11 @@ namespace UnitTests
         }
 
         [Test]
-        public void Test1()
+        public void TestTourCreationValidation()
+
         {
+            var createTourViewModel = new CreateTourViewModel();
+            Assert.Throws<Exception>(() => createTourViewModel.Manager.CreateTour(new Tour()));
 
         }
     }

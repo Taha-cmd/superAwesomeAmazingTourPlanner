@@ -15,7 +15,18 @@ namespace ViewModels.ViewModels
     {
         public ObservableCollection<Tour> Data { get; } // data to be displayed
         private List<Tour> items; // actual data
-        public ICommand LoadTourCommand { get; }
+        private Tour selectedItem;
+
+        public Tour SelectedItem
+        {
+            get => selectedItem;
+            set
+            {
+                selectedItem = value;
+                TriggerPropertyChangedEvent(nameof(SelectedItem));
+            }
+        }
+
         public ICommand SearchCommand { get; }
 
 
@@ -24,7 +35,8 @@ namespace ViewModels.ViewModels
             ViewName = "Tours";
             Data = new ObservableCollection<Tour>();
             SearchCommand = CommandFactory.CreateCommand<SearchCommand>(this);
-            //LoadTourCommand = CommandFactory.CreateCommand<LoadTourCommand>(this);
+
+             
             LoadFakeTours();
         }
 
@@ -39,6 +51,7 @@ namespace ViewModels.ViewModels
         {
             items = Manager.GetTours();
             items.ForEach(item => Data.Add(item));
+            SelectedItem = items[0];
         }
         
         public void FilterTours(string filter)

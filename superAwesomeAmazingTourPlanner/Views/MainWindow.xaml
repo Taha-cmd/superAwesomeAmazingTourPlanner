@@ -8,10 +8,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1200">
 
-    <Window.DataContext>
-        <ViewModels:MainViewModel></ViewModels:MainViewModel>
-    </Window.DataContext>
-
     <Window.Resources>
         <Style x:Key="NavigationButton"
                TargetType="Button">
@@ -26,18 +22,7 @@
 
         </Style>
         
-        <DataTemplate DataType="{x:Type ViewModels:HomeViewModel}">
-            <local:Home/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels:ToursViewModel}">
-            <local:Tours/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels:TourViewModel}">
-            <local:Tour/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type ViewModels:CreateTourViewModel}">
-            <local:CreateTour/>
-        </DataTemplate>
+
     </Window.Resources>
 
     <Grid>
@@ -47,12 +32,12 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0" Background="Azure">
-            <ItemsControl ItemsSource="{Binding ViewModels}">
+            <ItemsControl DataContext="{StaticResource MainViewModel}" ItemsSource="{Binding ViewModels}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button 
+                        <Button
                             Content="{Binding ViewName}"
-                            Command="{Binding DataContext.ChangePageCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            Command="{Binding ChangePageCommand, Source={StaticResource MainViewModel}}"
                             CommandParameter="{Binding }"
                             Style="{StaticResource NavigationButton}"
                             />
@@ -63,6 +48,6 @@
             
         </StackPanel>
 
-        <ContentControl Background="Wheat" Grid.Column="1" Content="{Binding CurrentViewModel}"></ContentControl>
+        <ContentControl DataContext="{StaticResource MainViewModel}" Background="Wheat" Grid.Column="1" Content="{Binding CurrentViewModel}"></ContentControl>
     </Grid>
 </Window>

@@ -26,13 +26,11 @@ namespace ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            //return createTourViewModel
-            //    .GetType()
-            //    .GetProperties()
-            //    .ToList()
-            //    .All(el => !el.GetValue(el).IsNull());
-
-            return true;
+            return
+                !createTourViewModel.Name.IsEmptyOrWhiteSpace() &&
+                !createTourViewModel.StartingArea.IsEmptyOrWhiteSpace() &&
+                !createTourViewModel.TargetArea.IsEmptyOrWhiteSpace() &&
+                !createTourViewModel.Description.IsEmptyOrWhiteSpace();
         }
         public void Execute(object parameter)
         {

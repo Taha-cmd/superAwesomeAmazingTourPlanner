@@ -11,7 +11,7 @@ namespace BusinessLogic
         {
             return new List<Tour>()
             {
-                new Tour() { Name = "tour1", Description = "very nice", Distance = 10 },
+                new Tour() { Name = "tour1", StartingArea="place1", TargetArea="place2", Description = "very nice", Distance = 10 },
                 new Tour() { Name = "tour2", Description = "very very nice", Distance = 20 },
                 new Tour() { Name = "tour3", Description = "even more nice", Distance = 30 }
             };

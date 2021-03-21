@@ -88,6 +88,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\DataGridTextColumnValueExtractor.cs" />
+    <Compile Include="Converters\MultiParamsConverter.cs" />
     <Compile Include="Converters\StatusToColorConverter.cs" />
     <Compile Include="Converters\StatusToTextConverter.cs" />
     <Compile Include="Views\CreateTour.xaml.cs">
@@ -101,9 +103,6 @@
     </Compile>
     <Compile Include="Views\Tours.xaml.cs">
       <DependentUpon>Tours.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\CreateTour.xaml">
       <SubType>Designer</SubType>
@@ -130,10 +129,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tours.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

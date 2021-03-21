@@ -14,13 +14,13 @@ namespace ViewModels.Commands
             {
                 case nameof(CreateTourCommand): return new CreateTourCommand(viewModel);
                 case nameof(ChangePageCommand): return new ChangePageCommand(viewModel);
-                case nameof(LoadTourCommand):   return new LoadTourCommand(viewModel);
                 case nameof(SearchCommand):     return new SearchCommand(viewModel);
-                /*case nameof(UpdateTourCommand): return new UpdateTourCommand(viewModel);
-                case nameof(DeleteTourCommand): return new DeleteTourCommand(viewModel);
-                case nameof(ImportTourCommand): return new ImportTourCommand(viewModel);
-                case nameof(ExportTourCommand): return new ExportTourCommand(viewModel);
-                case nameof(CopyTourCommand): return new CopyTourCommand(viewModel); */
+                case nameof(LoadTourCommand): return new LoadTourCommand(viewModel);
+                    /*case nameof(UpdateTourCommand): return new UpdateTourCommand(viewModel);
+                    case nameof(DeleteTourCommand): return new DeleteTourCommand(viewModel);
+                    case nameof(ImportTourCommand): return new ImportTourCommand(viewModel);
+                    case nameof(ExportTourCommand): return new ExportTourCommand(viewModel);
+                    case nameof(CopyTourCommand): return new CopyTourCommand(viewModel); */
             }
 
             throw new Exception($"command type [{typeof(CommandType).Name}] unknown");

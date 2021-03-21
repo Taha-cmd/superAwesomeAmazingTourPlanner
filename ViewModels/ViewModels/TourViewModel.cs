@@ -46,20 +46,32 @@ namespace ViewModels.ViewModels
 
         #endregion
 
-        public ICommand CreateTourCommand { get; set; }
-
         public TourViewModel(Tour tour)
         {
             this.tour = tour;
             ViewName = "Tour";
-            CreateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
         }
 
         public TourViewModel()
         {
             ViewName = "Tour";
-            CreateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
+        }
 
+        private string param;
+        public string Parameter
+        {
+            get => param;
+            set
+            {
+                param = value;
+                TriggerPropertyChangedEvent(nameof(Parameter));
+            }
+        }
+
+        public override void Init(object parameter)
+        {
+            Console.WriteLine("tour init, name: " + parameter.ToString());
+            Console.WriteLine("param prop: " + Parameter);
         }
     }
 }

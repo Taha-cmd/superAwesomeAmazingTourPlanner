@@ -1,4 +1,5 @@
 ﻿using BusinessLogic;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,8 +16,7 @@ namespace ViewModels.ViewModels
         private ICommand loadTourCommand;
         private List<ViewModelBase> viewModels;
         private ViewModelBase currentViewModel;
-
-        
+        private object parameter;
 
         public MainViewModel()
         {
@@ -24,15 +24,15 @@ namespace ViewModels.ViewModels
             loadTourCommand = CommandFactory.CreateCommand<LoadTourCommand>(this);
 
             viewModels = new List<ViewModelBase>() 
-            { 
-                new HomeViewModel(), 
+            {
+                new HomeViewModel(),
                 new ToursViewModel(),
                 new CreateTourViewModel()
             };
 
             CurrentViewModel = viewModels[0];
         }
-        
+
         public List<ViewModelBase> ViewModels { get => viewModels; }
         public ICommand ChangePageCommand { get => changePageCommand; }
         public ICommand LoadTourCommand { get => loadTourCommand; }
@@ -46,9 +46,19 @@ namespace ViewModels.ViewModels
             }
         }
 
-        public void LoadTourByName(string name)
+        public object Parameter
         {
-            CurrentViewModel = new TourViewModel(new Models.Tour() { Name = name });           
+            get => parameter;
+            set
+            {
+                parameter = value;
+                TriggerPropertyChangedEvent(nameof(Parameter));
+            }
+        }
+
+        public void LoadTour(Tour tour)
+        {
+            CurrentViewModel = new TourViewModel(tour);
         }
     }
 }

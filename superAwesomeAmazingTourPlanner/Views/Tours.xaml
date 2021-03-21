@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:superAwesomeAmazingTourPlanner.Views"
              xmlns:ViewModels="clr-namespace:ViewModels.ViewModels;assembly=ViewModels"
+             xmlns:Converters="clr-namespace:superAwesomeAmazingTourPlanner.Converters"
+             xmlns:Commands="clr-namespace:ViewModels.Commands;assembly=ViewModels"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,12 +16,14 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type ViewModels:TourViewModel}">
-            <local:Tour/>
-        </DataTemplate>
-        <ViewModels:MainViewModel x:Key="MainViewModel">
+        <ViewModels:TourViewModel x:Key="Tour">
 
-        </ViewModels:MainViewModel>
+        </ViewModels:TourViewModel>
+        
+        
+
+        <Converters:DataGridTextColumnValueExtractor x:Key="DataGridTextColumnValueExtractor"/>
+
 
         <Style TargetType="DataGridCell"  x:Key="CellStyle">
             <Setter Property="Padding" Value="10"/>
@@ -38,7 +42,7 @@
             <Setter Property="Background" Value="Cornsilk"/>
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Padding" Value="10"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontSize" Value="18"/>
         </Style>
 
         <Style TargetType="DataGrid">
@@ -101,45 +105,58 @@
             </i:Interaction.Triggers>
         </TextBox>
 
-        <DataGrid ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}" 
+        <DataGrid
+            x:Name="DataGrid"
+            ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}" 
             CellStyle="{StaticResource CellStyle}"
             Margin="10" Cursor="Hand"
             AlternatingRowBackground="AliceBlue" 
             IsReadOnly="True" 
-            CanUserAddRows="False" 
-            AutoGenerateColumns="False" 
+            CanUserAddRows="False"
+            CanUserSortColumns="True"
+            SelectionMode="Single"
+            AutoGenerateColumns="False"
+            SelectedItem="{Binding SelectedItem}"
             ItemsSource="{Binding Data}">
 
             <DataGrid.Columns>
-                
-                <DataGridTemplateColumn Header="Name">
+
+                <DataGridTemplateColumn x:Name="dataGridTextColumn" Header="Name">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock>
-                                <Hyperlink CommandParameter="{Binding Name}" 
-                                    Command="{Binding LoadTourCommand, Mode=OneWay}" CommandTarget="{Binding Mode=OneWay, Source={StaticResource MainViewModel}}">
-                                    <TextBlock Text="{Binding Name}"/>
-                                </Hyperlink>
-                            </TextBlock>
+                            <TextBlock  x:Name="NameTextBlock" Text="{Binding Name}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
-                <DataGridTextColumn Header="Distance" Binding="{Binding Distance}"/>
+
+                <!--<DataGridTextColumn x:Name="NameDataGridTextColumn" Binding="{Binding Name}" Header="Name"/>-->
+                <DataGridTextColumn Header="From" Binding="{Binding StartingArea}"/>
+                <DataGridTextColumn Header="To" Binding="{Binding TargetArea}"/>
+                <DataGridTextColumn Header="Distance (km)" Binding="{Binding Distance}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button 
-                                    Command="{Binding LoadTourCommand}"
-                                    CommandParameter="{Binding ElementName=dataGridTextColumn, Path=Binding}"
-                                    Style="{StaticResource RoundedButton}">
-                                 click me</Button>
+                                    Command="{Binding LoadTourCommand, Mode=OneWay, Source={StaticResource MainViewModel}}"
+                                    CommandParameter="{Binding }"
+                                    Style="{StaticResource RoundedButton}"
+                                    
+                                   >
+                                Details
+
+
+                                
+                            
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
             </DataGrid.Columns>
 
         </DataGrid>
+        
+        
 
     </StackPanel>
 </UserControl>
