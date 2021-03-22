@@ -22,7 +22,6 @@
         
         
 
-        <Converters:DataGridTextColumnValueExtractor x:Key="DataGridTextColumnValueExtractor"/>
 
 
         <Style TargetType="DataGridCell"  x:Key="CellStyle">
@@ -139,14 +138,8 @@
                             <Button 
                                     Command="{Binding LoadTourCommand, Mode=OneWay, Source={StaticResource MainViewModel}}"
                                     CommandParameter="{Binding }"
-                                    Style="{StaticResource RoundedButton}"
-                                    
-                                   >
+                                    Style="{StaticResource RoundedButton}">
                                 Details
-
-
-                                
-                            
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

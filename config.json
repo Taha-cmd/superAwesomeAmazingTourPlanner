@@ -5,5 +5,10 @@
 		"Name": "fuck",
 		"User": "fuck",
 		"Password": "fuck"
+	},
+
+	"LocalStorage": {
+		"Images": "../../../LocalStorage/Images",
+		"Exports": "../../../LocalStorage/Exports"
 	}
 }

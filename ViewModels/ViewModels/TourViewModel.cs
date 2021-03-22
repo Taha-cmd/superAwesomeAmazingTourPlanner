@@ -10,7 +10,7 @@ namespace ViewModels.ViewModels
 {
     public class TourViewModel : ViewModelBase
     {
-        private readonly Tour tour = new Tour();
+        private readonly Tour tour;
 
         #region Properties
         public string Name
@@ -55,23 +55,6 @@ namespace ViewModels.ViewModels
         public TourViewModel()
         {
             ViewName = "Tour";
-        }
-
-        private string param;
-        public string Parameter
-        {
-            get => param;
-            set
-            {
-                param = value;
-                TriggerPropertyChangedEvent(nameof(Parameter));
-            }
-        }
-
-        public override void Init(object parameter)
-        {
-            Console.WriteLine("tour init, name: " + parameter.ToString());
-            Console.WriteLine("param prop: " + Parameter);
         }
     }
 }

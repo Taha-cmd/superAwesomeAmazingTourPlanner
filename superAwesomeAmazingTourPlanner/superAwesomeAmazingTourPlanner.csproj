@@ -88,7 +88,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\DataGridTextColumnValueExtractor.cs" />
     <Compile Include="Converters\MultiParamsConverter.cs" />
     <Compile Include="Converters\StatusToColorConverter.cs" />
     <Compile Include="Converters\StatusToTextConverter.cs" />

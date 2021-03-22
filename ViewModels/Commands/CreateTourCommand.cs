@@ -36,15 +36,16 @@ namespace ViewModels.Commands
         {
             try
             {
-                throw new Exception();
+                //throw new Exception();
 
                 createTourViewModel.Manager.CreateTour
                     (
                         new Tour() 
                         { 
                             Description = createTourViewModel.Description, 
-                            Distance = createTourViewModel.Distnace, 
-                            Name = createTourViewModel.Name 
+                            Name = createTourViewModel.Name,
+                            StartingArea = createTourViewModel.StartingArea,
+                            TargetArea = createTourViewModel.TargetArea
                         }
                     );
 

@@ -8,8 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid>
-        <TextBlock Text="{Binding Name}" Background="Gainsboro"/>
-        <!--<TextBlock Text="tour page" Background="Wheat"/>-->
-    </Grid>
+    <StackPanel>
+        <TextBlock Style="{StaticResource Title}" Text="{Binding Name}"/>
+        
+    </StackPanel>
 </UserControl>

@@ -8,6 +8,7 @@ using ViewModels.Commands;
 using System.Linq;
 using Extensions;
 using BusinessLogic;
+using BusinessLogic.CustomEventArgs;
 
 namespace ViewModels.ViewModels
 {
@@ -15,18 +16,6 @@ namespace ViewModels.ViewModels
     {
         public ObservableCollection<Tour> Data { get; } // data to be displayed
         private List<Tour> items; // actual data
-        private Tour selectedItem;
-
-        public Tour SelectedItem
-        {
-            get => selectedItem;
-            set
-            {
-                selectedItem = value;
-                TriggerPropertyChangedEvent(nameof(SelectedItem));
-            }
-        }
-
         public ICommand SearchCommand { get; }
 
 
@@ -35,8 +24,6 @@ namespace ViewModels.ViewModels
             ViewName = "Tours";
             Data = new ObservableCollection<Tour>();
             SearchCommand = CommandFactory.CreateCommand<SearchCommand>(this);
-
-             
             LoadFakeTours();
         }
 
@@ -44,14 +31,12 @@ namespace ViewModels.ViewModels
         {
             items.Add(tour);
             Data.Add(tour);
-            Manager.CreateTour(tour);
         }
 
         private void LoadFakeTours()
         {
             items = Manager.GetTours();
             items.ForEach(item => Data.Add(item));
-            SelectedItem = items[0];
         }
         
         public void FilterTours(string filter)
