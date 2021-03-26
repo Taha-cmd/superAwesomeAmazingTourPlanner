@@ -5,15 +5,18 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ViewModels
+namespace BusinessLogic
 {
     public class Config // singleton
     {
         public static Config Instance { get; private set; }
         static Config() => Instance = new Config();
 
-        public string DataBaseConnectionString { get; private set; }
         private const string configFilePath = "../../../config.json";
+
+        public string DataBaseConnectionString { get; private set; }
+        public string ImagesFolderPath { get; private set; }
+        public string ExportsFolderPath { get; private set; }
 
         private Config()
         {
@@ -36,6 +39,14 @@ namespace ViewModels
                 $"Password={dbConf["Password"]};" +
                 $"SSLMode=Prefer";
 
+            ImagesFolderPath = configData["LocalStorage"]["Images"];
+            ExportsFolderPath = configData["LocalStorage"]["Exports"];
+
+            Console.WriteLine(DataBaseConnectionString);
+            Console.WriteLine(ImagesFolderPath);
+            Console.WriteLine(ExportsFolderPath);
         }
+
+        
     }
 }
