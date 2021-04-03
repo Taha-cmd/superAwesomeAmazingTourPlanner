@@ -16,37 +16,6 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <ViewModels:TourViewModel x:Key="Tour">
-
-        </ViewModels:TourViewModel>
-        
-        
-
-
-
-        <Style TargetType="DataGridCell"  x:Key="CellStyle">
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style TargetType="DataGridColumnHeader" x:Key="ColumnHeaderStyle">
-            <Setter Property="Background" Value="Cornsilk"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="FontSize" Value="18"/>
-        </Style>
-
-        <Style TargetType="DataGrid">
-            <Setter Property="GridLinesVisibility" Value="None"/>
-        </Style>
 
         <Style TargetType="Button" x:Key="TourLinkButton">
             <Setter Property="Background" Value="Transparent"/>
@@ -56,34 +25,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- this style was copied and modified from: https://gist.github.com/pocari/ef7778f1d67f568001e8-->
-        <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
-            <Style.Setters>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border x:Name="button" CornerRadius="5" Background="Transparent">
-                                <TextBlock  Text="{TemplateBinding Button.Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="button" Property="BorderBrush" Value="#FF5798d8" />
-                                    <Setter TargetName="button" Property="Background"  Value="Green"/>
-                                    <Setter Property="Foreground" Value="White" />
-                                </Trigger>
-                                <Trigger Property="IsFocused" Value="True">
-                                    <Setter TargetName="button" Property="BorderBrush" Value="#FF282828" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter TargetName="button" Property="Opacity" Value="0.7" />
-                                    <Setter Property="Foreground" Value="Gray" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style.Setters>
-        </Style>
+
     </UserControl.Resources>
 
 
@@ -115,7 +57,6 @@
             CanUserSortColumns="True"
             SelectionMode="Single"
             AutoGenerateColumns="False"
-            SelectedItem="{Binding SelectedItem}"
             ItemsSource="{Binding Data}">
 
             <DataGrid.Columns>

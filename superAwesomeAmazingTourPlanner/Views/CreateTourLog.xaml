@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="superAwesomeAmazingTourPlanner.Views.CreateTour"
+﻿<UserControl x:Class="superAwesomeAmazingTourPlanner.Views.CreateTourLog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,16 +8,13 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Converters="clr-namespace:superAwesomeAmazingTourPlanner.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="1000" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800">
 
-    <UserControl.DataContext>
-        <ViewModels:CreateTourViewModel/>
-    </UserControl.DataContext>
 
- 
+
     <StackPanel Background="Wheat">
 
-        <TextBlock Style="{StaticResource Title}" Text="{Binding Title}"/>
+        <TextBlock Style="{StaticResource Title}" Text="{Binding TourName, StringFormat='Create a log for tour: {0}'}"/>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -38,35 +35,36 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            
-            <Label Grid.Column="1" Grid.Row="0"  Style="{StaticResource Label}" Content="Name"/>
-            <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>
 
-            <Label Grid.Column="1" Grid.Row="1"  Style="{StaticResource Label}" Content="Starting Area"/>
-            <TextBox  Grid.Column="2" Grid.Row="1" Text="{Binding StartingArea, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>
+            <Label Grid.Column="1" Grid.Row="0"  Style="{StaticResource Label}" Content="When did you go?"/>
+            <DatePicker Grid.Column="2" Grid.Row="0" SelectedDate="{Binding DateTime, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Label Grid.Column="1" Grid.Row="2"  Style="{StaticResource Label}" Content="Target Area"/>
-            <TextBox  Grid.Column="2" Grid.Row="2" Text="{Binding TargetArea, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>
+            <Label Grid.Column="1" Grid.Row="1"  Style="{StaticResource Label}" Content="How was it?"/>
+            <TextBox  Grid.Column="2" Grid.Row="1" Text="{Binding Report, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}" Height="150"/>
+
+            <Label Grid.Column="1" Grid.Row="2"  Style="{StaticResource Label}" Content="How long did it take?"/>
+            <TextBox  Grid.Column="2" Grid.Row="2" Text="{Binding  TotalTime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>
 
             <!--<Label Grid.Column="1" Grid.Row="3"  Style="{StaticResource Label}" Content="Distance (km)"/>
             <TextBox  Grid.Column="2" Grid.Row="3" Text="{Binding Distnace}" Style="{StaticResource InputField}"/>-->
 
-            <Label Grid.Column="1" Grid.Row="4"  Style="{StaticResource Label}" Content="Description"/>
-            <TextBox  Grid.Column="2" Grid.Row="4" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}" Height="250"/>
+            <Label Grid.Column="1" Grid.Row="4"  Style="{StaticResource Label}" Content="Rating"/>
+            <TextBox  Grid.Column="2" Grid.Row="4" Text="{Binding Rating, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>
 
             <Button Grid.Column="1" Grid.Row="5" 
-                    Command="{Binding CreateTourCommand}"
+                    Command="{Binding CreateTourLogCommand}"
+                    CommandParameter="{Binding}"
                     Style="{StaticResource SubmitButton}" 
-                    Content="Create Tour"/>
+                    Content="Create Log"/>
 
-            <TextBlock
+             <!--<TextBlock
                 Foreground="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
                 Grid.ColumnSpan="3"
                 Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}"
-                Style="{StaticResource Status}" Grid.Column="1" Grid.Row="6"/>
+                Style="{StaticResource Status}" Grid.Column="1" Grid.Row="6"/> -->
         </Grid>
-        
-        
+
+
 
     </StackPanel>
 </UserControl>

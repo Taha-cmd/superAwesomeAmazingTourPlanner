@@ -94,6 +94,9 @@
     <Compile Include="Views\CreateTour.xaml.cs">
       <DependentUpon>CreateTour.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CreateTourLog.xaml.cs">
+      <DependentUpon>CreateTourLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
@@ -104,6 +107,10 @@
       <DependentUpon>Tours.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\CreateTour.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateTourLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

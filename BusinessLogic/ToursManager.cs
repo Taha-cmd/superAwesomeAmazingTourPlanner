@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Text;
 using Extensions;
 using BusinessLogic.CustomEventArgs;
+using System.Linq;
 
 namespace BusinessLogic
 {
     public class ToursManager
     {
-        private ToursRepository toursRepo = new ToursRepository();
+        private readonly ToursRepository toursRepo = new ToursRepository();
         public ToursManager()
         {
             Console.WriteLine(Config.Instance.DataBaseConnectionString);
@@ -33,7 +34,9 @@ namespace BusinessLogic
 
         public List<Tour> GetTours(int? limit = null)
         {
-            return (List<Tour>)toursRepo.GetTours();
+            var tours = (List<Tour>)(toursRepo.GetTours());
+            tours.ForEach(tour => tour.Logs = (List<TourLog>)toursRepo.GetLogs(tour.Name));
+            return tours;
         }
 
         public void DeleteTour(string name)
@@ -46,8 +49,6 @@ namespace BusinessLogic
             throw new NotImplementedException();
         }
         #endregion
-
-
         #region probably useless stuff
         public event EventHandler<TourAddedEventArgs> TourAdded;
         public event EventHandler<TourDeletedEventArgs> TourDeleted;
@@ -60,7 +61,17 @@ namespace BusinessLogic
 
         public void TriggerTourDeletedEvent(Tour tour) => TourDeleted?.Invoke(this, new TourDeletedEventArgs(tour));
         public void TriggerTourAddedEvent(Tour tour) => TourAdded?.Invoke(this, new TourAddedEventArgs(tour));
-        #endregion 
+        #endregion
+        #region TourLog Crud Methods
+        public void CreateTourLog(string tourName, TourLog log)
+        {
+            if (!ValidateTourLog(log))
+                throw new Exception("invalid tour log!");
+
+            Console.WriteLine("saving tour log for tour " + tourName);
+
+        }
+        #endregion
 
         public bool ValidateTour(Tour tour)
         {
@@ -69,6 +80,11 @@ namespace BusinessLogic
                 !tour.Description.IsEmptyOrWhiteSpace() &&
                 !tour.StartingArea.IsEmptyOrWhiteSpace() &&
                 !tour.TargetArea.IsEmptyOrWhiteSpace();
+        }
+
+        public bool ValidateTourLog(TourLog log)
+        {
+            return true;
         }
     }
 }

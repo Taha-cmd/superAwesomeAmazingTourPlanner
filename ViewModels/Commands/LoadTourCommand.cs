@@ -15,10 +15,6 @@ namespace ViewModels.Commands
             this.mainViewModel = (MainViewModel)parameter;
         }
         public bool CanExecute(object parameter) => true;
-        public void Execute(object parameter)
-        {
-            Console.WriteLine($"MainViewModel with id ({mainViewModel.GetHashCode()}) loading tour: " + ((Tour)parameter).Name);
-            mainViewModel.LoadTour((Tour)parameter);
-        }
+        public void Execute(object parameter) => mainViewModel.LoadTour((Tour)parameter);
     }
 }

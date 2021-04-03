@@ -51,7 +51,7 @@ namespace ViewModels.Commands
 
                 createTourViewModel.Status = Status.Success;
                 // after a successfull creation, clear the input fields
-                createTourViewModel.clearProperties();
+                createTourViewModel.ClearProperties();
             }
             catch(Exception ex)
             {

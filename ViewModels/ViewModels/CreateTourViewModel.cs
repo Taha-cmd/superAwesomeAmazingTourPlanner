@@ -87,7 +87,7 @@ namespace ViewModels.ViewModels
 
         #endregion
 
-        internal void clearProperties()
+        internal void ClearProperties()
         {
             Name = string.Empty;
             StartingArea = string.Empty;

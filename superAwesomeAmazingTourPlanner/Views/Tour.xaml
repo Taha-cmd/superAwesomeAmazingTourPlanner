@@ -8,8 +8,86 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <StackPanel>
+    <ScrollViewer Padding="20, 10" Background="AliceBlue">
+    <StackPanel >
         <TextBlock Style="{StaticResource Title}" Text="{Binding Name}"/>
+
         
-    </StackPanel>
+            <Label Style="{StaticResource Label}" Content="Description: "/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding Description}"/>
+            </Border>
+            
+
+            <Label Style="{StaticResource Label}" Content="From: "/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding StartingArea}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="To: "/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding TargetArea}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="Distance: "/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding Distance}"/>
+            </Border>
+        
+            <!-- picture here -->
+
+
+            <TextBlock Style="{StaticResource Title}" Text="Logs"/>
+            <DataGrid
+                x:Name="DataGrid"
+                ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}" 
+                CellStyle="{StaticResource CellStyle}"
+                Margin="10" Cursor="Hand"
+                AlternatingRowBackground="AliceBlue" 
+                IsReadOnly="True" 
+                CanUserAddRows="False"
+                CanUserSortColumns="True"
+                SelectionMode="Single"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Logs}">
+
+                <DataGrid.Columns>
+                    
+                    <DataGridTextColumn Header="Date" Binding="{Binding DateTime}"/>
+                    <DataGridTextColumn Header="Time" Binding="{Binding TotalTime}"/>
+                    <DataGridTextColumn Header="Rating" Binding="{Binding Rating}"/>
+                    
+                                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button 
+                                    Command="{Binding LoadLogCommand, Mode=OneWay, Source={StaticResource MainViewModel}}"
+                                    CommandParameter="{Binding }"
+                                    Style="{StaticResource RoundedButton}">
+                                Details
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                    
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <TextBlock Style="{StaticResource Title}" Text="Have you been on this tour? tell what what you think!"/>
+            <Button 
+                    MinWidth="200"
+                    MaxWidth="300"
+                    Style="{StaticResource SubmitButton}" 
+                    Command="{Binding LoadTourLogFormCommand, Source={StaticResource MainViewModel}}"
+                    CommandParameter="{Binding }"
+                    Content="Create Tour Log"
+                    />
+
+
+
+
+
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

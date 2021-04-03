@@ -21,5 +21,19 @@ namespace BusinessLogic
         {
             Console.WriteLine("saving tour to database");
         }
+
+        public void SaveTourLog(string tourName, TourLog log)
+        {
+            Console.WriteLine("saving tour log to database");
+        }
+
+        public IEnumerable<TourLog> GetLogs(string tourName)
+        {
+            return new List<TourLog>()
+            {
+                new TourLog(){ DateTime = DateTime.Now, Rating= "very good", Report= "very nice tour", TotalTime =3},
+                new TourLog(){ Rating= "sucks", Report="it was rainy", TotalTime=4}
+            };
+        }
     }
 }

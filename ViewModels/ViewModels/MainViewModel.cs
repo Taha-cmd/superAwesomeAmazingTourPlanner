@@ -14,6 +14,8 @@ namespace ViewModels.ViewModels
 
         private ICommand changePageCommand;
         private ICommand loadTourCommand;
+        private ICommand loadTourLogFormCommand;
+        private ICommand loadLogCommand;
         private List<ViewModelBase> viewModels;
         private ViewModelBase currentViewModel;
         private object parameter;
@@ -22,6 +24,8 @@ namespace ViewModels.ViewModels
         {
             changePageCommand = CommandFactory.CreateCommand<ChangePageCommand>(this);
             loadTourCommand = CommandFactory.CreateCommand<LoadTourCommand>(this);
+            loadTourLogFormCommand = CommandFactory.CreateCommand<LoadTourLogFormCommand>(this);
+            loadLogCommand = CommandFactory.CreateCommand<LoadLogCommand>(this);
 
             viewModels = new List<ViewModelBase>() 
             {
@@ -36,6 +40,8 @@ namespace ViewModels.ViewModels
         public List<ViewModelBase> ViewModels { get => viewModels; }
         public ICommand ChangePageCommand { get => changePageCommand; }
         public ICommand LoadTourCommand { get => loadTourCommand; }
+        public ICommand LoadTourLogFormCommand { get => loadTourLogFormCommand; }
+        public ICommand LoadLogCommand { get => loadLogCommand; }
         public ViewModelBase CurrentViewModel
         {
             get => currentViewModel;
@@ -58,7 +64,13 @@ namespace ViewModels.ViewModels
 
         public void LoadTour(Tour tour)
         {
+            Console.WriteLine($"MainViewModel with id ({this.GetHashCode()}) loading tour: " + tour.Name);
             CurrentViewModel = new TourViewModel(tour);
+        }
+
+        public void LoadTourLogForm(string tourName)
+        {
+            CurrentViewModel = new CreateTourLogViewModel(tourName);
         }
     }
 }

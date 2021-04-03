@@ -12,7 +12,7 @@ namespace ViewModels.ViewModels
     {
         private readonly Tour tour;
 
-        #region Properties
+        #region Tour Properties
         public string Name
         {
             get => tour.Name;
@@ -22,7 +22,6 @@ namespace ViewModels.ViewModels
                 TriggerPropertyChangedEvent(nameof(Name));
             }
         }
-
 
         public string Description
         {
@@ -44,16 +43,36 @@ namespace ViewModels.ViewModels
             }
         }
 
+        public string StartingArea
+        {
+            get => tour.StartingArea;
+            set
+            {
+                tour.StartingArea = value;
+                TriggerPropertyChangedEvent(nameof(StartingArea));
+            }
+        }
+
+        public string TargetArea
+        {
+            get => tour.TargetArea;
+            set
+            {
+                tour.TargetArea = value;
+                TriggerPropertyChangedEvent(nameof(TargetArea));
+            }
+        }
+
+        public List<TourLog> Logs
+        {
+            get => tour.Logs;
+        }
+
         #endregion
 
         public TourViewModel(Tour tour)
         {
             this.tour = tour;
-            ViewName = "Tour";
-        }
-
-        public TourViewModel()
-        {
             ViewName = "Tour";
         }
     }

@@ -11,5 +11,6 @@ namespace Models
         public string StartingArea { get; set; }
         public string TargetArea { get; set; }
         public float Distance { get; set; } // in km?
+        public List<TourLog> Logs { get; set; } = new List<TourLog>();
     }
 }
