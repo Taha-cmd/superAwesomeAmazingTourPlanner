@@ -16,12 +16,7 @@ namespace ViewModels.Commands
         public CreateTourCommand(object tourViewModel)
         {
             createTourViewModel = (CreateTourViewModel)tourViewModel;
-
-            createTourViewModel
-                .GetType()
-                .GetProperties()
-                .ToList()
-                .ForEach(prop => RegisterSubscriptionToPropertyChanged(createTourViewModel, prop.Name));
+            RegisterAllProperties(createTourViewModel);
         }
 
         public bool CanExecute(object parameter)

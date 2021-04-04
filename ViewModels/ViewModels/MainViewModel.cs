@@ -12,14 +12,6 @@ namespace ViewModels.ViewModels
     {
         // https://rachel53461.wordpress.com/2011/12/18/navigation-with-mvvm-2/
 
-        private ICommand changePageCommand;
-        private ICommand loadTourCommand;
-        private ICommand loadTourLogFormCommand;
-        private ICommand loadLogCommand;
-        private List<ViewModelBase> viewModels;
-        private ViewModelBase currentViewModel;
-        private object parameter;
-
         public MainViewModel()
         {
             changePageCommand = CommandFactory.CreateCommand<ChangePageCommand>(this);
@@ -37,11 +29,23 @@ namespace ViewModels.ViewModels
             CurrentViewModel = viewModels[0];
         }
 
-        public List<ViewModelBase> ViewModels { get => viewModels; }
+        #region fields
+        private ICommand changePageCommand;
+        private ICommand loadTourCommand;
+        private ICommand loadTourLogFormCommand;
+        private ICommand loadLogCommand;
+        private List<ViewModelBase> viewModels;
+        private ViewModelBase currentViewModel;
+        private object parameter;
+        #endregion
+
+        #region properties
         public ICommand ChangePageCommand { get => changePageCommand; }
         public ICommand LoadTourCommand { get => loadTourCommand; }
         public ICommand LoadTourLogFormCommand { get => loadTourLogFormCommand; }
         public ICommand LoadLogCommand { get => loadLogCommand; }
+        public List<ViewModelBase> ViewModels { get => viewModels; }
+        
         public ViewModelBase CurrentViewModel
         {
             get => currentViewModel;
@@ -61,10 +65,19 @@ namespace ViewModels.ViewModels
                 TriggerPropertyChangedEvent(nameof(Parameter));
             }
         }
+        #endregion
 
+        #region methods
         public void LoadTour(Tour tour)
         {
-            Console.WriteLine($"MainViewModel with id ({this.GetHashCode()}) loading tour: " + tour.Name);
+            Console.WriteLine($"MainViewModel with id ({GetHashCode()}) loading tour: " + tour.Name);
+            CurrentViewModel = new TourViewModel(tour);
+        }
+
+        public void LoadTour(string tourName)
+        {
+            var tour = Manager.GetTour(tourName);
+            Console.WriteLine("loading tour by name : " + tourName);
             CurrentViewModel = new TourViewModel(tour);
         }
 
@@ -72,5 +85,7 @@ namespace ViewModels.ViewModels
         {
             CurrentViewModel = new CreateTourLogViewModel(tourName);
         }
+
+        #endregion
     }
 }

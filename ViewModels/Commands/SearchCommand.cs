@@ -9,13 +9,13 @@ namespace ViewModels.Commands
 {
     class SearchCommand : CommandBase, ICommand
     {
-        private ToursViewModel toursViewModel;
+        private IFilterable ViewModel;
         public SearchCommand(object viewModel)
         {
-            toursViewModel = (ToursViewModel)viewModel;
+            ViewModel = (IFilterable)viewModel;
         }
         public bool CanExecute(object parameter) => true;
-        public void Execute(object parameter) => toursViewModel.FilterTours((string)parameter);
+        public void Execute(object parameter) => ViewModel.Filter((string)parameter);
             
     }
 }

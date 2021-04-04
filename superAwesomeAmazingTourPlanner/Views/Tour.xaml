@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:superAwesomeAmazingTourPlanner.Views"
-             xmlns:ViewModels="clr-namespace:ViewModels.ViewModels;assembly=ViewModels"
+             xmlns:ViewModels="clr-namespace:ViewModels.ViewModels;assembly=ViewModels" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -38,6 +38,18 @@
 
 
             <TextBlock Style="{StaticResource Title}" Text="Logs"/>
+        
+            <TextBox
+            Style="{StaticResource InputField}"
+            x:Name="SearchBox" Height="40" 
+            Margin="150, 10" Text="search for tour logs">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="KeyUp">
+                        <i:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding Text, ElementName=SearchBox}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        
             <DataGrid
                 x:Name="DataGrid"
                 ColumnHeaderStyle="{StaticResource ColumnHeaderStyle}" 
@@ -56,8 +68,10 @@
                     <DataGridTextColumn Header="Date" Binding="{Binding DateTime}"/>
                     <DataGridTextColumn Header="Time" Binding="{Binding TotalTime}"/>
                     <DataGridTextColumn Header="Rating" Binding="{Binding Rating}"/>
-                    
-                                    <DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Report" Binding="{Binding Report}"/>
+
+                    <!--detail? a seperate view?-->
+                    <!--<DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button 
@@ -68,7 +82,7 @@
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
                     
                 </DataGrid.Columns>
             </DataGrid>

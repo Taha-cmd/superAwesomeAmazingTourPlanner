@@ -42,13 +42,13 @@
             <Label Grid.Column="1" Grid.Row="1"  Style="{StaticResource Label}" Content="How was it?"/>
             <TextBox  Grid.Column="2" Grid.Row="1" Text="{Binding Report, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}" Height="150"/>
 
-            <Label Grid.Column="1" Grid.Row="2"  Style="{StaticResource Label}" Content="How long did it take?"/>
+            <Label Grid.Column="1" Grid.Row="2"  Style="{StaticResource Label}" Content="How long did it take? (hours)"/>
             <TextBox  Grid.Column="2" Grid.Row="2" Text="{Binding  TotalTime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>
 
             <!--<Label Grid.Column="1" Grid.Row="3"  Style="{StaticResource Label}" Content="Distance (km)"/>
             <TextBox  Grid.Column="2" Grid.Row="3" Text="{Binding Distnace}" Style="{StaticResource InputField}"/>-->
 
-            <Label Grid.Column="1" Grid.Row="4"  Style="{StaticResource Label}" Content="Rating"/>
+            <Label Grid.Column="1" Grid.Row="4"  Style="{StaticResource Label}" Content="Rating (1-10)"/>
             <TextBox  Grid.Column="2" Grid.Row="4" Text="{Binding Rating, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>
 
             <Button Grid.Column="1" Grid.Row="5" 
@@ -57,14 +57,25 @@
                     Style="{StaticResource SubmitButton}" 
                     Content="Create Log"/>
 
-             <!--<TextBlock
+            <Button
+                MaxWidth="150"
+                MinWidth="100"
+                Grid.Column="2" Grid.Row="5"
+                Style="{StaticResource SubmitButton}"
+                Content="{Binding TourName, StringFormat='return to {0}'}"
+                CommandParameter="{Binding TourName}"
+                Command="{Binding LoadTourCommand, Mode=OneWay, Source={StaticResource MainViewModel}}"
+                />
+
+
+            <TextBlock
                 Foreground="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
-                Grid.ColumnSpan="3"
                 Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}"
-                Style="{StaticResource Status}" Grid.Column="1" Grid.Row="6"/> -->
+                Style="{StaticResource Status}" 
+                Grid.ColumnSpan="3"
+                Grid.Column="1" 
+                Grid.Row="6"/>
         </Grid>
-
-
 
     </StackPanel>
 </UserControl>

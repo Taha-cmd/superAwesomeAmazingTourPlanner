@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Models;
@@ -8,7 +10,7 @@ using ViewModels.Commands;
 
 namespace ViewModels.ViewModels
 {
-    public class TourViewModel : ViewModelBase
+    public class TourViewModel : ViewModelBase, IFilterable
     {
         private readonly Tour tour;
 
@@ -63,10 +65,9 @@ namespace ViewModels.ViewModels
             }
         }
 
-        public List<TourLog> Logs
-        {
-            get => tour.Logs;
-        }
+        public ICommand SearchCommand { get; }
+
+        public ObservableCollection<TourLog> Logs { get; } 
 
         #endregion
 
@@ -74,6 +75,14 @@ namespace ViewModels.ViewModels
         {
             this.tour = tour;
             ViewName = "Tour";
+            Logs = new ObservableCollection<TourLog>(tour.Logs);
+            SearchCommand = CommandFactory.CreateCommand<SearchCommand>(this);
+        }
+
+        public void Filter(string filter)
+        {
+            Logs.Clear();
+            tour.Logs.Where(log => log.Report.Contains(filter)).ToList().ForEach(item => Logs.Add(item));
         }
     }
 }

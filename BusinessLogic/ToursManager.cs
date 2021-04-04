@@ -16,7 +16,6 @@ namespace BusinessLogic
             Console.WriteLine(Config.Instance.DataBaseConnectionString);
         }
 
-
         #region Tour CRUD Methods
         public void CreateTour(Tour tour)
         {
@@ -25,11 +24,10 @@ namespace BusinessLogic
 
             Console.WriteLine("manager creating tour");
             toursRepo.SaveTour(tour);
-            TriggerTourAddedEvent(tour);
         }
         public Tour GetTour(string name)
         {
-            throw new NotImplementedException();
+            return GetTours().Where(tour => tour.Name == name).ToList()[0];
         }
 
         public List<Tour> GetTours(int? limit = null)
@@ -49,6 +47,7 @@ namespace BusinessLogic
             throw new NotImplementedException();
         }
         #endregion
+
         #region probably useless stuff
         public event EventHandler<TourAddedEventArgs> TourAdded;
         public event EventHandler<TourDeletedEventArgs> TourDeleted;
@@ -62,6 +61,7 @@ namespace BusinessLogic
         public void TriggerTourDeletedEvent(Tour tour) => TourDeleted?.Invoke(this, new TourDeletedEventArgs(tour));
         public void TriggerTourAddedEvent(Tour tour) => TourAdded?.Invoke(this, new TourAddedEventArgs(tour));
         #endregion
+
         #region TourLog Crud Methods
         public void CreateTourLog(string tourName, TourLog log)
         {
@@ -73,18 +73,16 @@ namespace BusinessLogic
         }
         #endregion
 
+        #region validation methods
         public bool ValidateTour(Tour tour)
         {
-            return
-                !tour.Name.IsEmptyOrWhiteSpace() &&
-                !tour.Description.IsEmptyOrWhiteSpace() &&
-                !tour.StartingArea.IsEmptyOrWhiteSpace() &&
-                !tour.TargetArea.IsEmptyOrWhiteSpace();
+            return new List<string>() { tour.Name, tour.Description, tour.StartingArea, tour.TargetArea }.All(el => el.HasValue());
         }
 
         public bool ValidateTourLog(TourLog log)
         {
-            return true;
+            return log.Rating >= 0 && log.Rating <= 10 && log.Report.HasValue() && log.TotalTime > 0;
         }
+        #endregion
     }
 }

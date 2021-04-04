@@ -12,7 +12,7 @@ using BusinessLogic.CustomEventArgs;
 
 namespace ViewModels.ViewModels
 {
-    public class ToursViewModel : ViewModelBase
+    public class ToursViewModel : ViewModelBase, IFilterable
     {
         public ObservableCollection<Tour> Data { get; } // data to be displayed
         private List<Tour> items; // actual data
@@ -39,7 +39,7 @@ namespace ViewModels.ViewModels
             items.ForEach(item => Data.Add(item));
         }
         
-        public void FilterTours(string filter)
+        public void Filter(string filter)
         {
             Data.Clear();
             items.Where(item => item.Name.Contains(filter)).ToList().ForEach(item => Data.Add(item));

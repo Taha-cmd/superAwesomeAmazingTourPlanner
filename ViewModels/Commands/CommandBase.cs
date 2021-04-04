@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ViewModels.ViewModels;
+using System.Linq;
 
 namespace ViewModels.Commands
 {
@@ -16,6 +17,15 @@ namespace ViewModels.Commands
                     CanExecuteChanged?.Invoke(this, EventArgs.Empty);
                 }
             };
+        }
+
+        protected void RegisterAllProperties(ViewModelBase viewModel)
+        {
+            viewModel
+                .GetType()
+                .GetProperties()
+                .ToList()
+                .ForEach(prop => RegisterSubscriptionToPropertyChanged(viewModel, prop.Name));
         }
 
         public event EventHandler CanExecuteChanged;

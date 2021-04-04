@@ -31,8 +31,8 @@ namespace BusinessLogic
         {
             return new List<TourLog>()
             {
-                new TourLog(){ DateTime = DateTime.Now, Rating= "very good", Report= "very nice tour", TotalTime =3},
-                new TourLog(){ Rating= "sucks", Report="it was rainy", TotalTime=4}
+                new TourLog(){ DateTime = DateTime.Now, Rating= 2, Report= "very nice tour", TotalTime =3},
+                new TourLog(){ Rating= 1, Report="it was rainy", TotalTime=4}
             };
         }
     }

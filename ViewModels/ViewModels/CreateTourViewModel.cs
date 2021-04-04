@@ -19,16 +19,18 @@ namespace ViewModels.ViewModels
         public ICommand CreateTourCommand { get; protected set; }
 
 
-        #region fields and their properties
+        #region fields
 
         private string name;
         private string startingArea;
         private string targetArea;
         private string description;
         private float distnace;
-
         private Status status = Status.Empty;
 
+        #endregion fields
+
+        #region properties
         public string Name 
         { 
             get => name; 
@@ -84,7 +86,6 @@ namespace ViewModels.ViewModels
                 TriggerPropertyChangedEvent(nameof(Status));
             }
         }
-
         #endregion
 
         internal void ClearProperties()

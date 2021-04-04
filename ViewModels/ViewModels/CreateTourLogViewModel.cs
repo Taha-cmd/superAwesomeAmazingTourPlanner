@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using ViewModels.Commands;
+using ViewModels.Enums;
 
 namespace ViewModels.ViewModels
 {
@@ -16,15 +17,21 @@ namespace ViewModels.ViewModels
             this.tourName = tourName;
             createLogCommand = CommandFactory.CreateCommand<CreateTourLogCommand>(this);
         }
-        private readonly string tourName;
 
+        #region private fields
+
+        private readonly string tourName;
+        private Status status = Status.Empty;
         private DateTime dateTime = DateTime.Now;
         private string report;
         private float distance;
         private float totalTime;
-        private string rating;
+        private int rating;
         private readonly ICommand createLogCommand;
 
+        #endregion
+
+        #region properties
         public ICommand CreateTourLogCommand { get => createLogCommand; }
 
         public string TourName
@@ -35,6 +42,20 @@ namespace ViewModels.ViewModels
         { 
             get => dateTime;
             set { dateTime = value; TriggerPropertyChangedEvent(nameof(DateTime)); } 
+        }
+
+        internal void ClearProperties()
+        {
+            Report = string.Empty;
+            TotalTime = 0;
+            Rating = 0;
+            DateTime = DateTime.Now;
+        }
+
+        public Status Status
+        {
+            get => status;
+            set { status = value; TriggerPropertyChangedEvent(nameof(Status)); }
         }
         public string Report 
         { 
@@ -51,10 +72,11 @@ namespace ViewModels.ViewModels
             get => totalTime; 
             set { totalTime = value; TriggerPropertyChangedEvent(nameof(Distance)); } 
         }
-        public string Rating 
+        public int Rating 
         { 
             get => rating; 
             set { rating = value; TriggerPropertyChangedEvent(nameof(Rating)); }
         }
+        #endregion
     }
 }

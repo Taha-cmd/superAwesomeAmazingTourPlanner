@@ -10,7 +10,7 @@ namespace Models
         public string Report { get; set; }
         public float Distance { get; set; }
         public float TotalTime { get; set; }
-        public string Rating { get; set; }
+        public int Rating { get; set; }
 
     }
 }

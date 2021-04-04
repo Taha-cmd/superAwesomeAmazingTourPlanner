@@ -15,6 +15,12 @@ namespace ViewModels.Commands
             this.mainViewModel = (MainViewModel)parameter;
         }
         public bool CanExecute(object parameter) => true;
-        public void Execute(object parameter) => mainViewModel.LoadTour((Tour)parameter);
+        public void Execute(object parameter)
+        {
+            if (parameter.GetType().Name == nameof(String))
+                mainViewModel.LoadTour((string)parameter);
+            else
+                mainViewModel.LoadTour((Tour)parameter);
+        }
     }
 }
