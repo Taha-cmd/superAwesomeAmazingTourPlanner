@@ -30,16 +30,8 @@ namespace BusinessLogic
             TriggerDataChangedEvent();
 
         }
-        public Tour GetTour(string name)
-        {
-            return toursRepo.GetTour(name);
-        }
-
-        public List<Tour> GetTours(int? limit = null)
-        {
-            return toursRepo.GetTours(limit).ToList();
-        }
-
+        public Tour GetTour(string name) => toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
+        public List<Tour> GetTours(int? limit = null) => toursRepo.GetTours(limit).ToList();
         public void DeleteTour(string name)
         {
             toursRepo.Delete(name);
