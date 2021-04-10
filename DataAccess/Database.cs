@@ -4,17 +4,8 @@ using System.Text;
 
 namespace DataAccess
 {
-    class Database
+    public abstract class Database
     {
-        private string connectionString;
-        public Database(string conn)
-        {
-            connectionString = conn;
-        }
-
-        /*public GetConnection()
-        {
-            return new connection()
-        } */
+        protected string connectionString;
     }
 }

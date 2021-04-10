@@ -50,7 +50,7 @@ namespace ViewModels.Commands
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.Message);
                 createTourViewModel.Status = Status.Failure;
             }
         }

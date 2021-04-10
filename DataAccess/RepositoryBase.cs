@@ -4,8 +4,12 @@ using System.Text;
 
 namespace DataAccess
 {
-    class RepositoryBase
+    public class RepositoryBase
     {
-        protected Database database;
+        protected PostgresDatabase database;
+        public RepositoryBase(string connectionString)
+        {
+            database = new PostgresDatabase(connectionString);
+        }
     }
 }

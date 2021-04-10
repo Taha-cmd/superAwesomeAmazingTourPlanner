@@ -5,15 +5,16 @@ using System.Text;
 using Extensions;
 using BusinessLogic.CustomEventArgs;
 using System.Linq;
+using DataAccess;
 
 namespace BusinessLogic
 {
     public class ToursManager
     {
-        private readonly ToursRepository toursRepo = new ToursRepository();
-        public ToursManager()
+        private readonly IToursRepository toursRepo;
+        public ToursManager(IToursRepository toursRepo)
         {
-            Console.WriteLine(Config.Instance.DataBaseConnectionString);
+            this.toursRepo = toursRepo;
         }
 
         #region Tour CRUD Methods
@@ -23,7 +24,7 @@ namespace BusinessLogic
                 throw new Exception("invalid tour!");
 
             Console.WriteLine("manager creating tour");
-            toursRepo.SaveTour(tour);
+            toursRepo.Create(tour);
         }
         public Tour GetTour(string name)
         {
@@ -33,7 +34,7 @@ namespace BusinessLogic
         public List<Tour> GetTours(int? limit = null)
         {
             var tours = (List<Tour>)(toursRepo.GetTours());
-            tours.ForEach(tour => tour.Logs = (List<TourLog>)toursRepo.GetLogs(tour.Name));
+            //tours.ForEach(tour => tour.Logs = (List<TourLog>)toursRepo.GetLogs(tour.Name));
             return tours;
         }
 

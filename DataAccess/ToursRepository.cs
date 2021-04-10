@@ -1,38 +1,87 @@
-﻿using Models;
+﻿using Extensions;
+using Models;
+using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
-namespace BusinessLogic
+namespace DataAccess
 {
-    public class ToursRepository
+    public class ToursRepository : RepositoryBase, IToursRepository
     {
-        public IEnumerable<Tour> GetTours()
+        public ToursRepository(string dataBaseConnectionString) : base(dataBaseConnectionString) { }
+        public void Create(Tour tour)
         {
-            return new List<Tour>()
-            {
-                new Tour() { Name = "tour1", StartingArea="place1", TargetArea="place2", Description = "very nice", Distance = 10 },
-                new Tour() { Name = "tour2", Description = "very very nice", Distance = 20 },
-                new Tour() { Name = "tour3", Description = "even more nice", Distance = 30 }
-            };
+            string statement = $"INSERT INTO \"tour\" (name, description, startingArea, targetArea, distance) " +
+                $"VALUES (@name, @description, @startingArea, @targetArea, @distance)";
+
+            database.ExecuteNonQuery(
+                    statement,
+                    database.Param("name", tour.Name),
+                    database.Param("description", tour.Description),
+                    database.Param("startingArea", tour.StartingArea),
+                    database.Param("targetArea", tour.TargetArea),
+                    database.Param("distance", tour.Distance)
+                );
         }
 
-        public void SaveTour(Tour tour)
+        public void Delete(Tour tour)
         {
-            Console.WriteLine("saving tour to database");
+            throw new NotImplementedException();
         }
 
-        public void SaveTourLog(string tourName, TourLog log)
+        public void Update(string tourName, Tour tour)
         {
-            Console.WriteLine("saving tour log to database");
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Tour> GetTours(int? limit = null)
+        {
+            string statement = $"SELECT * FROM \"tour\"";
+
+            if (!limit.IsNull())
+                statement += $" limit {limit}";
+
+            var tours = database.ExecuteQuery(statement, TourReader);
+            tours.ToList().ForEach(tour => tour.Logs = GetLogs(tour.Name).ToList());
+
+            return tours;
+            
         }
 
         public IEnumerable<TourLog> GetLogs(string tourName)
         {
-            return new List<TourLog>()
+            string statement = $"SELECT * FROM \"log\" WHERE tourname=@tourname";
+
+            return database.ExecuteQuery(statement, TourLogReader, database.Param("tourname", tourName));
+        }
+
+        public Tour GetTour(string tourName)
+        {
+            string statement = $"SELECT * FROM \"tour\" WHERE name=@name";
+            return database.ExecuteQuery(statement, TourReader, database.Param("name", tourName)).First();
+        }
+
+        private Tour TourReader(NpgsqlDataReader reader)
+        {
+            return new Tour()
             {
-                new TourLog(){ DateTime = DateTime.Now, Rating= 2, Report= "very nice tour", TotalTime =3},
-                new TourLog(){ Rating= 1, Report="it was rainy", TotalTime=4}
+                Name = reader.GetValue<string>("name"),
+                Description = reader.GetValue<string>("description"),
+                Distance = reader.GetValue<double>("distance"),
+                StartingArea = reader.GetValue<string>("startingArea"),
+                TargetArea = reader.GetValue<string>("targetArea")
+            };
+        }
+
+        private TourLog TourLogReader(NpgsqlDataReader reader)
+        {
+            return new TourLog()
+            {
+                Rating = reader.GetValue<int>("rating"),
+                Report = reader.GetValue<string>("report"),
+                TotalTime = reader.GetValue<double>("totalTime"),
+                DateTime = reader.GetValue<DateTime>("date")
             };
         }
     }
