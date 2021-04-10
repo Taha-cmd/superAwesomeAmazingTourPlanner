@@ -3,13 +3,14 @@ using Models;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 
 namespace DataAccess
 {
     public class ToursRepository : RepositoryBase, IToursRepository
     {
-        public ToursRepository(string dataBaseConnectionString) : base(dataBaseConnectionString) { }
+        public ToursRepository(IDatebase database) : base(database) { }
         public void Create(Tour tour)
         {
             string statement = $"INSERT INTO \"tour\" (name, description, startingArea, targetArea, distance) " +
@@ -24,9 +25,7 @@ namespace DataAccess
                     database.Param("distance", tour.Distance)
                 );
         }
-
         public void Delete(Tour tour) => Delete(tour.Name);
-
         public void Delete(string name)
         {
             string statement = $"DELETE FROM \"tour\" WHERE name=@name";
@@ -51,6 +50,11 @@ namespace DataAccess
             return tours;
             
         }
+        public Tour GetTour(string tourName)
+        {
+            string statement = $"SELECT * FROM \"tour\" WHERE name=@name";
+            return database.ExecuteQuery(statement, TourReader, database.Param("name", tourName)).First();
+        }
 
         public IEnumerable<TourLog> GetLogs(string tourName)
         {
@@ -58,13 +62,9 @@ namespace DataAccess
             return database.ExecuteQuery(statement, TourLogReader, database.Param("tourname", tourName));
         }
 
-        public Tour GetTour(string tourName)
-        {
-            string statement = $"SELECT * FROM \"tour\" WHERE name=@name";
-            return database.ExecuteQuery(statement, TourReader, database.Param("name", tourName)).First();
-        }
 
-        private Tour TourReader(NpgsqlDataReader reader)
+        // DbDataReader is the common abstract class in c# that all database providers implement
+        private Tour TourReader(DbDataReader reader)
         {
             return new Tour()
             {
@@ -76,7 +76,7 @@ namespace DataAccess
             };
         }
 
-        private TourLog TourLogReader(NpgsqlDataReader reader)
+        private TourLog TourLogReader(DbDataReader reader)
         {
             return new TourLog()
             {
@@ -86,6 +86,8 @@ namespace DataAccess
                 DateTime = reader.GetValue<DateTime>("date")
             };
         }
+
+        
 
         public bool TourExists(string tourName) => Exists("tour", "name", tourName);
     }

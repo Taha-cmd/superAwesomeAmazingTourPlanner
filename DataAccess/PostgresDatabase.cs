@@ -3,17 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Extensions;
+using System.Linq;
+using System.Data.Common;
 
 namespace DataAccess
 {
-    public class PostgresDatabase : Database
+    public class PostgresDatabase : IDatebase
     {
-        public PostgresDatabase(string conn)
-        {
-            connectionString = conn;
-        }
-
-        public int ExecuteNonQuery(string statement, params NpgsqlParameter[] parameters)
+        private string connectionString;
+        public PostgresDatabase(string conn) => connectionString = conn;
+        public int ExecuteNonQuery(string statement, params DbParameter[] parameters)
         {
             using var conn = GetConnection();
             using var command = Command(statement, conn, parameters);
@@ -21,7 +20,7 @@ namespace DataAccess
             return command.ExecuteNonQuery();
         }
 
-        public IEnumerable<TResult> ExecuteQuery<TResult>(string statement, Func<NpgsqlDataReader, TResult> rowReader, params NpgsqlParameter[] parameters)
+        public IEnumerable<TResult> ExecuteQuery<TResult>(string statement, Func<DbDataReader, TResult> rowReader, params DbParameter[] parameters)
         {
             using var conn = GetConnection();
             using var command = Command(statement, conn, parameters);
@@ -36,20 +35,20 @@ namespace DataAccess
             while (reader.Read())
                 results.Add(rowReader(reader));
 
-
             return results;
         }
 
         #region wrapper methods to make life easier
-        public NpgsqlConnection GetConnection()
+        public DbParameter Param<T>(string key, T value) => new NpgsqlParameter<T>(key, value);
+
+        private NpgsqlConnection GetConnection()
         {
             var conn = new NpgsqlConnection(connectionString);
             conn.Open();
 
             return conn;
         }
-        public NpgsqlParameter Param<T>(string key, T value) => new NpgsqlParameter<T>(key, value);
-        public NpgsqlCommand Command(string statement, NpgsqlConnection conn, params NpgsqlParameter[] parameters)
+        private NpgsqlCommand Command(string statement, NpgsqlConnection conn, params DbParameter[] parameters)
         {
             var command = new NpgsqlCommand(statement, conn);
             command.Parameters.AddRange(parameters);
@@ -58,7 +57,5 @@ namespace DataAccess
             return command;
         }
         #endregion
-
-
     }
 }

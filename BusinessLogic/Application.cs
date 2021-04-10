@@ -16,7 +16,10 @@ namespace BusinessLogic
             if (manager.IsNull())
             {
                 Config.Instance.LoadAndParseConfigFile(configFilePath);
-                manager = new ToursManager(new ToursRepository(Config.Instance.DataBaseConnectionString));
+
+                var database = new PostgresDatabase(Config.Instance.DataBaseConnectionString);
+                var toursRepo = new ToursRepository(database);
+                manager = new ToursManager(toursRepo);
             }
                 
 

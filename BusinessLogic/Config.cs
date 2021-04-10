@@ -12,17 +12,12 @@ namespace BusinessLogic
         public static Config Instance { get; private set; }
         static Config() => Instance = new Config();
 
-        
 
         public string DataBaseConnectionString { get; private set; }
         public string ImagesFolderPath { get; private set; }
         public string ExportsFolderPath { get; private set; }
 
-        private Config()
-        {
-
-        }
-        
+        private Config() { }
         public void LoadAndParseConfigFile(string configFilePath)
         {
             if (!File.Exists(configFilePath))
@@ -41,10 +36,6 @@ namespace BusinessLogic
 
             ImagesFolderPath = configData["LocalStorage"]["Images"];
             ExportsFolderPath = configData["LocalStorage"]["Exports"];
-
-            Console.WriteLine(DataBaseConnectionString);
-            Console.WriteLine(ImagesFolderPath);
-            Console.WriteLine(ExportsFolderPath);
         }
 
         
