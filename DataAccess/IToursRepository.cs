@@ -13,8 +13,10 @@ namespace DataAccess
         // crud methods
         void Create(Tour tour);
         void Delete(Tour tour);
+        void Delete(string name);
         void Update(string tourName, Tour tour);
         IEnumerable<Tour> GetTours(int? limit = null);
         Tour GetTour(string tourName);
+        bool TourExists(string tourName);
     }
 }

@@ -18,6 +18,7 @@ namespace ViewModels.ViewModels
             loadTourCommand = CommandFactory.CreateCommand<LoadTourCommand>(this);
             loadTourLogFormCommand = CommandFactory.CreateCommand<LoadTourLogFormCommand>(this);
             loadLogCommand = CommandFactory.CreateCommand<LoadLogCommand>(this);
+            deleteTourCommand = CommandFactory.CreateCommand<DeleteTourCommand>(this);
 
             viewModels = new List<ViewModelBase>() 
             {
@@ -34,6 +35,8 @@ namespace ViewModels.ViewModels
         private ICommand loadTourCommand;
         private ICommand loadTourLogFormCommand;
         private ICommand loadLogCommand;
+        private ICommand deleteTourCommand;
+
         private List<ViewModelBase> viewModels;
         private ViewModelBase currentViewModel;
         private object parameter;
@@ -44,6 +47,7 @@ namespace ViewModels.ViewModels
         public ICommand LoadTourCommand { get => loadTourCommand; }
         public ICommand LoadTourLogFormCommand { get => loadTourLogFormCommand; }
         public ICommand LoadLogCommand { get => loadLogCommand; }
+        public ICommand DeleteTourCommand { get => deleteTourCommand; }
         public List<ViewModelBase> ViewModels { get => viewModels; }
         
         public ViewModelBase CurrentViewModel

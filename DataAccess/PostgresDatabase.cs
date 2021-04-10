@@ -13,37 +13,18 @@ namespace DataAccess
             connectionString = conn;
         }
 
-        public NpgsqlConnection GetConnection()
-        {
-            var conn = new NpgsqlConnection(connectionString);
-            conn.Open();
-
-            return conn;
-        }
-
         public int ExecuteNonQuery(string statement, params NpgsqlParameter[] parameters)
         {
             using var conn = GetConnection();
-            using var command = new NpgsqlCommand(statement, conn);
-
-            command.Parameters.AddRange(parameters);
+            using var command = Command(statement, conn, parameters);
 
             return command.ExecuteNonQuery();
         }
 
-        public IEnumerable<TResult> ExecuteQuery<TResult>(string statement, Func<NpgsqlDataReader, TResult> rowReader)
-        {
-            var conn = GetConnection();
-            var command = new NpgsqlCommand(statement, conn);
-
-            return ReadRows(command, rowReader);
-        }
-
         public IEnumerable<TResult> ExecuteQuery<TResult>(string statement, Func<NpgsqlDataReader, TResult> rowReader, params NpgsqlParameter[] parameters)
         {
-            var conn = GetConnection();
-            var command = new NpgsqlCommand(statement, conn);
-            command.Parameters.AddRange(parameters);
+            using var conn = GetConnection();
+            using var command = Command(statement, conn, parameters);
 
             return ReadRows(command, rowReader);
         }
@@ -59,7 +40,25 @@ namespace DataAccess
             return results;
         }
 
+        #region wrapper methods to make life easier
+        public NpgsqlConnection GetConnection()
+        {
+            var conn = new NpgsqlConnection(connectionString);
+            conn.Open();
+
+            return conn;
+        }
         public NpgsqlParameter Param<T>(string key, T value) => new NpgsqlParameter<T>(key, value);
+        public NpgsqlCommand Command(string statement, NpgsqlConnection conn, params NpgsqlParameter[] parameters)
+        {
+            var command = new NpgsqlCommand(statement, conn);
+            command.Parameters.AddRange(parameters);
+            command.Prepare();
+
+            return command;
+        }
+        #endregion
+
 
     }
 }

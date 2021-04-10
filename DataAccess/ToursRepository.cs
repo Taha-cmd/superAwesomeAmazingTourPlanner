@@ -25,9 +25,12 @@ namespace DataAccess
                 );
         }
 
-        public void Delete(Tour tour)
+        public void Delete(Tour tour) => Delete(tour.Name);
+
+        public void Delete(string name)
         {
-            throw new NotImplementedException();
+            string statement = $"DELETE FROM \"tour\" WHERE name=@name";
+            database.ExecuteNonQuery(statement, database.Param("name", name));
         }
 
         public void Update(string tourName, Tour tour)
@@ -52,7 +55,6 @@ namespace DataAccess
         public IEnumerable<TourLog> GetLogs(string tourName)
         {
             string statement = $"SELECT * FROM \"log\" WHERE tourname=@tourname";
-
             return database.ExecuteQuery(statement, TourLogReader, database.Param("tourname", tourName));
         }
 
@@ -84,5 +86,7 @@ namespace DataAccess
                 DateTime = reader.GetValue<DateTime>("date")
             };
         }
+
+        public bool TourExists(string tourName) => Exists("tour", "name", tourName);
     }
 }
