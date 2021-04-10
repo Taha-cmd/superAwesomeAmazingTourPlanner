@@ -35,7 +35,7 @@ namespace ViewModels.ViewModels
             }
         }
 
-        public float Distance
+        public double Distance
         {
             get => tour.Distance;
             set

@@ -24,17 +24,19 @@ namespace ViewModels.ViewModels
             ViewName = "Tours";
             Data = new ObservableCollection<Tour>();
             SearchCommand = CommandFactory.CreateCommand<SearchCommand>(this);
-            LoadFakeTours();
+            LoadTours();
+
+            Manager.DataChanged += (object sender, EventArgs e) =>
+            {
+                LoadTours();
+            };
         }
 
-        public void AddTour(Tour tour)
-        {
-            items.Add(tour);
-            Data.Add(tour);
-        }
 
-        private void LoadFakeTours()
+        private void LoadTours()
         {
+            items?.Clear(); 
+            Data.Clear();
             items = Manager.GetTours();
             items.ForEach(item => Data.Add(item));
         }

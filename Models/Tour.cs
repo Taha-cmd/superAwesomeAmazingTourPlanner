@@ -10,7 +10,7 @@ namespace Models
         public string Description { get; set; }
         public string StartingArea { get; set; }
         public string TargetArea { get; set; }
-        public float Distance { get; set; } // in km?
+        public double Distance { get; set; } // in km?
         public List<TourLog> Logs { get; set; } = new List<TourLog>();
     }
 }

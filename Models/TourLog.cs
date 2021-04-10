@@ -8,8 +8,8 @@ namespace Models
     {
         public DateTime DateTime { get; set; }
         public string Report { get; set; }
-        public float Distance { get; set; }
-        public float TotalTime { get; set; }
+        public double Distance { get; set; }
+        public double TotalTime { get; set; }
         public int Rating { get; set; }
 
     }

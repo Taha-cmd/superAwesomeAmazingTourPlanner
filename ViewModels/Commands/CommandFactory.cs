@@ -19,8 +19,9 @@ namespace ViewModels.Commands
                 case nameof(LoadTourLogFormCommand): return new LoadTourLogFormCommand(viewModel);
                 case nameof(LoadLogCommand): return new LoadLogCommand(viewModel);
                 case nameof(CreateTourLogCommand): return new CreateTourLogCommand(viewModel);
+                case nameof(DeleteTourCommand): return new DeleteTourCommand(viewModel);
                     /*case nameof(UpdateTourCommand): return new UpdateTourCommand(viewModel);
-                    case nameof(DeleteTourCommand): return new DeleteTourCommand(viewModel);
+                    
                     case nameof(ImportTourCommand): return new ImportTourCommand(viewModel);
                     case nameof(ExportTourCommand): return new ExportTourCommand(viewModel);
                     case nameof(CopyTourCommand): return new CopyTourCommand(viewModel); */

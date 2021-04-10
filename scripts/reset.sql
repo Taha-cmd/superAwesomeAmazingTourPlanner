@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS "TourPlanner";
+DROP USER IF EXISTS "TourPlannerAdmin";

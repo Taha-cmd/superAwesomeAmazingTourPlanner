@@ -5,16 +5,20 @@ using System.Text;
 using Extensions;
 using BusinessLogic.CustomEventArgs;
 using System.Linq;
+using DataAccess;
 
 namespace BusinessLogic
 {
     public class ToursManager
     {
-        private readonly ToursRepository toursRepo = new ToursRepository();
-        public ToursManager()
+        private readonly IToursRepository toursRepo;
+        public ToursManager(IToursRepository toursRepo)
         {
-            Console.WriteLine(Config.Instance.DataBaseConnectionString);
+            this.toursRepo = toursRepo;
         }
+
+        public event EventHandler DataChanged;
+        private void TriggerDataChangedEvent() => DataChanged?.Invoke(this, EventArgs.Empty);
 
         #region Tour CRUD Methods
         public void CreateTour(Tour tour)
@@ -22,25 +26,27 @@ namespace BusinessLogic
             if (!ValidateTour(tour))
                 throw new Exception("invalid tour!");
 
-            Console.WriteLine("manager creating tour");
-            toursRepo.SaveTour(tour);
+            toursRepo.Create(tour);
+            TriggerDataChangedEvent();
+
         }
         public Tour GetTour(string name)
         {
-            return GetTours().Where(tour => tour.Name == name).ToList()[0];
+            return toursRepo.GetTour(name);
         }
 
         public List<Tour> GetTours(int? limit = null)
         {
-            var tours = (List<Tour>)(toursRepo.GetTours());
-            tours.ForEach(tour => tour.Logs = (List<TourLog>)toursRepo.GetLogs(tour.Name));
-            return tours;
+            return toursRepo.GetTours(limit).ToList();
         }
 
         public void DeleteTour(string name)
         {
-
+            toursRepo.Delete(name);
+            TriggerDataChangedEvent();
         }
+
+        public void DeleteTour(Tour tour) => DeleteTour(tour.Name);
 
         public Tour UpdateTour(string currentName, Tour tour)
         {
@@ -53,11 +59,7 @@ namespace BusinessLogic
         public event EventHandler<TourDeletedEventArgs> TourDeleted;
         public event EventHandler<TourUpdatedEventArgs> TourUpdated;
 
-        public void TriggerTourUpdatedEvent(string oldName, Tour tour)
-        {
-            TourUpdated?.Invoke(this, new TourUpdatedEventArgs(oldName, tour));
-        }
-
+        public void TriggerTourUpdatedEvent(string oldName, Tour tour) => TourUpdated?.Invoke(this, new TourUpdatedEventArgs(oldName, tour));
         public void TriggerTourDeletedEvent(Tour tour) => TourDeleted?.Invoke(this, new TourDeletedEventArgs(tour));
         public void TriggerTourAddedEvent(Tour tour) => TourAdded?.Invoke(this, new TourAddedEventArgs(tour));
         #endregion
@@ -76,7 +78,7 @@ namespace BusinessLogic
         #region validation methods
         public bool ValidateTour(Tour tour)
         {
-            return new List<string>() { tour.Name, tour.Description, tour.StartingArea, tour.TargetArea }.All(el => el.HasValue());
+            return new List<string>() { tour.Name, tour.Description, tour.StartingArea, tour.TargetArea }.All(el => el.HasValue()) && !toursRepo.TourExists(tour.Name);
         }
 
         public bool ValidateTourLog(TourLog log)

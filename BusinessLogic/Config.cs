@@ -12,7 +12,7 @@ namespace BusinessLogic
         public static Config Instance { get; private set; }
         static Config() => Instance = new Config();
 
-        private const string configFilePath = "../../../config.json";
+        
 
         public string DataBaseConnectionString { get; private set; }
         public string ImagesFolderPath { get; private set; }
@@ -20,14 +20,14 @@ namespace BusinessLogic
 
         private Config()
         {
+
+        }
+        
+        public void LoadAndParseConfigFile(string configFilePath)
+        {
             if (!File.Exists(configFilePath))
                 throw new Exception($"could not find config file at {configFilePath}");
 
-            LoadAndParseConfigFile(configFilePath);
-        }
-        
-        private void LoadAndParseConfigFile(string configFilePath)
-        {
             string jsonString = File.ReadAllText(configFilePath);
             var configData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(jsonString);
             var dbConf = configData["Database"];
