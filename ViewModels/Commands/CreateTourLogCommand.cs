@@ -19,7 +19,7 @@ namespace ViewModels.Commands
             viewModel = (CreateTourLogViewModel)parameter;
             RegisterAllProperties(viewModel);
         }
-        public bool CanExecute(object parameter)
+        public override bool CanExecute(object parameter)
         {
             // validate that the input is not empty
             return viewModel.Report.HasValue() && viewModel.TotalTime != 0;

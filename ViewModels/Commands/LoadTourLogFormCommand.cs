@@ -15,12 +15,6 @@ namespace ViewModels.Commands
         {
             this.mainViewModel = (MainViewModel)viewModel;
         }
-
-        public bool CanExecute(object parameter) => true;
-        
-        public void Execute(object parameter)
-        {
-            mainViewModel.LoadTourLogForm(((TourViewModel)parameter).Name);
-        }
+        public void Execute(object parameter) => mainViewModel.LoadTourLogForm(((TourViewModel)parameter).Name);
     }
 }

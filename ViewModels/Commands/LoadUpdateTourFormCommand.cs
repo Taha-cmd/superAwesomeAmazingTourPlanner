@@ -7,13 +7,13 @@ using ViewModels.ViewModels;
 
 namespace ViewModels.Commands
 {
-    public class DeleteTourCommand : CommandBase, ICommand
+    public class LoadUpdateTourFormCommand : CommandBase, ICommand
     {
         private MainViewModel mainViewModel;
-        public DeleteTourCommand(object parameter)
+        public LoadUpdateTourFormCommand(object parameter)
         {
             this.mainViewModel = (MainViewModel)parameter;
         }
-        public void Execute(object parameter) => mainViewModel.Manager.DeleteTour((Tour)parameter);
+        public void Execute(object parameter) => mainViewModel.LoadUpdateTourForm(((TourViewModel)parameter).Tour);
     }
 }

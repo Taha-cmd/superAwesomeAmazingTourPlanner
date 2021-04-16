@@ -36,6 +36,15 @@
         
             <!-- picture here -->
 
+            <Button 
+                    MinWidth="200"
+                    MaxWidth="300"
+                    Style="{StaticResource SubmitButton}" 
+                    Command="{Binding LoadUpdateTourFormCommand, Source={StaticResource MainViewModel}}"
+                    CommandParameter="{Binding }"
+                    Content="Modify this tour"
+                    />
+
 
             <TextBlock Style="{StaticResource Title}" Text="Logs"/>
         

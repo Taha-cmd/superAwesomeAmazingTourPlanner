@@ -14,7 +14,6 @@ namespace ViewModels.Commands
         {
             ViewModel = (IFilterable)viewModel;
         }
-        public bool CanExecute(object parameter) => true;
         public void Execute(object parameter) => ViewModel.Filter((string)parameter);
             
     }

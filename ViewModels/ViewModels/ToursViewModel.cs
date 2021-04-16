@@ -19,9 +19,8 @@ namespace ViewModels.ViewModels
         public ICommand SearchCommand { get; }
 
 
-        public ToursViewModel()
+        public ToursViewModel() : base("Tours", "Tours")
         {
-            ViewName = "Tours";
             Data = new ObservableCollection<Tour>();
             SearchCommand = CommandFactory.CreateCommand<SearchCommand>(this);
             LoadTours();
@@ -39,6 +38,7 @@ namespace ViewModels.ViewModels
             Data.Clear();
             items = Manager.GetTours();
             items.ForEach(item => Data.Add(item));
+            
         }
         
         public void Filter(string filter)

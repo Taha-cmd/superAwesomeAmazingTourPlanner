@@ -24,5 +24,12 @@ namespace superAwesomeAmazingTourPlanner.Views
         {
             InitializeComponent();
         }
+
+
+        public void OnTextChanged(object sender, EventArgs args)
+        {
+
+        }
+
     }
 }

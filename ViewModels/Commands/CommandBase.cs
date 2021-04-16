@@ -28,6 +28,9 @@ namespace ViewModels.Commands
                 .ForEach(prop => RegisterSubscriptionToPropertyChanged(viewModel, prop.Name));
         }
 
+        //default behavior for canexecute
+        virtual public bool CanExecute(object parameter) => true;
+
         public event EventHandler CanExecuteChanged;
     }
 }

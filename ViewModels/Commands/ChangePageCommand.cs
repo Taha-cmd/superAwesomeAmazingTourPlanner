@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ViewModels.ViewModels;
 using System.Linq;
 using Models;
+using System.Diagnostics;
 
 namespace ViewModels.Commands
 {
@@ -16,7 +17,6 @@ namespace ViewModels.Commands
             mainViewModel = (MainViewModel)viewModel;
             RegisterSubscriptionToPropertyChanged(mainViewModel, nameof(mainViewModel.CurrentViewModel));
         }
-        public bool CanExecute(object parameter) => true;
         public void Execute(object parameter)
         {
             ViewModelBase viewModel = (ViewModelBase)parameter;
@@ -26,7 +26,7 @@ namespace ViewModels.Commands
 
             mainViewModel.CurrentViewModel = mainViewModel.ViewModels.FirstOrDefault(vm => vm == viewModel);
             mainViewModel.CurrentViewModel.Init(parameter);
-            Console.WriteLine($"MainViewModel with id ({mainViewModel.GetHashCode()}) changing page to :" + viewModel.ViewName);
+            Debug.WriteLine($"MainViewModel with id ({mainViewModel.GetHashCode()}) changing page to :" + viewModel.ViewName + $" id: {viewModel.GetHashCode()}");
         }
     }
 }

@@ -10,10 +10,8 @@ namespace ViewModels.ViewModels
 {
     public class CreateTourLogViewModel : ViewModelBase
     {
-        public CreateTourLogViewModel(string tourName)
+        public CreateTourLogViewModel(string tourName) : base("CreateTourLog", $"Create Tour Log for {tourName}")
         {
-            ViewName = "CreateTourLog";
-            Title = "Create Tour Log for ";
             this.tourName = tourName;
             createLogCommand = CommandFactory.CreateCommand<CreateTourLogCommand>(this);
         }

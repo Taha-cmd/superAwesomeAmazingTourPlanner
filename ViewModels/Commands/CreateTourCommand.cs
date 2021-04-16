@@ -19,38 +19,19 @@ namespace ViewModels.Commands
             RegisterAllProperties(createTourViewModel);
         }
 
-        public bool CanExecute(object parameter)
-        {
-            return
-                !createTourViewModel.Name.IsEmptyOrWhiteSpace() &&
-                !createTourViewModel.StartingArea.IsEmptyOrWhiteSpace() &&
-                !createTourViewModel.TargetArea.IsEmptyOrWhiteSpace() &&
-                !createTourViewModel.Description.IsEmptyOrWhiteSpace();
-        }
+        public override bool CanExecute(object parameter) => createTourViewModel.Manager.ValidateTour(createTourViewModel.Tour);
         public void Execute(object parameter)
         {
             try
             {
-                //throw new Exception();
-
-                createTourViewModel.Manager.CreateTour
-                    (
-                        new Tour() 
-                        { 
-                            Description = createTourViewModel.Description, 
-                            Name = createTourViewModel.Name,
-                            StartingArea = createTourViewModel.StartingArea,
-                            TargetArea = createTourViewModel.TargetArea
-                        }
-                    );
-
+                createTourViewModel.Manager.CreateTour(createTourViewModel.Tour);
                 createTourViewModel.Status = Status.Success;
                 // after a successfull creation, clear the input fields
                 createTourViewModel.ClearProperties();
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                createTourViewModel.StatusMessage = ex.Message;
                 createTourViewModel.Status = Status.Failure;
             }
         }

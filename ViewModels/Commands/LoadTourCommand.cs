@@ -14,7 +14,6 @@ namespace ViewModels.Commands
         {
             this.mainViewModel = (MainViewModel)parameter;
         }
-        public bool CanExecute(object parameter) => true;
         public void Execute(object parameter)
         {
             if (parameter.GetType().Name == nameof(String))

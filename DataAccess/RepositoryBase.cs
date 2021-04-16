@@ -31,5 +31,13 @@ namespace DataAccess
         {
             return Count(table, filter, filterValue) == 1;
         }
+
+        //for now this only works with one value
+        //TODO: abstract it even more to update n Values (pass a list of tuples)
+        protected int Update<TFilter, TValue>(string table, string filter, TFilter filterValue, string column, TValue newValue, string filterOperator = "=")
+        {
+            string statement = $"UPDATE \"{table}\" SET {column}=@newValue WHERE {filter} {filterOperator} @filterValue";
+            return database.ExecuteNonQuery(statement, database.Param("newValue", newValue), database.Param("filterValue", filterValue));
+        }
     }
 }

@@ -6,6 +6,7 @@ using Extensions;
 using BusinessLogic.CustomEventArgs;
 using System.Linq;
 using DataAccess;
+using System.Diagnostics;
 
 namespace BusinessLogic
 {
@@ -24,7 +25,10 @@ namespace BusinessLogic
         public void CreateTour(Tour tour)
         {
             if (!ValidateTour(tour))
-                throw new Exception("invalid tour!");
+                throw new Exception("invalid tour! all fields must have a value!");
+
+            if (toursRepo.TourExists(tour.Name))
+                throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
 
             toursRepo.Create(tour);
             TriggerDataChangedEvent();
@@ -42,7 +46,17 @@ namespace BusinessLogic
 
         public Tour UpdateTour(string currentName, Tour tour)
         {
-            throw new NotImplementedException();
+            if (!toursRepo.TourExists(currentName))
+                throw new Exception($"Tour {currentName} does not exist");
+
+            if (!ValidateTour(tour))
+                throw new Exception($"Invalid Tour!");
+
+            if (toursRepo.TourExists(tour.Name) && currentName != tour.Name)
+                throw new Exception($"Tour Name {tour.Name} is allready taken, names must be unique");
+
+            toursRepo.Update(currentName, tour);
+            return tour;
         }
         #endregion
 
@@ -70,7 +84,7 @@ namespace BusinessLogic
         #region validation methods
         public bool ValidateTour(Tour tour)
         {
-            return new List<string>() { tour.Name, tour.Description, tour.StartingArea, tour.TargetArea }.All(el => el.HasValue()) && !toursRepo.TourExists(tour.Name);
+            return new List<string>() { tour.Name, tour.Description, tour.StartingArea, tour.TargetArea }.All(el => el.HasValue());
         }
 
         public bool ValidateTourLog(TourLog log)

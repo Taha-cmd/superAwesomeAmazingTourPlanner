@@ -2,6 +2,7 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
 using ViewModels.Commands;
@@ -12,13 +13,15 @@ namespace ViewModels.ViewModels
     {
         // https://rachel53461.wordpress.com/2011/12/18/navigation-with-mvvm-2/
 
-        public MainViewModel()
+        public MainViewModel() : base("MainWindow", "Main View Model")
         {
             changePageCommand = CommandFactory.CreateCommand<ChangePageCommand>(this);
             loadTourCommand = CommandFactory.CreateCommand<LoadTourCommand>(this);
             loadTourLogFormCommand = CommandFactory.CreateCommand<LoadTourLogFormCommand>(this);
             loadLogCommand = CommandFactory.CreateCommand<LoadLogCommand>(this);
             deleteTourCommand = CommandFactory.CreateCommand<DeleteTourCommand>(this);
+            loadUpdateTourFormCommand = CommandFactory.CreateCommand<LoadUpdateTourFormCommand>(this);
+
 
             viewModels = new List<ViewModelBase>() 
             {
@@ -35,8 +38,9 @@ namespace ViewModels.ViewModels
         private ICommand loadTourCommand;
         private ICommand loadTourLogFormCommand;
         private ICommand loadLogCommand;
+        private ICommand loadUpdateTourFormCommand;
         private ICommand deleteTourCommand;
-
+        
         private List<ViewModelBase> viewModels;
         private ViewModelBase currentViewModel;
         private object parameter;
@@ -48,6 +52,7 @@ namespace ViewModels.ViewModels
         public ICommand LoadTourLogFormCommand { get => loadTourLogFormCommand; }
         public ICommand LoadLogCommand { get => loadLogCommand; }
         public ICommand DeleteTourCommand { get => deleteTourCommand; }
+        public ICommand LoadUpdateTourFormCommand { get => loadUpdateTourFormCommand; }
         public List<ViewModelBase> ViewModels { get => viewModels; }
         
         public ViewModelBase CurrentViewModel
@@ -72,23 +77,10 @@ namespace ViewModels.ViewModels
         #endregion
 
         #region methods
-        public void LoadTour(Tour tour)
-        {
-            Console.WriteLine($"MainViewModel with id ({GetHashCode()}) loading tour: " + tour.Name);
-            CurrentViewModel = new TourViewModel(tour);
-        }
-
-        public void LoadTour(string tourName)
-        {
-            var tour = Manager.GetTour(tourName);
-            Console.WriteLine("loading tour by name : " + tourName);
-            CurrentViewModel = new TourViewModel(tour);
-        }
-
-        public void LoadTourLogForm(string tourName)
-        {
-            CurrentViewModel = new CreateTourLogViewModel(tourName);
-        }
+        public void LoadTour(Tour tour) => CurrentViewModel = new TourViewModel(tour);
+        public void LoadTour(string tourName) => CurrentViewModel = new TourViewModel(Manager.GetTour(tourName));
+        public void LoadTourLogForm(string tourName) => CurrentViewModel = new CreateTourLogViewModel(tourName);
+        public void LoadUpdateTourForm(Tour tour) => CurrentViewModel = new CreateTourViewModel(tour);
 
         #endregion
     }

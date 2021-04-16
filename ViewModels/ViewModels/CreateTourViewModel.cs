@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
 using ViewModels.Commands;
@@ -9,13 +11,25 @@ namespace ViewModels.ViewModels
 {
     public class CreateTourViewModel : ViewModelBase
     {
-        public CreateTourViewModel()
+        public CreateTourViewModel() : base("CreateTour", "Create New Tour")
         {
-            ViewName = "CreateTour";
-            Title = "Create New Tour";
             CreateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
-        }
+            operation = Title;
+        } 
 
+        public CreateTourViewModel(Tour tour) : base("CreateTour", $"Update Tour {tour.Name}")
+        {
+            CreateTourCommand = CommandFactory.CreateCommand<UpdateTourCommand>(this);
+
+            Name = tour.Name;
+            StartingArea = tour.StartingArea;
+            TargetArea = tour.TargetArea;
+            Description = tour.Description;
+            Distnace = tour.Distance;
+
+            operation = Title;
+            oldName = Name;
+        }
         public ICommand CreateTourCommand { get; protected set; }
 
 
@@ -25,8 +39,12 @@ namespace ViewModels.ViewModels
         private string startingArea;
         private string targetArea;
         private string description;
-        private float distnace;
+        private double distnace;
+
         private Status status = Status.Empty;
+        private string statusMessage = string.Empty;
+        private string operation = string.Empty;
+        private string oldName = string.Empty;
 
         #endregion fields
 
@@ -67,7 +85,7 @@ namespace ViewModels.ViewModels
                 TriggerPropertyChangedEvent(nameof(Description));
             }
         }
-        public float Distnace 
+        public double Distnace 
         { 
             get => distnace;
             set
@@ -86,6 +104,29 @@ namespace ViewModels.ViewModels
                 TriggerPropertyChangedEvent(nameof(Status));
             }
         }
+
+        public string StatusMessage
+        {
+            get => statusMessage;
+            set { statusMessage = value; TriggerPropertyChangedEvent(nameof(StatusMessage)); }
+        }
+
+        public string Operation { get => operation; }
+        public string OldName { get => oldName; }
+
+        public Tour Tour
+        {
+            get
+            {
+                return new Tour()
+                {
+                    Description = this.Description,
+                    Name = this.Name,
+                    StartingArea = this.StartingArea,
+                    TargetArea = this.TargetArea
+                };
+            }
+        }
         #endregion
 
         internal void ClearProperties()
@@ -95,6 +136,7 @@ namespace ViewModels.ViewModels
             TargetArea = string.Empty;
             Description = string.Empty;
             distnace = 0;
+            StatusMessage = string.Empty;
             //Status = Status.Empty;
         }
     }

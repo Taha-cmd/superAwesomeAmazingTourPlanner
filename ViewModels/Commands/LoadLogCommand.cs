@@ -14,7 +14,6 @@ namespace ViewModels.Commands
         {
             mainViewModel = (MainViewModel)parameter;
         }
-        public bool CanExecute(object parameter) => true;
         
         public void Execute(object parameter)
         {

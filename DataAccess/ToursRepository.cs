@@ -34,7 +34,22 @@ namespace DataAccess
 
         public void Update(string tourName, Tour tour)
         {
-            throw new NotImplementedException();
+            // update "log" set tourname = "newName" where tourname = "oldName"
+
+            string statement =  "UPDATE \"tour\" SET " +
+                                "(description, startingArea, targetArea, name) =" +
+                                "(@newDescription, @newStartingArea, @newTargetArea, @newName)" +
+                                "WHERE name=@currentName";
+
+            database.ExecuteNonQuery(statement,
+                database.Param("newDescription", tour.Description),
+                database.Param("newStartingArea", tour.StartingArea),
+                database.Param("newTargetArea", tour.StartingArea),
+                database.Param("newName", tour.Name),
+                database.Param("currentName", tourName)
+                );
+
+            Update("log", "tourname", tourName, "tourname", tour.Name); // update all related logs
         }
 
         public IEnumerable<Tour> GetTours(int? limit = null)
@@ -86,9 +101,7 @@ namespace DataAccess
                 DateTime = reader.GetValue<DateTime>("date")
             };
         }
-
-        
-
+       
         public bool TourExists(string tourName) => Exists("tour", "name", tourName);
     }
 }

@@ -13,6 +13,7 @@ namespace ViewModels.ViewModels
     public class TourViewModel : ViewModelBase, IFilterable
     {
         private readonly Tour tour;
+        public Tour Tour { get => tour; }
 
         #region Tour Properties
         public string Name
@@ -71,10 +72,9 @@ namespace ViewModels.ViewModels
 
         #endregion
 
-        public TourViewModel(Tour tour)
+        public TourViewModel(Tour tour) : base("Tour", tour.Name)
         {
             this.tour = tour;
-            ViewName = "Tour";
             Logs = new ObservableCollection<TourLog>(tour.Logs);
             SearchCommand = CommandFactory.CreateCommand<SearchCommand>(this);
         }
