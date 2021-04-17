@@ -10,11 +10,8 @@ namespace ViewModels.Commands
     {
         private MainViewModel mainViewModel;
 
-        public LoadLogCommand(object parameter)
-        {
-            mainViewModel = (MainViewModel)parameter;
-        }
-        
+        public LoadLogCommand(object parameter) => mainViewModel = (MainViewModel)parameter;
+
         public void Execute(object parameter)
         {
             Console.WriteLine($"MainViewModel with id ({mainViewModel.GetHashCode()}) loading log: ");

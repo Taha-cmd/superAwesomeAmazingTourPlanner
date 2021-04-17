@@ -12,10 +12,10 @@ namespace ViewModels.Commands
 {
     class CreateTourCommand : CommandBase, ICommand
     {
-        private CreateTourViewModel createTourViewModel;
+        private CreateOrUpdateTourViewModel createTourViewModel;
         public CreateTourCommand(object tourViewModel)
         {
-            createTourViewModel = (CreateTourViewModel)tourViewModel;
+            createTourViewModel = (CreateOrUpdateTourViewModel)tourViewModel;
             RegisterAllProperties(createTourViewModel);
         }
 
@@ -27,7 +27,7 @@ namespace ViewModels.Commands
                 createTourViewModel.Manager.CreateTour(createTourViewModel.Tour);
                 createTourViewModel.Status = Status.Success;
                 // after a successfull creation, clear the input fields
-                createTourViewModel.ClearProperties();
+                createTourViewModel.Clear();
             }
             catch(Exception ex)
             {

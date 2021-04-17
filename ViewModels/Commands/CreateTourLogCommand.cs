@@ -30,22 +30,13 @@ namespace ViewModels.Commands
             try
             {
 
-                var log = new TourLog()
-                {
-                    DateTime = viewModel.DateTime,
-                    Rating = viewModel.Rating,
-                    Report = viewModel.Report,
-                    TotalTime = viewModel.TotalTime
-                };
-
-                viewModel.Manager.CreateTourLog(viewModel.TourName, log);
-
+                viewModel.Manager.CreateTourLog(viewModel.TourName, viewModel.Log);
                 viewModel.Status = Status.Success;
-                viewModel.ClearProperties();
+                viewModel.Clear();
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
+                viewModel.StatusMessage = ex.Message;
                 viewModel.Status = Status.Failure;
             }
 

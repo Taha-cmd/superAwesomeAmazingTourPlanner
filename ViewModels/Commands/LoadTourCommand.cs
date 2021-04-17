@@ -10,10 +10,7 @@ namespace ViewModels.Commands
     public class LoadTourCommand : CommandBase, ICommand
     {
         private MainViewModel mainViewModel;
-        public LoadTourCommand(object parameter)
-        {
-            this.mainViewModel = (MainViewModel)parameter;
-        }
+        public LoadTourCommand(object parameter) => this.mainViewModel = (MainViewModel)parameter;
         public void Execute(object parameter)
         {
             if (parameter.GetType().Name == nameof(String))

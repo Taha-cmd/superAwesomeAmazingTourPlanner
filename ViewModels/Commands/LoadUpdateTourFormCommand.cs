@@ -10,10 +10,7 @@ namespace ViewModels.Commands
     public class LoadUpdateTourFormCommand : CommandBase, ICommand
     {
         private MainViewModel mainViewModel;
-        public LoadUpdateTourFormCommand(object parameter)
-        {
-            this.mainViewModel = (MainViewModel)parameter;
-        }
+        public LoadUpdateTourFormCommand(object parameter) => this.mainViewModel = (MainViewModel)parameter;
         public void Execute(object parameter) => mainViewModel.LoadUpdateTourForm(((TourViewModel)parameter).Tour);
     }
 }

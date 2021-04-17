@@ -10,11 +10,7 @@ namespace ViewModels.Commands
     public class LoadTourLogFormCommand : CommandBase, ICommand
     {
         private MainViewModel mainViewModel;
-
-        public LoadTourLogFormCommand(object viewModel)
-        {
-            this.mainViewModel = (MainViewModel)viewModel;
-        }
+        public LoadTourLogFormCommand(object viewModel) => this.mainViewModel = (MainViewModel)viewModel;
         public void Execute(object parameter) => mainViewModel.LoadTourLogForm(((TourViewModel)parameter).Name);
     }
 }

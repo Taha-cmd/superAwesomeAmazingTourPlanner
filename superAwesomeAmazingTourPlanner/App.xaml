@@ -36,7 +36,7 @@
             <DataTemplate DataType="{x:Type ViewModels:TourViewModel}">
                 <local:Tour DataContext="{Binding}"/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type ViewModels:CreateTourViewModel}">
+            <DataTemplate DataType="{x:Type ViewModels:CreateOrUpdateTourViewModel}">
                 <local:CreateTour DataContext="{Binding}"/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type ViewModels:CreateTourLogViewModel}">

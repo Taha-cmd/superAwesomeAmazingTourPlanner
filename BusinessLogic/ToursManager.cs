@@ -76,7 +76,10 @@ namespace BusinessLogic
             if (!ValidateTourLog(log))
                 throw new Exception("invalid tour log!");
 
-            Console.WriteLine("saving tour log for tour " + tourName);
+            if (!toursRepo.TourExists(tourName))
+                throw new Exception($"Tour {tourName} does not exist");
+
+            toursRepo.AddLog(tourName, log);
 
         }
         #endregion

@@ -27,7 +27,7 @@ namespace ViewModels.ViewModels
             {
                 new HomeViewModel(),
                 new ToursViewModel(),
-                new CreateTourViewModel()
+                new CreateOrUpdateTourViewModel()
             };
 
             CurrentViewModel = viewModels[0];
@@ -80,7 +80,7 @@ namespace ViewModels.ViewModels
         public void LoadTour(Tour tour) => CurrentViewModel = new TourViewModel(tour);
         public void LoadTour(string tourName) => CurrentViewModel = new TourViewModel(Manager.GetTour(tourName));
         public void LoadTourLogForm(string tourName) => CurrentViewModel = new CreateTourLogViewModel(tourName);
-        public void LoadUpdateTourForm(Tour tour) => CurrentViewModel = new CreateTourViewModel(tour);
+        public void LoadUpdateTourForm(Tour tour) => CurrentViewModel = new CreateOrUpdateTourViewModel(tour);
 
         #endregion
     }

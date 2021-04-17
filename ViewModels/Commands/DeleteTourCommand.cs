@@ -10,10 +10,7 @@ namespace ViewModels.Commands
     public class DeleteTourCommand : CommandBase, ICommand
     {
         private MainViewModel mainViewModel;
-        public DeleteTourCommand(object parameter)
-        {
-            this.mainViewModel = (MainViewModel)parameter;
-        }
+        public DeleteTourCommand(object parameter) => this.mainViewModel = (MainViewModel)parameter;
         public void Execute(object parameter) => mainViewModel.Manager.DeleteTour((Tour)parameter);
     }
 }

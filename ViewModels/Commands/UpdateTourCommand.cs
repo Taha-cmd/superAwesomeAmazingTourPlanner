@@ -9,10 +9,10 @@ namespace ViewModels.Commands
 {
     class UpdateTourCommand : CommandBase, ICommand
     {
-        private CreateTourViewModel createTourViewModel;
+        private CreateOrUpdateTourViewModel createTourViewModel;
         public UpdateTourCommand(object tourViewModel)
         {
-            createTourViewModel = (CreateTourViewModel)tourViewModel;
+            createTourViewModel = (CreateOrUpdateTourViewModel)tourViewModel;
             RegisterAllProperties(createTourViewModel);
         }
         public override bool CanExecute(object parameter) => createTourViewModel.Manager.ValidateTour(createTourViewModel.Tour);
@@ -24,7 +24,7 @@ namespace ViewModels.Commands
                 createTourViewModel.Manager.UpdateTour(createTourViewModel.OldName, createTourViewModel.Tour);
                 createTourViewModel.Status = Status.Success;
                 // after a successfull creation, clear the input fields
-                createTourViewModel.ClearProperties();
+                createTourViewModel.Clear();
             }
             catch (Exception ex)
             {

@@ -70,14 +70,24 @@
                 CanUserSortColumns="True"
                 SelectionMode="Single"
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding Logs}">
+                ItemsSource="{Binding Logs}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                
 
                 <DataGrid.Columns>
                     
                     <DataGridTextColumn Header="Date" Binding="{Binding DateTime}"/>
                     <DataGridTextColumn Header="Time" Binding="{Binding TotalTime}"/>
                     <DataGridTextColumn Header="Rating" Binding="{Binding Rating}"/>
-                    <DataGridTextColumn Header="Report" Binding="{Binding Report}"/>
+                    <DataGridTextColumn Header="Report" Binding="{Binding Report}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                <Setter Property="Padding" Value="1" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
 
                     <!--detail? a seperate view?-->
                     <!--<DataGridTemplateColumn>

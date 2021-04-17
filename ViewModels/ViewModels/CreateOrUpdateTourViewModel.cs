@@ -9,17 +9,17 @@ using ViewModels.Enums;
 
 namespace ViewModels.ViewModels
 {
-    public class CreateTourViewModel : ViewModelBase
+    public class CreateOrUpdateTourViewModel : ViewModelBase, IForm
     {
-        public CreateTourViewModel() : base("CreateTour", "Create New Tour")
+        public CreateOrUpdateTourViewModel() : base("CreateTour", "Create New Tour")
         {
-            CreateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
-            operation = Title;
+            CreateOrUpdateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
+            Operation = Title;
         } 
 
-        public CreateTourViewModel(Tour tour) : base("CreateTour", $"Update Tour {tour.Name}")
+        public CreateOrUpdateTourViewModel(Tour tour) : base("CreateTour", $"Update Tour {tour.Name}")
         {
-            CreateTourCommand = CommandFactory.CreateCommand<UpdateTourCommand>(this);
+            CreateOrUpdateTourCommand = CommandFactory.CreateCommand<UpdateTourCommand>(this);
 
             Name = tour.Name;
             StartingArea = tour.StartingArea;
@@ -27,10 +27,10 @@ namespace ViewModels.ViewModels
             Description = tour.Description;
             Distnace = tour.Distance;
 
-            operation = Title;
+            Operation = Title;
             oldName = Name;
         }
-        public ICommand CreateTourCommand { get; protected set; }
+        public ICommand CreateOrUpdateTourCommand { get; protected set; }
 
 
         #region fields
@@ -43,7 +43,6 @@ namespace ViewModels.ViewModels
 
         private Status status = Status.Empty;
         private string statusMessage = string.Empty;
-        private string operation = string.Empty;
         private string oldName = string.Empty;
 
         #endregion fields
@@ -110,8 +109,6 @@ namespace ViewModels.ViewModels
             get => statusMessage;
             set { statusMessage = value; TriggerPropertyChangedEvent(nameof(StatusMessage)); }
         }
-
-        public string Operation { get => operation; }
         public string OldName { get => oldName; }
 
         public Tour Tour
@@ -127,9 +124,11 @@ namespace ViewModels.ViewModels
                 };
             }
         }
+
+        public string Operation { get; }
         #endregion
 
-        internal void ClearProperties()
+        public void Clear()
         {
             Name = string.Empty;
             StartingArea = string.Empty;

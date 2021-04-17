@@ -11,12 +11,15 @@ namespace DataAccess
     public interface IToursRepository
     {
         // crud methods
+
         void Create(Tour tour);
-        void Delete(Tour tour);
-        void Delete(string name);
-        void Update(string tourName, Tour tour);
         IEnumerable<Tour> GetTours(int? limit = null);
         Tour GetTour(string tourName);
+        void Update(string tourName, Tour tour);
+        void Delete(Tour tour);
+        void Delete(string name);
+
+        void AddLog(string tourName, TourLog log);
         bool TourExists(string tourName);
     }
 }

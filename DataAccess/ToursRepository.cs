@@ -28,8 +28,11 @@ namespace DataAccess
         public void Delete(Tour tour) => Delete(tour.Name);
         public void Delete(string name)
         {
-            string statement = $"DELETE FROM \"tour\" WHERE name=@name";
-            database.ExecuteNonQuery(statement, database.Param("name", name));
+            string statement1 = $"DELETE FROM \"log\" WHERE tourname=@name";
+            string statement2 = $"DELETE FROM \"tour\" WHERE name=@name";
+
+            database.ExecuteNonQuery(statement1, database.Param("name", name));
+            database.ExecuteNonQuery(statement2, database.Param("name", name));
         }
 
         public void Update(string tourName, Tour tour)
@@ -68,13 +71,29 @@ namespace DataAccess
         public Tour GetTour(string tourName)
         {
             string statement = $"SELECT * FROM \"tour\" WHERE name=@name";
-            return database.ExecuteQuery(statement, TourReader, database.Param("name", tourName)).First();
+            var tour = database.ExecuteQuery(statement, TourReader, database.Param("name", tourName)).First();
+            tour.Logs = GetLogs(tour.Name).ToList();
+            return tour;
         }
 
         public IEnumerable<TourLog> GetLogs(string tourName)
         {
             string statement = $"SELECT * FROM \"log\" WHERE tourname=@tourname";
             return database.ExecuteQuery(statement, TourLogReader, database.Param("tourname", tourName));
+        }
+
+        public void AddLog(string tourName, TourLog log)
+        {
+            string statement = $"INSERT INTO \"log\" (date, tourname, report, totaltime, rating) " +
+                                $"VALUES (@date, @tourname, @report, @totaltime, @rating)";
+
+            database.ExecuteNonQuery(statement,
+                    database.Param("date", log.DateTime),
+                    database.Param("tourname", tourName),
+                    database.Param("report", log.Report),
+                    database.Param("totaltime", log.TotalTime),
+                    database.Param("rating", log.Rating)
+                    );
         }
 
 
@@ -103,5 +122,7 @@ namespace DataAccess
         }
        
         public bool TourExists(string tourName) => Exists("tour", "name", tourName);
+
+
     }
 }

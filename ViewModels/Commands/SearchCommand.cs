@@ -10,10 +10,7 @@ namespace ViewModels.Commands
     class SearchCommand : CommandBase, ICommand
     {
         private IFilterable ViewModel;
-        public SearchCommand(object viewModel)
-        {
-            ViewModel = (IFilterable)viewModel;
-        }
+        public SearchCommand(object viewModel) => ViewModel = (IFilterable)viewModel;
         public void Execute(object parameter) => ViewModel.Filter((string)parameter);
             
     }
