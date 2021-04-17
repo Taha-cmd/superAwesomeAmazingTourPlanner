@@ -21,6 +21,18 @@ namespace ViewModels.ViewModels
                 throw new Exception("Invalid propery name: " + propertyName);
             
         }
+
+        protected void SetValue<T>(ref T target, T value, string propertyName)
+        {
+            target = value;
+            TriggerPropertyChangedEvent(propertyName);
+        }
+
+        protected void SetValue<T>(object obj, T value, string propertyName)
+        {
+            obj.GetType().GetProperty(propertyName).SetValue(obj, value);
+            TriggerPropertyChangedEvent(propertyName);
+        }
         public ToursManager Manager { get; private set; } = Application.GetToursManager();
         public ViewModelBase(string viewName, string title)
         {
@@ -30,9 +42,7 @@ namespace ViewModels.ViewModels
         }
         public string ViewName { get; protected set; }
         public string Title { get; protected set; }
-        public virtual void Init(object parameter)
-        {
-            // do nothing as default behavior
-        }
+        public virtual void Reset() { }
+
     }
 }

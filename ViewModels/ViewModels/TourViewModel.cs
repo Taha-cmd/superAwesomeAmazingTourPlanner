@@ -19,51 +19,31 @@ namespace ViewModels.ViewModels
         public string Name
         {
             get => tour.Name;
-            set
-            {
-                tour.Name = value;
-                TriggerPropertyChangedEvent(nameof(Name));
-            }
+            set => SetValue(tour, value, nameof(Name));
         }
 
         public string Description
         {
             get => tour.Description;
-            set
-            {
-                tour.Description = value;
-                TriggerPropertyChangedEvent(nameof(Name));
-            }
+            set => SetValue(tour, value, nameof(Description));
         }
 
         public double Distance
         {
             get => tour.Distance;
-            set
-            {
-                tour.Distance = value;
-                TriggerPropertyChangedEvent(nameof(Distance));
-            }
+            set => SetValue(tour, value, nameof(Distance));
         }
 
         public string StartingArea
         {
             get => tour.StartingArea;
-            set
-            {
-                tour.StartingArea = value;
-                TriggerPropertyChangedEvent(nameof(StartingArea));
-            }
+            set => SetValue(tour, value, nameof(StartingArea));
         }
 
         public string TargetArea
         {
             get => tour.TargetArea;
-            set
-            {
-                tour.TargetArea = value;
-                TriggerPropertyChangedEvent(nameof(TargetArea));
-            }
+            set => SetValue(tour, value, nameof(TargetArea));
         }
 
         public ICommand SearchCommand { get; }

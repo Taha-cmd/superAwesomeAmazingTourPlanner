@@ -38,49 +38,41 @@ namespace ViewModels.ViewModels
         {
             get => tourName;
         }
-        public DateTime DateTime 
-        { 
-            get => dateTime;
-            set { dateTime = value; TriggerPropertyChangedEvent(nameof(DateTime)); } 
-        }
-
-        public void Clear()
+        public DateTime DateTime
         {
-            Report = string.Empty;
-            TotalTime = 0;
-            Rating = 0;
-            DateTime = DateTime.Now;
+            get => dateTime;
+            set => SetValue(ref dateTime, value, nameof(DateTime));
         }
         public string Report 
         { 
             get => report;
-            set { report = value; TriggerPropertyChangedEvent(nameof(Report)); } 
+            set => SetValue(ref report, value, nameof(Report));
         }
         public float Distance 
         { 
-            get => distance; 
-            set { distance = value; TriggerPropertyChangedEvent(nameof(Distance)); }
+            get => distance;
+            set => SetValue(ref distance, value, nameof(Distance));
         }
         public float TotalTime 
         { 
-            get => totalTime; 
-            set { totalTime = value; TriggerPropertyChangedEvent(nameof(Distance)); } 
+            get => totalTime;
+            set => SetValue(ref totalTime, value, nameof(TotalTime));
         }
         public int Rating 
         { 
-            get => rating; 
-            set { rating = value; TriggerPropertyChangedEvent(nameof(Rating)); }
+            get => rating;
+            set => SetValue(ref rating, value, nameof(Rating));
         }
 
         public Status Status
         {
             get => status;
-            set { status = value; TriggerPropertyChangedEvent(nameof(Status)); }
+            set => SetValue(ref status, value, nameof(Status));
         }
         public string StatusMessage 
         {
             get => statusMessage;
-            set { statusMessage = value; TriggerPropertyChangedEvent(nameof(StatusMessage)); }
+            set => SetValue(ref statusMessage, value, nameof(StatusMessage));
         }
 
         public string Operation { get; }
@@ -98,6 +90,20 @@ namespace ViewModels.ViewModels
                      TotalTime = this.TotalTime
                 };
             }
+        }
+        public void Clear()
+        {
+            Report = string.Empty;
+            TotalTime = 0;
+            Rating = 0;
+            DateTime = DateTime.Now;
+        }
+
+        public override void Reset()
+        {
+            Clear();
+            StatusMessage = string.Empty;
+            Status = Status.Empty;
         }
 
 

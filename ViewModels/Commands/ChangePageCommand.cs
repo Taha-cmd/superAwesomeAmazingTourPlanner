@@ -25,7 +25,7 @@ namespace ViewModels.Commands
                 mainViewModel.ViewModels.Add(viewModel);
 
             mainViewModel.CurrentViewModel = mainViewModel.ViewModels.FirstOrDefault(vm => vm == viewModel);
-            mainViewModel.CurrentViewModel.Init(parameter);
+            mainViewModel.CurrentViewModel.Reset();
             Debug.WriteLine($"MainViewModel with id ({mainViewModel.GetHashCode()}) changing page to :" + viewModel.ViewName + $" id: {viewModel.GetHashCode()}");
         }
     }

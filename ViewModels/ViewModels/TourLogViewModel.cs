@@ -7,9 +7,6 @@ namespace ViewModels.ViewModels
 {
     public class TourLogViewModel : ViewModelBase
     {
-        public TourLogViewModel() : base("TourLog", "what eva")
-        {
-        }
-        
+        public TourLogViewModel() : base("TourLog", "what eva") { }  
     }
 }

@@ -21,7 +21,7 @@ namespace ViewModels.ViewModels
         {
             CreateOrUpdateTourCommand = CommandFactory.CreateCommand<UpdateTourCommand>(this);
 
-            Name = tour.Name;
+            name = tour.Name;
             StartingArea = tour.StartingArea;
             TargetArea = tour.TargetArea;
             Description = tour.Description;
@@ -50,66 +50,41 @@ namespace ViewModels.ViewModels
         #region properties
         public string Name 
         { 
-            get => name; 
-            set 
-            { 
-                name = value; 
-                TriggerPropertyChangedEvent(nameof(Name)); 
-            } 
+            get => name;
+            set => SetValue(ref name, value, nameof(Name));
         }
         public string StartingArea 
         { 
             get => startingArea;
-            set
-            {
-                startingArea = value;
-                TriggerPropertyChangedEvent(nameof(StartingArea));
-            }
+            set => SetValue(ref startingArea, value, nameof(StartingArea));
         }
         public string TargetArea
         { 
             get => targetArea;
-            set
-            {
-                targetArea = value;
-                TriggerPropertyChangedEvent(nameof(TargetArea));
-            }
+            set => SetValue(ref targetArea, value, nameof(TargetArea));
         }
         public string Description 
         { 
             get => description;
-            set
-            {
-                description = value;
-                TriggerPropertyChangedEvent(nameof(Description));
-            }
+            set => SetValue(ref description, value, nameof(Description));
         }
         public double Distnace 
         { 
             get => distnace;
-            set
-            {
-                distnace = value;
-                TriggerPropertyChangedEvent(nameof(Distnace));
-            }
+            set => SetValue(ref distnace, value, nameof(Distnace));
         }
 
         public Status Status
         {
             get => status;
-            set
-            {
-                status = value;
-                TriggerPropertyChangedEvent(nameof(Status));
-            }
+            set => SetValue(ref status, value, nameof(Status));
         }
 
         public string StatusMessage
         {
             get => statusMessage;
-            set { statusMessage = value; TriggerPropertyChangedEvent(nameof(StatusMessage)); }
+            set => SetValue(ref statusMessage, value, nameof(StatusMessage));
         }
-        public string OldName { get => oldName; }
 
         public Tour Tour
         {
@@ -125,6 +100,7 @@ namespace ViewModels.ViewModels
             }
         }
 
+        public string OldName { get => oldName; }
         public string Operation { get; }
         #endregion
 
@@ -135,8 +111,14 @@ namespace ViewModels.ViewModels
             TargetArea = string.Empty;
             Description = string.Empty;
             distnace = 0;
+
+        }
+
+        public override void Reset()
+        {
+            Clear();
             StatusMessage = string.Empty;
-            //Status = Status.Empty;
+            Status = Status.Empty;
         }
     }
 }
