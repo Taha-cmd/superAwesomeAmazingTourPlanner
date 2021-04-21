@@ -9,9 +9,7 @@ namespace ViewModels.Commands
     public class LoadLogCommand : CommandBase, ICommand
     {
         private MainViewModel mainViewModel;
-
         public LoadLogCommand(object parameter) => mainViewModel = (MainViewModel)parameter;
-
         public void Execute(object parameter)
         {
             Console.WriteLine($"MainViewModel with id ({mainViewModel.GetHashCode()}) loading log: ");

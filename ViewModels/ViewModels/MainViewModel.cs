@@ -49,11 +49,7 @@ namespace ViewModels.ViewModels
         public ViewModelBase CurrentViewModel
         {
             get => currentViewModel;
-            set 
-            {
-                SetValue(ref currentViewModel, value, nameof(CurrentViewModel));
-                //CurrentViewModel.Reset();
-            }
+            set => SetValue(ref currentViewModel, value, nameof(CurrentViewModel));
         }
         #endregion
 

@@ -46,6 +46,12 @@ namespace ViewModels.ViewModels
             set => SetValue(tour, value, nameof(TargetArea));
         }
 
+        public string Image
+        {
+            get => tour.Image;
+            set => SetValue(tour, value, nameof(Image));
+        }
+
         public ICommand SearchCommand { get; }
 
         public ObservableCollection<TourLog> Logs { get; } 

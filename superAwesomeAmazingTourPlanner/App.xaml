@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <ViewModels:MainViewModel x:Key="MainViewModel"/>
             <Converters:MultiParamsConverter x:Key="MultiParamsConverter"/>
+            <Converters:PathToBitMapImageConverter x:Key="PathToBitMapImageConverter"/>
 
             <Style x:Key="SubmitButton" TargetType="Button">
                 <Setter Property="Margin" Value="10" />

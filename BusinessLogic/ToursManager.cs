@@ -6,23 +6,27 @@ using Extensions;
 using BusinessLogic.CustomEventArgs;
 using System.Linq;
 using DataAccess;
+using DataAccess.Maps;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace BusinessLogic
 {
     public class ToursManager
     {
         private readonly IToursRepository toursRepo;
-        public ToursManager(IToursRepository toursRepo)
+        private readonly IMapsApiClient mapsClient;
+        public ToursManager(IToursRepository toursRepo, IMapsApiClient mapsClient)
         {
             this.toursRepo = toursRepo;
+            this.mapsClient = mapsClient;
         }
 
         public event EventHandler DataChanged;
         private void TriggerDataChangedEvent() => DataChanged?.Invoke(this, EventArgs.Empty);
 
         #region Tour CRUD Methods
-        public void CreateTour(Tour tour)
+        public async Task CreateTour(Tour tour)
         {
             if (!ValidateTour(tour))
                 throw new Exception("invalid tour! all fields must have a value!");
@@ -30,21 +34,25 @@ namespace BusinessLogic
             if (toursRepo.TourExists(tour.Name))
                 throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
 
+            if (!await mapsClient.RouteExists(tour.StartingArea, tour.TargetArea))
+                throw new Exception($"no route found between {tour.StartingArea} and tour.targetArea");
+
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+            tour.Distance = routeInfo.Distance;
+            tour.Image = routeInfo.ImagePath;
+
             toursRepo.Create(tour);
             TriggerDataChangedEvent();
-
         }
         public Tour GetTour(string name) => toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
         public List<Tour> GetTours(int? limit = null) => toursRepo.GetTours(limit).ToList();
-        public void DeleteTour(string name)
+        public void DeleteTour(Tour tour)
         {
-            toursRepo.Delete(name);
+            toursRepo.Delete(tour);
             TriggerDataChangedEvent();
         }
 
-        public void DeleteTour(Tour tour) => DeleteTour(tour.Name);
-
-        public Tour UpdateTour(string currentName, Tour tour)
+        public async Task UpdateTour(string currentName, string currentImage, Tour tour)
         {
             if (!toursRepo.TourExists(currentName))
                 throw new Exception($"Tour {currentName} does not exist");
@@ -55,8 +63,15 @@ namespace BusinessLogic
             if (toursRepo.TourExists(tour.Name) && currentName != tour.Name)
                 throw new Exception($"Tour Name {tour.Name} is allready taken, names must be unique");
 
-            toursRepo.Update(currentName, tour);
-            return tour;
+            if (!await mapsClient.RouteExists(tour.StartingArea, tour.TargetArea))
+                throw new Exception($"no route found between {tour.StartingArea} and tour.targetArea");
+
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+            tour.Distance = routeInfo.Distance;
+            tour.Image = routeInfo.ImagePath;
+
+            toursRepo.Update(currentName, currentImage, tour);
+            TriggerDataChangedEvent();
         }
         #endregion
 
@@ -80,7 +95,6 @@ namespace BusinessLogic
                 throw new Exception($"Tour {tourName} does not exist");
 
             toursRepo.AddLog(tourName, log);
-
         }
         #endregion
 

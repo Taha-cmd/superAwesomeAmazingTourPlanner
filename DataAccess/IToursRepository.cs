@@ -15,10 +15,8 @@ namespace DataAccess
         void Create(Tour tour);
         IEnumerable<Tour> GetTours(int? limit = null);
         Tour GetTour(string tourName);
-        void Update(string tourName, Tour tour);
+        void Update(string tourName, string imagePath, Tour tour);
         void Delete(Tour tour);
-        void Delete(string name);
-
         void AddLog(string tourName, TourLog log);
         bool TourExists(string tourName);
     }

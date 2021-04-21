@@ -29,6 +29,8 @@ namespace ViewModels.ViewModels
 
             Operation = Title;
             oldName = Name;
+            oldImage = tour.Image;
+
         }
         public ICommand CreateOrUpdateTourCommand { get; protected set; }
 
@@ -44,6 +46,7 @@ namespace ViewModels.ViewModels
         private Status status = Status.Empty;
         private string statusMessage = string.Empty;
         private string oldName = string.Empty;
+        private string oldImage = string.Empty;
 
         #endregion fields
 
@@ -101,6 +104,7 @@ namespace ViewModels.ViewModels
         }
 
         public string OldName { get => oldName; }
+        public string OldImage { get => oldImage; }
         public string Operation { get; }
         #endregion
 
@@ -111,7 +115,6 @@ namespace ViewModels.ViewModels
             TargetArea = string.Empty;
             Description = string.Empty;
             distnace = 0;
-
         }
 
         public override void Reset()

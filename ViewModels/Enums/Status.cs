@@ -8,6 +8,7 @@ namespace ViewModels.Enums
     {
         Success,
         Failure,
-        Empty
+        Empty,
+        Pending
     }
 }

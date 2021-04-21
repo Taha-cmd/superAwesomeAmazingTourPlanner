@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DataAccess;
 using Extensions;
+using DataAccess.Maps;
 
 namespace BusinessLogic
 {
@@ -19,7 +20,9 @@ namespace BusinessLogic
 
                 var database = new PostgresDatabase(Config.Instance.DataBaseConnectionString);
                 var toursRepo = new ToursRepository(database);
-                manager = new ToursManager(toursRepo);
+                var mapsClient = new MapQuestClient(Config.Instance.MapsApiKey, Config.Instance.ImagesFolderPath);
+
+                manager = new ToursManager(toursRepo, mapsClient);
             }
                 
 

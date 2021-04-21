@@ -17,6 +17,7 @@ namespace superAwesomeAmazingTourPlanner.Converters
             {
                 case Status.Success: return "Operation was Successfull!";
                 case Status.Failure: return "Operation has failed!";
+                case Status.Pending: return "Request successfully sent, this might take a minute!";
                 case Status.Empty: return "";
             }
 

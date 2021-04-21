@@ -20,11 +20,13 @@ namespace ViewModels.Commands
         }
 
         public override bool CanExecute(object parameter) => createTourViewModel.Manager.ValidateTour(createTourViewModel.Tour);
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
             try
             {
-                createTourViewModel.Manager.CreateTour(createTourViewModel.Tour);
+                createTourViewModel.StatusMessage = string.Empty;
+                createTourViewModel.Status = Status.Pending;
+                await createTourViewModel.Manager.CreateTour(createTourViewModel.Tour);
                 createTourViewModel.Status = Status.Success;
                 // after a successfull creation, clear the input fields
                 createTourViewModel.Clear();

@@ -29,7 +29,6 @@ namespace ViewModels.Commands
         {
             try
             {
-
                 viewModel.Manager.CreateTourLog(viewModel.TourName, viewModel.Log);
                 viewModel.Status = Status.Success;
                 viewModel.Clear();

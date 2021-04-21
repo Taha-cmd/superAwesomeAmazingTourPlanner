@@ -6,6 +6,10 @@ set /p PGPASSWORD="enter the password for the root user (postgres) of your postg
 echo reseting database
 psql -U postgres -f scripts\reset.sql
 
+echo deleting existing images
+rmdir /S /Q LocalStorage\Images
+mkdir LocalStorage\Images
+
 echo creating user
 psql -U postgres -f scripts\createUser.sql
 

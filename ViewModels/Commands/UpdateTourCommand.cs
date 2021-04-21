@@ -16,12 +16,14 @@ namespace ViewModels.Commands
             RegisterAllProperties(createTourViewModel);
         }
         public override bool CanExecute(object parameter) => createTourViewModel.Manager.ValidateTour(createTourViewModel.Tour);
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
             
             try
             {
-                createTourViewModel.Manager.UpdateTour(createTourViewModel.OldName, createTourViewModel.Tour);
+                createTourViewModel.StatusMessage = string.Empty;
+                createTourViewModel.Status = Status.Pending;
+                await createTourViewModel.Manager.UpdateTour(createTourViewModel.OldName, createTourViewModel.OldImage, createTourViewModel.Tour);
                 createTourViewModel.Status = Status.Success;
                 // after a successfull creation, clear the input fields
                 createTourViewModel.Clear();

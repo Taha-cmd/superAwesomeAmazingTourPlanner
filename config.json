@@ -8,7 +8,11 @@
 	},
 
 	"LocalStorage": {
-		"Images": "../../../LocalStorage/Images",
-		"Exports": "../../../LocalStorage/Exports"
+		"Images": "../../../../LocalStorage/Images",
+		"Exports": "../../../../LocalStorage/Exports"
+	},
+
+	"Maps": {
+		"Key": "ibhwVgZTL5tIgPF7JzeABz1rJkxGUpuE"
 	}
 }

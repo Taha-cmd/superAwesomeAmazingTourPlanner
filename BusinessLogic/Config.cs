@@ -16,6 +16,7 @@ namespace BusinessLogic
         public string DataBaseConnectionString { get; private set; }
         public string ImagesFolderPath { get; private set; }
         public string ExportsFolderPath { get; private set; }
+        public string MapsApiKey { get; private set; }
 
         private Config() { }
         public void LoadAndParseConfigFile(string configFilePath)
@@ -36,6 +37,10 @@ namespace BusinessLogic
 
             ImagesFolderPath = configData["LocalStorage"]["Images"];
             ExportsFolderPath = configData["LocalStorage"]["Exports"];
+            MapsApiKey = configData["Maps"]["Key"];
+
+            if (!Directory.Exists(ImagesFolderPath) || !Directory.Exists(ExportsFolderPath))
+                throw new Exception("path in config file does not exist");
         }
 
         
