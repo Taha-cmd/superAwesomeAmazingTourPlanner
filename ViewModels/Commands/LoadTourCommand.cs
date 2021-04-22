@@ -11,12 +11,6 @@ namespace ViewModels.Commands
     {
         private MainViewModel mainViewModel;
         public LoadTourCommand(object parameter) => this.mainViewModel = (MainViewModel)parameter;
-        public void Execute(object parameter)
-        {
-            if (parameter.GetType().Name == nameof(String))
-                mainViewModel.LoadTour((string)parameter);
-            else
-                mainViewModel.LoadTour((Tour)parameter);
-        }
+        public void Execute(object parameter) => mainViewModel.CurrentViewModel = new TourViewModel((Tour)parameter);
     }
 }

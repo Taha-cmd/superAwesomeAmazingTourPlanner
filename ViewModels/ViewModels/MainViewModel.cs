@@ -52,13 +52,5 @@ namespace ViewModels.ViewModels
             set => SetValue(ref currentViewModel, value, nameof(CurrentViewModel));
         }
         #endregion
-
-        #region methods
-        public void LoadTour(Tour tour) => CurrentViewModel = new TourViewModel(tour);
-        public void LoadTour(string tourName) => CurrentViewModel = new TourViewModel(Manager.GetTour(tourName));
-        public void LoadTourLogForm(string tourName) => CurrentViewModel = new CreateTourLogViewModel(tourName);
-        public void LoadUpdateTourForm(Tour tour) => CurrentViewModel = new CreateOrUpdateTourViewModel(tour);
-
-        #endregion
     }
 }

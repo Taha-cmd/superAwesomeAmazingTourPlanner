@@ -11,6 +11,6 @@ namespace ViewModels.Commands
     {
         private MainViewModel mainViewModel;
         public LoadUpdateTourFormCommand(object parameter) => this.mainViewModel = (MainViewModel)parameter;
-        public void Execute(object parameter) => mainViewModel.LoadUpdateTourForm(((TourViewModel)parameter).Tour);
+        public void Execute(object parameter) => mainViewModel.CurrentViewModel = new CreateOrUpdateTourViewModel(((TourViewModel)parameter).Tour);
     }
 }

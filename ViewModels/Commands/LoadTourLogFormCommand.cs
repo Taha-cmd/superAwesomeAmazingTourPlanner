@@ -11,6 +11,6 @@ namespace ViewModels.Commands
     {
         private MainViewModel mainViewModel;
         public LoadTourLogFormCommand(object viewModel) => this.mainViewModel = (MainViewModel)viewModel;
-        public void Execute(object parameter) => mainViewModel.LoadTourLogForm(((TourViewModel)parameter).Name);
+        public void Execute(object parameter) => mainViewModel.CurrentViewModel =  new CreateTourLogViewModel(((TourViewModel)parameter).Name);
     }
 }
