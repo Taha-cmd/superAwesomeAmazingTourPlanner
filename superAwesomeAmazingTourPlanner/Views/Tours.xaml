@@ -11,10 +11,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <UserControl.DataContext>
-        <ViewModels:ToursViewModel/>
-    </UserControl.DataContext>
-
     <UserControl.Resources>
 
         <Style TargetType="Button" x:Key="TourLinkButton">
@@ -29,7 +25,7 @@
     </UserControl.Resources>
 
 
-    <StackPanel>
+    <StackPanel Background="{StaticResource BackgroundColor}">
 
         <TextBlock  HorizontalAlignment="Center" Margin="10" Padding="10" FontSize="24"
             Text="{Binding ViewName}"/>

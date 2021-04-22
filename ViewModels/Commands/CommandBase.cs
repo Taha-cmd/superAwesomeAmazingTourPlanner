@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using ViewModels.ViewModels;
 using System.Linq;
+using System.Threading.Tasks;
+using ViewModels.Enums;
 
 namespace ViewModels.Commands
 {
@@ -32,5 +34,24 @@ namespace ViewModels.Commands
         virtual public bool CanExecute(object parameter) => true;
 
         public event EventHandler CanExecuteChanged;
+
+        protected async Task CreateOrUpdate(IForm form, Func<Task> action)
+        {
+            try
+            {
+                form.StatusMessage = string.Empty;
+                form.Status = Status.Pending;
+                await action();
+                form.Status = Status.Success;
+                // after a successfull creation, clear the input fields
+                form.Clear();
+            }
+            catch (Exception ex)
+            {
+                form.StatusMessage = ex.Message;
+                form.Status = Status.Failure;
+            }
+
+        }
     }
 }

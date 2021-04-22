@@ -11,6 +11,6 @@ namespace ViewModels.Commands
     {
         private MainViewModel mainViewModel;
         public DeleteTourCommand(object parameter) => this.mainViewModel = (MainViewModel)parameter;
-        public void Execute(object parameter) => mainViewModel.Manager.DeleteTour((Tour)parameter);
+        public async void Execute(object parameter) =>  await mainViewModel.Manager.DeleteTour((Tour)parameter);
     }
 }

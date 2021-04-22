@@ -7,7 +7,6 @@ namespace DataAccess.Maps
 {
     public interface IMapsApiClient
     {
-        Task<IMapsApiResponse> GetRouteInformation(string from, string to);
-        Task<bool> RouteExists(string from, string to);
+        Task<MapsApiResponse> GetRouteInformation(string from, string to);
     }
 }

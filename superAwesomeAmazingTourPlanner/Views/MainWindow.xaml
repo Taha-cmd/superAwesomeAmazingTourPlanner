@@ -48,6 +48,6 @@
             
         </StackPanel>
 
-        <ContentControl DataContext="{StaticResource MainViewModel}" Background="Wheat" Grid.Column="1" Content="{Binding CurrentViewModel}"></ContentControl>
+        <ContentControl DataContext="{StaticResource MainViewModel}"  Background="{StaticResource BackgroundColor}" Grid.Column="1" Content="{Binding CurrentViewModel}"></ContentControl>
     </Grid>
 </Window>

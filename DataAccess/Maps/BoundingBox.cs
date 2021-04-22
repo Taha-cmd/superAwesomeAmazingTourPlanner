@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace DataAccess.Maps
 {
-    public class MapQuestBoundingBox
+    public class BoundingBox
     {
         public double UL_LNG { get; set; }
         public double UL_LAT { get; set; }

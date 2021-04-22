@@ -13,6 +13,12 @@
             <ViewModels:MainViewModel x:Key="MainViewModel"/>
             <Converters:MultiParamsConverter x:Key="MultiParamsConverter"/>
             <Converters:PathToBitMapImageConverter x:Key="PathToBitMapImageConverter"/>
+            
+            <SolidColorBrush x:Key="BackgroundColor">
+                <SolidColorBrush.Color>
+                    <Color A="255" R="248" G="241" B="255"/>
+                </SolidColorBrush.Color>
+            </SolidColorBrush>
 
             <Style x:Key="SubmitButton" TargetType="Button">
                 <Setter Property="Margin" Value="10" />

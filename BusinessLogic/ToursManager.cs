@@ -34,10 +34,11 @@ namespace BusinessLogic
             if (toursRepo.TourExists(tour.Name))
                 throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
 
-            if (!await mapsClient.RouteExists(tour.StartingArea, tour.TargetArea))
-                throw new Exception($"no route found between {tour.StartingArea} and tour.targetArea");
-
             var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+
+            if (!routeInfo.RouteExists)
+                throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+
             tour.Distance = routeInfo.Distance;
             tour.Image = routeInfo.ImagePath;
 
@@ -46,9 +47,14 @@ namespace BusinessLogic
         }
         public Tour GetTour(string name) => toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
         public List<Tour> GetTours(int? limit = null) => toursRepo.GetTours(limit).ToList();
-        public void DeleteTour(Tour tour)
+        public async Task DeleteTour(Tour tour)
         {
-            toursRepo.Delete(tour);
+            await Task.Run(() =>
+              {
+                  toursRepo.Delete(tour);
+              });
+
+            // throws an exception when triggered from the task thread
             TriggerDataChangedEvent();
         }
 
@@ -63,10 +69,11 @@ namespace BusinessLogic
             if (toursRepo.TourExists(tour.Name) && currentName != tour.Name)
                 throw new Exception($"Tour Name {tour.Name} is allready taken, names must be unique");
 
-            if (!await mapsClient.RouteExists(tour.StartingArea, tour.TargetArea))
-                throw new Exception($"no route found between {tour.StartingArea} and tour.targetArea");
-
             var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+
+            if (!routeInfo.RouteExists)
+                throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+
             tour.Distance = routeInfo.Distance;
             tour.Image = routeInfo.ImagePath;
 
@@ -86,15 +93,18 @@ namespace BusinessLogic
         #endregion
 
         #region TourLog Crud Methods
-        public void CreateTourLog(string tourName, TourLog log)
+        public async Task CreateTourLog(string tourName, TourLog log)
         {
-            if (!ValidateTourLog(log))
-                throw new Exception("invalid tour log!");
+            await Task.Run(() =>
+            {
+                if (!ValidateTourLog(log))
+                    throw new Exception("invalid tour log!");
 
-            if (!toursRepo.TourExists(tourName))
-                throw new Exception($"Tour {tourName} does not exist");
+                if (!toursRepo.TourExists(tourName))
+                    throw new Exception($"Tour {tourName} does not exist");
 
-            toursRepo.AddLog(tourName, log);
+                toursRepo.AddLog(tourName, log);
+            });
         }
         #endregion
 

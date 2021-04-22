@@ -23,28 +23,23 @@ namespace DataAccess.Maps
         private string CreateRouteRequest(string from, string to) => $"http://www.mapquestapi.com/directions/v2/route?key={key}&from={from}&to={to}";
         private string CreateStaticMapRequest(double width, double length, int zoom, string sessionId, string boundingBox)
             => $"https://www.mapquestapi.com/staticmap/v5/map?key={key}&size={width},{length}&zoom={zoom}&session={sessionId}&boundingBox={boundingBox}";
-        public async Task<IMapsApiResponse> GetRouteInformation(string from, string to)
+        public async Task<MapsApiResponse> GetRouteInformation(string from, string to)
         {
             var routeInfo = await httpClient.GetStringAsync(CreateRouteRequest(from, to));
             return await ParseRouteInfo(routeInfo);
         }
-        private async Task<IMapsApiResponse> ParseRouteInfo(string routeInfo)
+        private async Task<MapsApiResponse> ParseRouteInfo(string routeInfo)
         {
             var data = new ParsedMapQuestApiResponse(routeInfo);
             //Debug.WriteLine(CreateStaticMapRequest(640, 480, 11, data.Session, data.BoundingBox.ToString()));
-            var staticMapResponse = await httpClient.GetByteArrayAsync(CreateStaticMapRequest(640, 480, 11, data.Session, data.BoundingBox.ToString()));
+            if (data.StatusCode != 0)
+                return new MapsApiResponse(false);
 
+            var staticMapResponse = await httpClient.GetByteArrayAsync(CreateStaticMapRequest(640, 480, 11, data.Session, data.BoundingBox.ToString()));
             string imagePath = $"{imagesFolderPath}/{Guid.NewGuid()}.jpg";
             File.WriteAllBytes(imagePath, staticMapResponse);
 
-            return new MapQuestResponse(data.Distance, imagePath);
-        }
-
-        public async Task<bool> RouteExists(string from, string to)
-        {
-            var routeInfo = await httpClient.GetStringAsync(CreateRouteRequest(from, to));
-            var data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, JsonElement>>>(routeInfo);
-            return data["info"]["statuscode"].GetInt32() == 0;
+            return new MapsApiResponse(data.Distance, imagePath);
         }
     }
 }

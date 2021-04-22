@@ -10,14 +10,20 @@ namespace DataAccess.Maps
     {
         public double Distance { get; }
         public string Session { get; }
-        public MapQuestBoundingBox BoundingBox {get;}
+        public int StatusCode { get; }
+        public BoundingBox BoundingBox {get;}
 
         public ParsedMapQuestApiResponse(string response)
         {
             var data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, JsonElement>>>(response);
+            StatusCode = data["info"]["statuscode"].GetInt32();
+
+            if (StatusCode != 0)
+                return;
 
             Distance = data["route"]["distance"].GetDouble();
             Session = data["route"]["sessionId"].GetString();
+
 
             //"boundingBox": {
             //      "lr": {
@@ -31,7 +37,7 @@ namespace DataAccess.Maps
             //},
 
             var box = data["route"]["boundingBox"].EnumerateObject();
-            BoundingBox = new MapQuestBoundingBox();
+            BoundingBox = new BoundingBox();
             box.MoveNext();
 
             var lr = box.Current.Value.EnumerateObject();

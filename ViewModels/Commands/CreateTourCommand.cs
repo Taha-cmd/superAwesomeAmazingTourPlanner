@@ -12,30 +12,14 @@ namespace ViewModels.Commands
 {
     class CreateTourCommand : CommandBase, ICommand
     {
-        private CreateOrUpdateTourViewModel createTourViewModel;
+        private CreateOrUpdateTourViewModel viewModel;
         public CreateTourCommand(object tourViewModel)
         {
-            createTourViewModel = (CreateOrUpdateTourViewModel)tourViewModel;
-            RegisterAllProperties(createTourViewModel);
+            viewModel = (CreateOrUpdateTourViewModel)tourViewModel;
+            RegisterAllProperties(viewModel);
         }
 
-        public override bool CanExecute(object parameter) => createTourViewModel.Manager.ValidateTour(createTourViewModel.Tour);
-        public async void Execute(object parameter)
-        {
-            try
-            {
-                createTourViewModel.StatusMessage = string.Empty;
-                createTourViewModel.Status = Status.Pending;
-                await createTourViewModel.Manager.CreateTour(createTourViewModel.Tour);
-                createTourViewModel.Status = Status.Success;
-                // after a successfull creation, clear the input fields
-                createTourViewModel.Clear();
-            }
-            catch(Exception ex)
-            {
-                createTourViewModel.StatusMessage = ex.Message;
-                createTourViewModel.Status = Status.Failure;
-            }
-        }
+        public override bool CanExecute(object parameter) => viewModel.Manager.ValidateTour(viewModel.Tour);
+        public async void Execute(object parameter) => await CreateOrUpdate(viewModel, () => viewModel.Manager.CreateTour(viewModel.Tour));
     }
 }
