@@ -22,6 +22,8 @@ namespace ViewModels.Commands
                 nameof(DeleteTourCommand)           => new DeleteTourCommand(viewModel),
                 nameof(LoadUpdateTourFormCommand)   => new LoadUpdateTourFormCommand(viewModel),
                 nameof(UpdateTourCommand)           => new UpdateTourCommand(viewModel),
+                nameof(ExportTourCommand)           => new ExportTourCommand(viewModel),
+                nameof(ImportTourCommand)           => new ImportTourCommand(viewModel),
                 _ => throw new Exception($"command type [{typeof(TCommand).Name}] unknown"),
             };
         }

@@ -9,7 +9,9 @@ using DataAccess;
 using DataAccess.Maps;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.IO;
 namespace BusinessLogic
 {
     public class ToursManager
@@ -21,9 +23,51 @@ namespace BusinessLogic
             this.toursRepo = toursRepo;
             this.mapsClient = mapsClient;
         }
-
         public event EventHandler DataChanged;
         private void TriggerDataChangedEvent() => DataChanged?.Invoke(this, EventArgs.Empty);
+
+        public async Task Export(Tour tourOriginal)
+        {
+            Tour tour = tourOriginal.Clone();
+
+            await Task.Run(async () =>
+            {
+                string imagePath = Path.Join(Config.Instance.ExportsFolderPath, "Images", Path.GetFileName(tour.Image)); // save a copy of the image as well
+                File.Copy(tour.Image, imagePath, true); // save a copy at the new path
+
+                tour.Image = imagePath;
+                string path = Path.Join(Config.Instance.ExportsFolderPath, tour.Name + ".json");
+                string json = JsonSerializer.Serialize(tour);
+
+                await File.WriteAllTextAsync(path, json);
+            });
+        }
+
+        public async Task Import(string path)
+        {
+            await Task.Run(async () =>
+            {
+                Tour tour = JsonSerializer.Deserialize<Tour>(File.ReadAllText(path));
+
+                if (!ValidateTour(tour))
+                    throw new Exception("invalid tour! all fields must have a value!");
+
+                if (toursRepo.TourExists(tour.Name))
+                    throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
+
+                var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+
+                if (!routeInfo.RouteExists)
+                    throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+
+                string newPath = Path.Join(Config.Instance.ImagesFolderPath, Guid.NewGuid() + ".jpg");
+                File.Copy(tour.Image, newPath);
+                tour.Image = newPath;
+                toursRepo.Create(tour);
+            });
+
+            TriggerDataChangedEvent();
+        }
 
         #region Tour CRUD Methods
         public async Task CreateTour(Tour tour)
@@ -34,7 +78,7 @@ namespace BusinessLogic
             if (toursRepo.TourExists(tour.Name))
                 throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
 
-            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea, true);
 
             if (!routeInfo.RouteExists)
                 throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
@@ -69,7 +113,7 @@ namespace BusinessLogic
             if (toursRepo.TourExists(tour.Name) && currentName != tour.Name)
                 throw new Exception($"Tour Name {tour.Name} is allready taken, names must be unique");
 
-            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea, true);
 
             if (!routeInfo.RouteExists)
                 throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");

@@ -9,17 +9,19 @@ using ViewModels.Enums;
 
 namespace ViewModels.ViewModels
 {
-    public class CreateOrUpdateTourViewModel : ViewModelBase, IForm
+    public class CreateOrUpdateTourViewModel : ViewModelBase, IStatusDisplay
     {
         public CreateOrUpdateTourViewModel() : base("CreateTour", "Create New Tour")
         {
             CreateOrUpdateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
+            ImportTourCommand = CommandFactory.CreateCommand<ImportTourCommand>(this);
             Operation = Title;
         } 
 
         public CreateOrUpdateTourViewModel(Tour tour) : base("CreateTour", $"Update Tour {tour.Name}")
         {
             CreateOrUpdateTourCommand = CommandFactory.CreateCommand<UpdateTourCommand>(this);
+            ImportTourCommand  = CommandFactory.CreateCommand<ImportTourCommand>(this);
 
             name = tour.Name;
             StartingArea = tour.StartingArea;
@@ -33,6 +35,7 @@ namespace ViewModels.ViewModels
 
         }
         public ICommand CreateOrUpdateTourCommand { get; protected set; }
+        public ICommand ImportTourCommand { get; }
 
 
         #region fields

@@ -9,20 +9,32 @@ using System.Linq;
 using Extensions;
 using BusinessLogic;
 using BusinessLogic.CustomEventArgs;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Diagnostics;
+using ViewModels.Enums;
 
 namespace ViewModels.ViewModels
 {
-    public class ToursViewModel : ViewModelBase, IFilterable
+    public class ToursViewModel : ViewModelBase, IFilterable, IStatusDisplay
     {
         public ObservableCollection<Tour> Data { get; } // data to be displayed
         private List<Tour> items; // actual data
         public ICommand SearchCommand { get; }
+        public ICommand ExportTourCommand { get; }
 
+        private Status status = Status.Empty;
+        private string statusMessage = string.Empty;
+        public Status Status { get => status; set => SetValue(ref status, value, nameof(Status)); }
+        public string StatusMessage { get => statusMessage; set => SetValue(ref statusMessage, value, nameof(StatusMessage)); }
+
+        public string Operation => throw new NotImplementedException();
 
         public ToursViewModel() : base("Tours", "Tours")
         {
             Data = new ObservableCollection<Tour>();
             SearchCommand = CommandFactory.CreateCommand<SearchCommand>(this);
+            //ExportTourCommand = CommandFactory.CreateCommand<ExportTourCommand>(this);
             LoadTours();
 
             Manager.DataChanged += (object sender, EventArgs e) =>
@@ -30,8 +42,6 @@ namespace ViewModels.ViewModels
                 LoadTours();
             };
         }
-
-
         private void LoadTours()
         {
             items?.Clear(); 

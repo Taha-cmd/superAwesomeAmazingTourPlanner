@@ -5,6 +5,7 @@ using ViewModels.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels.Enums;
+using System.Threading;
 
 namespace ViewModels.Commands
 {
@@ -35,7 +36,7 @@ namespace ViewModels.Commands
 
         public event EventHandler CanExecuteChanged;
 
-        protected async Task CreateOrUpdate(IForm form, Func<Task> action)
+        protected async Task CreateOrUpdate(IStatusDisplay form, Func<Task> action)
         {
             try
             {

@@ -8,7 +8,7 @@ using ViewModels.Enums;
 
 namespace ViewModels.ViewModels
 {
-    public class CreateTourLogViewModel : ViewModelBase, IForm
+    public class CreateTourLogViewModel : ViewModelBase, IStatusDisplay
     {
         public CreateTourLogViewModel(string tourName) : base("CreateTourLog", $"Create Tour Log for {tourName}")
         {

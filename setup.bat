@@ -7,8 +7,12 @@ echo reseting database
 psql -U postgres -f scripts\reset.sql
 
 echo deleting existing images
-rmdir /S /Q LocalStorage\Images
+rmdir /S /Q LocalStorage
+mkdir LocalStorage
 mkdir LocalStorage\Images
+mkdir LocalStorage\Exports
+mkdir LocalStorage\Exports\Images
+
 
 echo creating user
 psql -U postgres -f scripts\createUser.sql

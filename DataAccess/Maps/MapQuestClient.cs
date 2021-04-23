@@ -19,25 +19,33 @@ namespace DataAccess.Maps
         {
             this.key = key;
             this.imagesFolderPath = imagesFolderPath;
+
+            if (!Directory.Exists("tmp"))
+                Directory.CreateDirectory("tmp");
         }
         private string CreateRouteRequest(string from, string to) => $"http://www.mapquestapi.com/directions/v2/route?key={key}&from={from}&to={to}";
         private string CreateStaticMapRequest(double width, double length, int zoom, string sessionId, string boundingBox)
             => $"https://www.mapquestapi.com/staticmap/v5/map?key={key}&size={width},{length}&zoom={zoom}&session={sessionId}&boundingBox={boundingBox}";
-        public async Task<MapsApiResponse> GetRouteInformation(string from, string to)
+        public async Task<MapsApiResponse> GetRouteInformation(string from, string to, bool saveMap = false)
         {
             var routeInfo = await httpClient.GetStringAsync(CreateRouteRequest(from, to));
-            return await ParseRouteInfo(routeInfo);
+            return await ParseRouteInfo(routeInfo, saveMap);
         }
-        private async Task<MapsApiResponse> ParseRouteInfo(string routeInfo)
+        private async Task<MapsApiResponse> ParseRouteInfo(string routeInfo, bool saveMap)
         {
             var data = new ParsedMapQuestApiResponse(routeInfo);
             //Debug.WriteLine(CreateStaticMapRequest(640, 480, 11, data.Session, data.BoundingBox.ToString()));
             if (data.StatusCode != 0)
                 return new MapsApiResponse(false);
 
-            var staticMapResponse = await httpClient.GetByteArrayAsync(CreateStaticMapRequest(640, 480, 11, data.Session, data.BoundingBox.ToString()));
-            string imagePath = $"{imagesFolderPath}/{Guid.NewGuid()}.jpg";
-            File.WriteAllBytes(imagePath, staticMapResponse);
+            string imagePath = null;
+
+            if (saveMap)
+            {
+                var staticMapResponse = await httpClient.GetByteArrayAsync(CreateStaticMapRequest(640, 480, 11, data.Session, data.BoundingBox.ToString()));
+                imagePath = $"{imagesFolderPath}/{Guid.NewGuid()}.jpg";
+                File.WriteAllBytes(imagePath, staticMapResponse);
+            }
 
             return new MapsApiResponse(data.Distance, imagePath);
         }

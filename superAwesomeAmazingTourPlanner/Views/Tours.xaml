@@ -30,6 +30,16 @@
         <TextBlock  HorizontalAlignment="Center" Margin="10" Padding="10" FontSize="24"
             Text="{Binding ViewName}"/>
 
+        <TextBlock
+                Foreground="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
+                Grid.ColumnSpan="3"
+                Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}"
+                Style="{StaticResource Status}"/>
+
+        <TextBlock
+                Text="{Binding StatusMessage}"
+                HorizontalAlignment="Center"/>
+
 
         <TextBox
             Style="{StaticResource InputField}"
@@ -92,6 +102,21 @@
                                     Margin="5, 0, 0, 0"
                                     >
                                 Delete
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button 
+                                    Command="{Binding ExportTourCommand, Mode=OneWay, Source={StaticResource MainViewModel}}"
+                                    CommandParameter="{Binding }"
+                                    Background="Gray"
+                                    Margin="5, 0, 0, 0"
+                                    >
+                                Export
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

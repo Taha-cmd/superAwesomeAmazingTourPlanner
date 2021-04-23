@@ -7,10 +7,11 @@ using System.Text;
 using System.Windows.Input;
 using Models;
 using ViewModels.Commands;
+using ViewModels.Enums;
 
 namespace ViewModels.ViewModels
 {
-    public class TourViewModel : ViewModelBase, IFilterable
+    public class TourViewModel : ViewModelBase, IFilterable, IStatusDisplay
     {
         private readonly Tour tour;
         public Tour Tour { get => tour; }
@@ -54,7 +55,14 @@ namespace ViewModels.ViewModels
 
         public ICommand SearchCommand { get; }
 
-        public ObservableCollection<TourLog> Logs { get; } 
+        public ObservableCollection<TourLog> Logs { get; }
+
+        private Status status = Status.Empty;
+        private string statusMessage = string.Empty;
+        public Status Status { get => status; set => SetValue(ref status, value, nameof(Status)); }
+        public string StatusMessage { get => statusMessage; set => SetValue(ref statusMessage, value, nameof(StatusMessage)); }
+
+        public string Operation => throw new NotImplementedException();
 
         #endregion
 

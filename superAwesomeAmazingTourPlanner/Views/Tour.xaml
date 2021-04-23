@@ -10,8 +10,12 @@
 
     <ScrollViewer Padding="20, 10" Background="{StaticResource BackgroundColor}">
     <StackPanel >
-        <TextBlock Style="{StaticResource Title}" Text="{Binding Name}"/>
 
+
+        
+            <TextBlock Style="{StaticResource Title}" Text="{Binding Name}"/>
+
+        
         
             <Label Style="{StaticResource Label}" Content="Description: "/>
             <Border Padding="30, 0">
@@ -45,6 +49,25 @@
                     CommandParameter="{Binding }"
                     Content="Modify this tour"
                     />
+
+            <Button 
+                    MinWidth="200"
+                    MaxWidth="300"
+                    Style="{StaticResource SubmitButton}" 
+                    Command="{Binding ExportTourCommand, Source={StaticResource MainViewModel}}"
+                    CommandParameter="{Binding Tour}"
+                    Content="Export this tour"
+                    />
+
+            <TextBlock
+                Foreground="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
+                Grid.ColumnSpan="3"
+                Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}"
+                Style="{StaticResource Status}"/>
+
+            <TextBlock
+                Text="{Binding StatusMessage}"
+                HorizontalAlignment="Center"/>
 
 
             <TextBlock Style="{StaticResource Title}" Text="Logs"/>
