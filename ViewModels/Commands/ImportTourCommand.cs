@@ -6,10 +6,10 @@ using ViewModels.ViewModels;
 
 namespace ViewModels.Commands
 {
-    public class ImportTourCommand : CommandBase, ICommand
+    public class ImportTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
         private readonly CreateOrUpdateTourViewModel viewModel;
         public ImportTourCommand(object param) => viewModel = (CreateOrUpdateTourViewModel)param;
-        public async void Execute(object parameter) => await CreateOrUpdate(viewModel, () => viewModel.Manager.Import((string)parameter));
+        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => viewModel.Manager.Import((string)parameter));
     }
 }

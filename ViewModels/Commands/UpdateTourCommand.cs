@@ -7,7 +7,7 @@ using ViewModels.ViewModels;
 
 namespace ViewModels.Commands
 {
-    class UpdateTourCommand : CommandBase, ICommand
+    class UpdateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
         private CreateOrUpdateTourViewModel viewModel;
         public UpdateTourCommand(object tourViewModel)
@@ -18,7 +18,7 @@ namespace ViewModels.Commands
         public override bool CanExecute(object parameter) => viewModel.Manager.ValidateTour(viewModel.Tour);
         public async void Execute(object parameter)
         {
-            await CreateOrUpdate(viewModel, () => viewModel.Manager.UpdateTour(viewModel.OldName, viewModel.OldImage, viewModel.Tour));
+            await AsyncOperationWrapper(viewModel, () => viewModel.Manager.UpdateTour(viewModel.OldName, viewModel.OldImage, viewModel.Tour));
         }
     }
 }
