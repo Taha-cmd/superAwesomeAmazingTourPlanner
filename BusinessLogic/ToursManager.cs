@@ -1,17 +1,16 @@
-﻿using Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Extensions;
-using BusinessLogic.CustomEventArgs;
-using System.Linq;
+﻿using BusinessLogic.CustomEventArgs;
 using DataAccess;
 using DataAccess.Maps;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Extensions;
+using Models;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+
 namespace BusinessLogic
 {
     public class ToursManager

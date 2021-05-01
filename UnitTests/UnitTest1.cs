@@ -18,7 +18,7 @@ namespace UnitTests
         public void TestTourCreationValidation()
         {
             var createTourViewModel = new CreateOrUpdateTourViewModel();
-            Assert.Throws<Exception>(() => createTourViewModel.Manager.CreateTour(new Tour()));
+            Assert.Throws<Exception>(async () => await createTourViewModel.Manager.CreateTour(new Tour()));
         }
 
         [Test]

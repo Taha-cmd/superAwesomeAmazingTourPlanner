@@ -1,9 +1,6 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Extensions;
-using System.Linq;
 using System.Data.Common;
 
 namespace DataAccess
