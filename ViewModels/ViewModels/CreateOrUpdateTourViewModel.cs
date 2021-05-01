@@ -16,6 +16,7 @@ namespace ViewModels.ViewModels
             CreateOrUpdateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
             ImportTourCommand = CommandFactory.CreateCommand<ImportTourCommand>(this);
             Operation = Title;
+            tour = new Tour();
         } 
 
         public CreateOrUpdateTourViewModel(Tour tour) : base("CreateTour", $"Update Tour {tour.Name}")
@@ -23,11 +24,7 @@ namespace ViewModels.ViewModels
             CreateOrUpdateTourCommand = CommandFactory.CreateCommand<UpdateTourCommand>(this);
             ImportTourCommand  = CommandFactory.CreateCommand<ImportTourCommand>(this);
 
-            name = tour.Name;
-            StartingArea = tour.StartingArea;
-            TargetArea = tour.TargetArea;
-            Description = tour.Description;
-            Distnace = tour.Distance;
+            this.tour = tour;
 
             Operation = Title;
             oldName = Name;
@@ -39,12 +36,7 @@ namespace ViewModels.ViewModels
 
 
         #region fields
-
-        private string name;
-        private string startingArea;
-        private string targetArea;
-        private string description;
-        private double distnace;
+        private Tour tour;
 
         private Status status = Status.Empty;
         private string statusMessage = string.Empty;
@@ -56,28 +48,28 @@ namespace ViewModels.ViewModels
         #region properties
         public string Name 
         { 
-            get => name;
-            set => SetValue(ref name, value, nameof(Name));
+            get => tour.Name;
+            set => SetValue(tour, value, nameof(Name));
         }
         public string StartingArea 
         { 
-            get => startingArea;
-            set => SetValue(ref startingArea, value, nameof(StartingArea));
+            get => tour.StartingArea;
+            set => SetValue(tour, value, nameof(StartingArea));
         }
         public string TargetArea
         { 
-            get => targetArea;
-            set => SetValue(ref targetArea, value, nameof(TargetArea));
+            get => tour.TargetArea;
+            set => SetValue(tour, value, nameof(TargetArea));
         }
         public string Description 
         { 
-            get => description;
-            set => SetValue(ref description, value, nameof(Description));
+            get => tour.Description;
+            set => SetValue(tour, value, nameof(Description));
         }
         public double Distnace 
         { 
-            get => distnace;
-            set => SetValue(ref distnace, value, nameof(Distnace));
+            get => tour.Distance;
+            set => SetValue(tour, value, nameof(Distnace));
         }
 
         public Status Status
@@ -92,22 +84,10 @@ namespace ViewModels.ViewModels
             set => SetValue(ref statusMessage, value, nameof(StatusMessage));
         }
 
-        public Tour Tour
-        {
-            get
-            {
-                return new Tour()
-                {
-                    Description = this.Description,
-                    Name = this.Name,
-                    StartingArea = this.StartingArea,
-                    TargetArea = this.TargetArea
-                };
-            }
-        }
+        public Tour Tour => tour;
 
-        public string OldName { get => oldName; }
-        public string OldImage { get => oldImage; }
+        public string OldName => oldName;
+        public string OldImage => oldImage;
         public string Operation { get; }
         #endregion
 
@@ -117,7 +97,6 @@ namespace ViewModels.ViewModels
             StartingArea = string.Empty;
             TargetArea = string.Empty;
             Description = string.Empty;
-            distnace = 0;
         }
 
         public override void Reset()
