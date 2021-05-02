@@ -2,6 +2,7 @@ using BusinessLogic;
 using Models;
 using NUnit.Framework;
 using System;
+using System.Threading.Tasks;
 using ViewModels;
 using ViewModels.ViewModels;
 
@@ -17,8 +18,12 @@ namespace UnitTests
         [Test]
         public void TestTourCreationValidation()
         {
-            var createTourViewModel = new CreateOrUpdateTourViewModel();
-            Assert.Throws<Exception>(async () => await createTourViewModel.Manager.CreateTour(new Tour()));
+            var manager = Application.GetToursManager();
+
+            Func<Task> func = async () => await manager.CreateTour(new Tour());
+
+            Assert.Throws<Exception>(() => func());
+            //Assert.Throws<Exception>(async () => await manager.CreateTour(new Tour()));
         }
 
         [Test]
@@ -30,6 +35,32 @@ namespace UnitTests
 
             Assert.IsFalse(Application.GetToursManager().ValidateTour(tour1));
             Assert.IsTrue(Application.GetToursManager().ValidateTour(tour2));
-        }   
+        }
+        
+        [Test] 
+        public void TestTourLogCreation()
+        {
+            var log = new TourLog();
+
+            var manager = Application.GetToursManager();
+            Func<Task> func = async () => await manager.CreateTourLog("sometour", log);
+
+
+            // passing an async lambda ( async () => ) is async void, this throws an exception in NUnit
+            Assert.Throws<Exception>(() => func());
+        }
+
+        [Test]
+        public void TestTourLogValidation()
+        {
+            var badLog = new TourLog();
+            var goodLog = new TourLog() { Rating = 3, TotalTime = 3, Report = "good", DateTime = DateTime.Now };
+
+            var manager = Application.GetToursManager();
+
+            Assert.IsTrue(manager.ValidateTourLog(goodLog));
+            Assert.IsFalse(manager.ValidateTourLog(badLog));
+        }
+
     }
 }

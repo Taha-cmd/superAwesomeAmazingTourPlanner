@@ -7,10 +7,9 @@ using ViewModels.ViewModels;
 
 namespace ViewModels.Commands
 {
-    public class LoadUpdateTourFormCommand : CommandBase, ICommand
+    public class LoadUpdateTourFormCommand : LoaderCommandBase, ICommand
     {
-        private MainViewModel mainViewModel;
-        public LoadUpdateTourFormCommand(object parameter) => this.mainViewModel = (MainViewModel)parameter;
-        public void Execute(object parameter) => mainViewModel.CurrentViewModel = new CreateOrUpdateTourViewModel(((TourViewModel)parameter).Tour);
+        public LoadUpdateTourFormCommand(object parameter) : base(parameter) { }
+        public void Execute(object parameter) => LoadViewModel(new CreateOrUpdateTourViewModel(((TourViewModel)parameter).Tour));
     }
 }
