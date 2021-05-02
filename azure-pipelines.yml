@@ -36,10 +36,11 @@ steps:
     projects: 'UnitTests/UnitTests.csproj'
  
 - task: DotNetCoreCLI@2
-  displayName: 'publish - $(buildConfiguration)'
+  displayName: 'Publish - $(buildConfiguration)'
   inputs:
     command: 'publish'
     arguments: '-c Release -r win-x64 -p:PublishSingleFile=true --self-contained true'
+    publishWebProjects: false
     projects: '$(solution)'
     
 
