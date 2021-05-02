@@ -10,7 +10,7 @@ using ViewModels.Enums;
 
 namespace ViewModels.Commands
 {
-    public class CreateTourLogCommand : CommandBase, ICommand
+    public class CreateTourLogCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
         private readonly CreateTourLogViewModel viewModel;
 
@@ -19,37 +19,8 @@ namespace ViewModels.Commands
             viewModel = (CreateTourLogViewModel)parameter;
             RegisterAllProperties(viewModel);
         }
-        public bool CanExecute(object parameter)
-        {
-            // validate that the input is not empty
-            return viewModel.Report.HasValue() && viewModel.TotalTime != 0;
-        }
-
-        public void Execute(object parameter)
-        {
-            try
-            {
-
-                var log = new TourLog()
-                {
-                    DateTime = viewModel.DateTime,
-                    Rating = viewModel.Rating,
-                    Report = viewModel.Report,
-                    TotalTime = viewModel.TotalTime
-                };
-
-                viewModel.Manager.CreateTourLog(viewModel.TourName, log);
-
-                viewModel.Status = Status.Success;
-                viewModel.ClearProperties();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-                viewModel.Status = Status.Failure;
-            }
-
-            // what to do after creation?
-        }
+        // validate that the input is not empty
+        public override bool CanExecute(object parameter) => viewModel.Report.HasValue() && viewModel.TotalTime != 0;   
+        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => viewModel.Manager.CreateTourLog(viewModel.TourName, viewModel.Log));
     }
 }

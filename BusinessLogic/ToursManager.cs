@@ -1,48 +1,138 @@
-﻿using Models;
+﻿using BusinessLogic.CustomEventArgs;
+using DataAccess;
+using DataAccess.Maps;
+using Extensions;
+using Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Extensions;
-using BusinessLogic.CustomEventArgs;
+using System.IO;
 using System.Linq;
-using DataAccess;
+using System.Text.Json;
+using System.Threading.Tasks;
+using log4net;
+
+
 
 namespace BusinessLogic
 {
     public class ToursManager
     {
         private readonly IToursRepository toursRepo;
-        public ToursManager(IToursRepository toursRepo)
+        private readonly IMapsApiClient mapsClient;
+        private readonly ILog logger;
+        public ToursManager(IToursRepository toursRepo, IMapsApiClient mapsClient)
         {
             this.toursRepo = toursRepo;
+            this.mapsClient = mapsClient;
+            this.logger = Application.GetLogger();
         }
-
         public event EventHandler DataChanged;
         private void TriggerDataChangedEvent() => DataChanged?.Invoke(this, EventArgs.Empty);
 
+        public async Task Export(Tour tourOriginal)
+        {
+            Tour tour = tourOriginal.Clone();
+
+            await Task.Run(async () =>
+            {
+                string imagePath = Path.Join(Config.Instance.ExportsFolderPath, "Images", Path.GetFileName(tour.Image)); // save a copy of the image as well
+                File.Copy(tour.Image, imagePath, true); // save a copy at the new path
+
+                tour.Image = imagePath;
+                string path = Path.Join(Config.Instance.ExportsFolderPath, tour.Name + ".json");
+                string json = JsonSerializer.Serialize(tour);
+
+                await File.WriteAllTextAsync(path, json);
+                logger.Debug($"exporting tour {tour.Name}");
+            });
+        }
+
+        public async Task Import(string path)
+        {
+            await Task.Run(async () =>
+            {
+                Tour tour = JsonSerializer.Deserialize<Tour>(File.ReadAllText(path));
+
+                if (!ValidateTour(tour))
+                    throw new Exception("invalid tour! all fields must have a value!");
+
+                if (toursRepo.TourExists(tour.Name))
+                    throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
+
+                var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+
+                if (!routeInfo.RouteExists)
+                    throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+
+                string newPath = Path.Join(Config.Instance.ImagesFolderPath, Guid.NewGuid() + ".jpg");
+                File.Copy(tour.Image, newPath);
+                tour.Image = newPath;
+                toursRepo.Create(tour);
+                logger.Debug($"importing tour {tour.Name}");
+            });
+
+            TriggerDataChangedEvent();
+        }
+
         #region Tour CRUD Methods
-        public void CreateTour(Tour tour)
+        public async Task CreateTour(Tour tour)
         {
             if (!ValidateTour(tour))
-                throw new Exception("invalid tour!");
+                throw new Exception("invalid tour! all fields must have a value!");
+
+            if (toursRepo.TourExists(tour.Name))
+                throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
+
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea, true);
+
+            if (!routeInfo.RouteExists)
+                throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+
+            tour.Distance = routeInfo.Distance;
+            tour.Image = routeInfo.ImagePath;
 
             toursRepo.Create(tour);
-            TriggerDataChangedEvent();
+            logger.Debug($"creating tour {tour.Name}");
 
+            TriggerDataChangedEvent();
         }
         public Tour GetTour(string name) => toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
         public List<Tour> GetTours(int? limit = null) => toursRepo.GetTours(limit).ToList();
-        public void DeleteTour(string name)
+        public async Task DeleteTour(Tour tour)
         {
-            toursRepo.Delete(name);
+            await Task.Run(() =>
+              {
+                  toursRepo.Delete(tour);
+              });
+            logger.Debug($"deleting tour {tour.Name}");
+
+            // throws an exception when triggered from the task thread
             TriggerDataChangedEvent();
         }
 
-        public void DeleteTour(Tour tour) => DeleteTour(tour.Name);
-
-        public Tour UpdateTour(string currentName, Tour tour)
+        public async Task UpdateTour(string currentName, string currentImage, Tour tour)
         {
-            throw new NotImplementedException();
+            if (!toursRepo.TourExists(currentName))
+                throw new Exception($"Tour {currentName} does not exist");
+
+            if (!ValidateTour(tour))
+                throw new Exception($"Invalid Tour!");
+
+            if (toursRepo.TourExists(tour.Name) && currentName != tour.Name)
+                throw new Exception($"Tour Name {tour.Name} is allready taken, names must be unique");
+
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea, true);
+
+            if (!routeInfo.RouteExists)
+                throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+
+            tour.Distance = routeInfo.Distance;
+            tour.Image = routeInfo.ImagePath;
+
+            toursRepo.Update(currentName, currentImage, tour);
+
+            logger.Debug($"updating tour {tour.Name}");
+            TriggerDataChangedEvent();
         }
         #endregion
 
@@ -57,20 +147,28 @@ namespace BusinessLogic
         #endregion
 
         #region TourLog Crud Methods
-        public void CreateTourLog(string tourName, TourLog log)
+        public async Task CreateTourLog(string tourName, TourLog log)
         {
-            if (!ValidateTourLog(log))
-                throw new Exception("invalid tour log!");
+            await Task.Run(() =>
+            {
+                if (!ValidateTourLog(log))
+                    throw new Exception("invalid tour log!");
 
-            Console.WriteLine("saving tour log for tour " + tourName);
+                if (!toursRepo.TourExists(tourName))
+                    throw new Exception($"Tour {tourName} does not exist");
 
+                toursRepo.AddLog(tourName, log);
+                logger.Debug($"creating tour log for {tourName}");
+            });
+
+            TriggerDataChangedEvent();
         }
         #endregion
 
         #region validation methods
         public bool ValidateTour(Tour tour)
         {
-            return new List<string>() { tour.Name, tour.Description, tour.StartingArea, tour.TargetArea }.All(el => el.HasValue()) && !toursRepo.TourExists(tour.Name);
+            return new List<string>() { tour.Name, tour.Description, tour.StartingArea, tour.TargetArea }.All(el => el.HasValue());
         }
 
         public bool ValidateTourLog(TourLog log)

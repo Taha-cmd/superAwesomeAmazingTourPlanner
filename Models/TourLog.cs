@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models
 {
-    public class TourLog : ModelBase
+    public class TourLog : ModelBase, ICloneable<TourLog>
     {
         public DateTime DateTime { get; set; }
         public string Report { get; set; }
@@ -12,5 +12,6 @@ namespace Models
         public double TotalTime { get; set; }
         public int Rating { get; set; }
 
+        public TourLog Clone() => (TourLog)this.MemberwiseClone();
     }
 }

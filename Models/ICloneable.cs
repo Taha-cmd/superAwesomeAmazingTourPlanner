@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ViewModels.Commands
+namespace Models
 {
-    class CopyTourCommand
+    public interface ICloneable<T>
     {
+        T Clone();
     }
 }

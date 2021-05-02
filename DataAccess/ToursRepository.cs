@@ -4,6 +4,8 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace DataAccess
@@ -11,30 +13,62 @@ namespace DataAccess
     public class ToursRepository : RepositoryBase, IToursRepository
     {
         public ToursRepository(IDatebase database) : base(database) { }
+
+        private const string createTourSQL = "INSERT INTO \"tour\" (name, description, startingArea, targetArea, distance, imagePath) " +
+                "VALUES (@name, @description, @startingArea, @targetArea, @distance, @imagePath)";
+
+        private const string deleteTourSQL = "DELETE FROM \"tour\" WHERE name=@name";
+        private const string deleteLogSQL = "DELETE FROM \"log\" WHERE tourname=@name";
+
+        private const string updateTourSQL = "UPDATE \"tour\" SET " +
+                                "(description, startingArea, targetArea, name, distance, imagepath) =" +
+                                "(@newDescription, @newStartingArea, @newTargetArea, @newName, @newDistance, @newImagePath)" +
+                                "WHERE name=@currentName";
+
+        private const string getTourSQL = "SELECT * FROM \"tour\" WHERE name=@name";
+        private const string getLogsSQL = "SELECT * FROM \"log\" WHERE tourname=@tourname";
+        private const string addLogSql = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating) " +
+                                "VALUES (@date, @tourname, @report, @totaltime, @rating)";
         public void Create(Tour tour)
         {
-            string statement = $"INSERT INTO \"tour\" (name, description, startingArea, targetArea, distance) " +
-                $"VALUES (@name, @description, @startingArea, @targetArea, @distance)";
-
             database.ExecuteNonQuery(
-                    statement,
+                    createTourSQL,
                     database.Param("name", tour.Name),
                     database.Param("description", tour.Description),
                     database.Param("startingArea", tour.StartingArea),
                     database.Param("targetArea", tour.TargetArea),
-                    database.Param("distance", tour.Distance)
+                    database.Param("distance", tour.Distance),
+                    database.Param("imagePath", tour.Image)
                 );
+
+            // add logs
+            tour.Logs.ForEach(log => AddLog(tour.Name, log));
         }
-        public void Delete(Tour tour) => Delete(tour.Name);
-        public void Delete(string name)
+        public void Delete(Tour tour)
         {
-            string statement = $"DELETE FROM \"tour\" WHERE name=@name";
-            database.ExecuteNonQuery(statement, database.Param("name", name));
+            // delete image from filesystem first
+            File.Delete(tour.Image);
+            database.ExecuteNonQuery(deleteLogSQL, database.Param("name", tour.Name));
+            database.ExecuteNonQuery(deleteTourSQL, database.Param("name", tour.Name));
         }
 
-        public void Update(string tourName, Tour tour)
+        public void Update(string tourName, string imagePath, Tour tour)
         {
-            throw new NotImplementedException();
+            // update "log" set tourname = "newName" where tourname = "oldName"
+            database.ExecuteNonQuery(updateTourSQL,
+                database.Param("newDescription", tour.Description),
+                database.Param("newStartingArea", tour.StartingArea),
+                database.Param("newTargetArea", tour.TargetArea),
+                database.Param("newName", tour.Name),
+                database.Param("currentName", tourName),
+                database.Param("newDistance", tour.Distance),
+                database.Param("newImagePath", tour.Image)
+                );
+
+            Update("log", "tourname", tourName, "tourname", tour.Name); // update all related logs
+
+            // delete old image from filesystem
+            File.Delete(imagePath);
         }
 
         public IEnumerable<Tour> GetTours(int? limit = null)
@@ -52,14 +86,25 @@ namespace DataAccess
         }
         public Tour GetTour(string tourName)
         {
-            string statement = $"SELECT * FROM \"tour\" WHERE name=@name";
-            return database.ExecuteQuery(statement, TourReader, database.Param("name", tourName)).First();
+            var tour = database.ExecuteQuery(getTourSQL, TourReader, database.Param("name", tourName)).First();
+            tour.Logs = GetLogs(tour.Name).ToList();
+            return tour;
         }
 
         public IEnumerable<TourLog> GetLogs(string tourName)
         {
-            string statement = $"SELECT * FROM \"log\" WHERE tourname=@tourname";
-            return database.ExecuteQuery(statement, TourLogReader, database.Param("tourname", tourName));
+            return database.ExecuteQuery(getLogsSQL, TourLogReader, database.Param("tourname", tourName));
+        }
+
+        public void AddLog(string tourName, TourLog log)
+        {
+            database.ExecuteNonQuery(addLogSql,
+                    database.Param("date", log.DateTime),
+                    database.Param("tourname", tourName),
+                    database.Param("report", log.Report),
+                    database.Param("totaltime", log.TotalTime),
+                    database.Param("rating", log.Rating)
+                    );
         }
 
 
@@ -72,7 +117,8 @@ namespace DataAccess
                 Description = reader.GetValue<string>("description"),
                 Distance = reader.GetValue<double>("distance"),
                 StartingArea = reader.GetValue<string>("startingArea"),
-                TargetArea = reader.GetValue<string>("targetArea")
+                TargetArea = reader.GetValue<string>("targetArea"),
+                Image = reader.GetValue<string>("imagePath")
             };
         }
 
@@ -86,8 +132,6 @@ namespace DataAccess
                 DateTime = reader.GetValue<DateTime>("date")
             };
         }
-
-        
 
         public bool TourExists(string tourName) => Exists("tour", "name", tourName);
     }

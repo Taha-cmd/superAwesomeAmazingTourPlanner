@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS "tour" (
   description text NOT NULL,
   startingArea varchar NOT NULL,
   targetArea varchar NOT NULL,
-  distance double precision NOT NULL
+  distance double precision NOT NULL,
+  imagePath varchar NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "log" (

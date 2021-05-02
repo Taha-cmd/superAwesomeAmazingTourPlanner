@@ -6,10 +6,6 @@ namespace ViewModels.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
-        public HomeViewModel()
-        {
-            ViewName = "Home";
-            Title = "Super Awesome Amazing Tour Planner";
-        }
+        public HomeViewModel() : base("Home", "Super Awesome Amazing Tour Planner"){}
     }
 }

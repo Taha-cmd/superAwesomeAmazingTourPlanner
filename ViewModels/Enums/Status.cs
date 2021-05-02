@@ -6,8 +6,9 @@ namespace ViewModels.Enums
 {
     public enum Status
     {
+        Empty,
         Success,
         Failure,
-        Empty
+        Pending
     }
 }

@@ -18,6 +18,7 @@ namespace superAwesomeAmazingTourPlanner.Converters
             {
                 case Status.Success: return Brushes.Green;
                 case Status.Failure: return Brushes.Red;
+                case Status.Pending: return Brushes.Gray;
             }
 
             return null;

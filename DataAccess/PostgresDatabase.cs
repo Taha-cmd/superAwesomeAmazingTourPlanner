@@ -1,9 +1,6 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Extensions;
-using System.Linq;
 using System.Data.Common;
 
 namespace DataAccess
@@ -15,7 +12,7 @@ namespace DataAccess
         public int ExecuteNonQuery(string statement, params DbParameter[] parameters)
         {
             using var conn = GetConnection();
-            using var command = Command(statement, conn, parameters);
+            using var command = CreateCommand(statement, conn, parameters);
 
             return command.ExecuteNonQuery();
         }
@@ -23,7 +20,7 @@ namespace DataAccess
         public IEnumerable<TResult> ExecuteQuery<TResult>(string statement, Func<DbDataReader, TResult> rowReader, params DbParameter[] parameters)
         {
             using var conn = GetConnection();
-            using var command = Command(statement, conn, parameters);
+            using var command = CreateCommand(statement, conn, parameters);
 
             return ReadRows(command, rowReader);
         }
@@ -48,7 +45,7 @@ namespace DataAccess
 
             return conn;
         }
-        private NpgsqlCommand Command(string statement, NpgsqlConnection conn, params DbParameter[] parameters)
+        private NpgsqlCommand CreateCommand(string statement, NpgsqlConnection conn, params DbParameter[] parameters)
         {
             var command = new NpgsqlCommand(statement, conn);
             command.Parameters.AddRange(parameters);

@@ -12,7 +12,7 @@
 
 
 
-    <StackPanel Background="Wheat">
+    <StackPanel Background="{StaticResource BackgroundColor}">
 
         <TextBlock Style="{StaticResource Title}" Text="{Binding TourName, StringFormat='Create a log for tour: {0}'}"/>
 

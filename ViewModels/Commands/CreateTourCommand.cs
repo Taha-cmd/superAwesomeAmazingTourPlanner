@@ -10,49 +10,16 @@ using ViewModels.Enums;
 
 namespace ViewModels.Commands
 {
-    class CreateTourCommand : CommandBase, ICommand
+    class CreateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
-        private CreateTourViewModel createTourViewModel;
+        private CreateOrUpdateTourViewModel viewModel;
         public CreateTourCommand(object tourViewModel)
         {
-            createTourViewModel = (CreateTourViewModel)tourViewModel;
-            RegisterAllProperties(createTourViewModel);
+            viewModel = (CreateOrUpdateTourViewModel)tourViewModel;
+            RegisterAllProperties(viewModel);
         }
 
-        public bool CanExecute(object parameter)
-        {
-            return
-                !createTourViewModel.Name.IsEmptyOrWhiteSpace() &&
-                !createTourViewModel.StartingArea.IsEmptyOrWhiteSpace() &&
-                !createTourViewModel.TargetArea.IsEmptyOrWhiteSpace() &&
-                !createTourViewModel.Description.IsEmptyOrWhiteSpace();
-        }
-        public void Execute(object parameter)
-        {
-            try
-            {
-                //throw new Exception();
-
-                createTourViewModel.Manager.CreateTour
-                    (
-                        new Tour() 
-                        { 
-                            Description = createTourViewModel.Description, 
-                            Name = createTourViewModel.Name,
-                            StartingArea = createTourViewModel.StartingArea,
-                            TargetArea = createTourViewModel.TargetArea
-                        }
-                    );
-
-                createTourViewModel.Status = Status.Success;
-                // after a successfull creation, clear the input fields
-                createTourViewModel.ClearProperties();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                createTourViewModel.Status = Status.Failure;
-            }
-        }
+        public override bool CanExecute(object parameter) => viewModel.Manager.ValidateTour(viewModel.Tour);
+        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => viewModel.Manager.CreateTour(viewModel.Tour));
     }
 }

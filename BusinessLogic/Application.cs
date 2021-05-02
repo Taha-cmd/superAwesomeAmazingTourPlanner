@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using DataAccess;
 using Extensions;
+using DataAccess.Maps;
+using log4net;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
 namespace BusinessLogic
 {
@@ -19,11 +25,15 @@ namespace BusinessLogic
 
                 var database = new PostgresDatabase(Config.Instance.DataBaseConnectionString);
                 var toursRepo = new ToursRepository(database);
-                manager = new ToursManager(toursRepo);
+                var mapsClient = new MapQuestClient(Config.Instance.MapsApiKey, Config.Instance.ImagesFolderPath);
+
+                manager = new ToursManager(toursRepo, mapsClient);
             }
                 
 
             return manager;
         }
+
+        public static ILog GetLogger([CallerFilePath]string filename = "") => LogManager.GetLogger(filename);
     }
 }

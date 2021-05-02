@@ -7,20 +7,9 @@ using ViewModels.ViewModels;
 
 namespace ViewModels.Commands
 {
-    public class LoadTourLogFormCommand : CommandBase, ICommand
+    public class LoadTourLogFormCommand : LoaderCommandBase, ICommand
     {
-        private MainViewModel mainViewModel;
-
-        public LoadTourLogFormCommand(object viewModel)
-        {
-            this.mainViewModel = (MainViewModel)viewModel;
-        }
-
-        public bool CanExecute(object parameter) => true;
-        
-        public void Execute(object parameter)
-        {
-            mainViewModel.LoadTourLogForm(((TourViewModel)parameter).Name);
-        }
+        public LoadTourLogFormCommand(object viewModel) : base(viewModel) { }
+        public void Execute(object parameter) => LoadViewModel(new CreateTourLogViewModel(((TourViewModel)parameter).Name));
     }
 }
