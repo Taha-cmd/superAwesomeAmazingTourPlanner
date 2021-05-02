@@ -58,6 +58,5 @@ namespace DataAccess.Maps
             ul.MoveNext();
             BoundingBox.UL_LAT = ul.Current.Value.GetDouble();
         }
-
     }
 }

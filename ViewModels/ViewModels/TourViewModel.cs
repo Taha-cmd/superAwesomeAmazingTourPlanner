@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using BusinessLogic;
 using Models;
 using ViewModels.Commands;
 using ViewModels.Enums;
@@ -66,7 +67,7 @@ namespace ViewModels.ViewModels
 
         #endregion
 
-        public TourViewModel(Tour tour) : base("Tour", tour.Name)
+        public TourViewModel(Tour tour) : base("Tour", tour.Name, Application.GetLogger())
         {
             this.tour = tour;
             Logs = new ObservableCollection<TourLog>(tour.Logs);
@@ -77,6 +78,7 @@ namespace ViewModels.ViewModels
         {
             Logs.Clear();
             tour.Logs.Where(log => log.Report.Contains(filter)).ToList().ForEach(item => Logs.Add(item));
+            Logger.Debug($"filtering tour logs of tour ({tour.Name}) with search string {filter}");
         }
     }
 }

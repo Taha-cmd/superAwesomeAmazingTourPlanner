@@ -11,6 +11,10 @@ namespace ViewModels.Commands
     {
         private MainViewModel mainViewModel;
         public LoadTourCommand(object parameter) => this.mainViewModel = (MainViewModel)parameter;
-        public void Execute(object parameter) => mainViewModel.CurrentViewModel = new TourViewModel((Tour)parameter);
+        public void Execute(object parameter)
+        {
+            mainViewModel.CurrentViewModel = new TourViewModel((Tour)parameter);
+            mainViewModel.Logger.Debug($"loading tour {((Tour)parameter).Name} with hash {parameter.GetHashCode()}");
+        }
     }
 }

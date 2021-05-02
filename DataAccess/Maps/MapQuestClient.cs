@@ -19,9 +19,6 @@ namespace DataAccess.Maps
         {
             this.key = key;
             this.imagesFolderPath = imagesFolderPath;
-
-            if (!Directory.Exists("tmp"))
-                Directory.CreateDirectory("tmp");
         }
         private string CreateRouteRequest(string from, string to) => $"http://www.mapquestapi.com/directions/v2/route?key={key}&from={from}&to={to}";
         private string CreateStaticMapRequest(double width, double length, int zoom, string sessionId, string boundingBox)

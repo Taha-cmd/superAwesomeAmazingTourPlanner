@@ -1,0 +1,17 @@
+{
+  "Name": "test",
+  "Description": "test tour",
+  "StartingArea": "Wien",
+  "TargetArea": "Graz",
+  "Distance": 120.009,
+  "Image": "../../../../LocalStorage/Exports\\Images\\19021f1a-9a10-4bff-bb46-c9ab3bf5ea38.png",
+  "Logs": [
+    {
+      "DateTime": "2021-05-01T20:49:13.545969",
+      "Report": "great",
+      "Distance": 0,
+      "TotalTime": 3,
+      "Rating": 0
+    }
+  ]
+}

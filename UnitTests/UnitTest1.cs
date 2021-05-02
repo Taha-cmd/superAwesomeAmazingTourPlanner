@@ -30,6 +30,6 @@ namespace UnitTests
 
             Assert.IsFalse(Application.GetToursManager().ValidateTour(tour1));
             Assert.IsTrue(Application.GetToursManager().ValidateTour(tour2));
-        }
+        }   
     }
 }

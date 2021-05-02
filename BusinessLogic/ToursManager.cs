@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using log4net;
+
 
 
 namespace BusinessLogic
@@ -17,10 +19,12 @@ namespace BusinessLogic
     {
         private readonly IToursRepository toursRepo;
         private readonly IMapsApiClient mapsClient;
+        private readonly ILog logger;
         public ToursManager(IToursRepository toursRepo, IMapsApiClient mapsClient)
         {
             this.toursRepo = toursRepo;
             this.mapsClient = mapsClient;
+            this.logger = Application.GetLogger();
         }
         public event EventHandler DataChanged;
         private void TriggerDataChangedEvent() => DataChanged?.Invoke(this, EventArgs.Empty);
@@ -39,6 +43,7 @@ namespace BusinessLogic
                 string json = JsonSerializer.Serialize(tour);
 
                 await File.WriteAllTextAsync(path, json);
+                logger.Debug($"exporting tour {tour.Name}");
             });
         }
 
@@ -63,6 +68,7 @@ namespace BusinessLogic
                 File.Copy(tour.Image, newPath);
                 tour.Image = newPath;
                 toursRepo.Create(tour);
+                logger.Debug($"importing tour {tour.Name}");
             });
 
             TriggerDataChangedEvent();
@@ -86,6 +92,8 @@ namespace BusinessLogic
             tour.Image = routeInfo.ImagePath;
 
             toursRepo.Create(tour);
+            logger.Debug($"creating tour {tour.Name}");
+
             TriggerDataChangedEvent();
         }
         public Tour GetTour(string name) => toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
@@ -96,6 +104,7 @@ namespace BusinessLogic
               {
                   toursRepo.Delete(tour);
               });
+            logger.Debug($"deleting tour {tour.Name}");
 
             // throws an exception when triggered from the task thread
             TriggerDataChangedEvent();
@@ -121,6 +130,8 @@ namespace BusinessLogic
             tour.Image = routeInfo.ImagePath;
 
             toursRepo.Update(currentName, currentImage, tour);
+
+            logger.Debug($"updating tour {tour.Name}");
             TriggerDataChangedEvent();
         }
         #endregion
@@ -147,7 +158,10 @@ namespace BusinessLogic
                     throw new Exception($"Tour {tourName} does not exist");
 
                 toursRepo.AddLog(tourName, log);
+                logger.Debug($"creating tour log for {tourName}");
             });
+
+            TriggerDataChangedEvent();
         }
         #endregion
 

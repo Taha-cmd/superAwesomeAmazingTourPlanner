@@ -40,6 +40,7 @@ namespace ViewModels.ViewModels
             Manager.DataChanged += (object sender, EventArgs e) =>
             {
                 LoadTours();
+                Logger.Info($"tours view model loading tours after a change occured");
             };
         }
         private void LoadTours()

@@ -25,8 +25,8 @@ namespace ViewModels.Commands
             {
                 form.StatusMessage = ex.Message;
                 form.Status = Status.Failure;
+                Logger.Error(ex.Message);
             }
-
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ViewModels.Enums;
 using System.Threading;
+using BusinessLogic;
+using log4net;
 
 namespace ViewModels.Commands
 {
@@ -33,6 +35,7 @@ namespace ViewModels.Commands
 
         //default behavior for canexecute
         virtual public bool CanExecute(object parameter) => true;
+        protected ILog Logger { get; } = Application.GetLogger();
 
         public event EventHandler CanExecuteChanged;
     }

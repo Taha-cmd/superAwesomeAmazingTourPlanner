@@ -40,11 +40,9 @@ namespace superAwesomeAmazingTourPlanner.Views
             }
         }
 
-
         public void OnTextChanged(object sender, EventArgs args)
         {
 
         }
-
     }
 }

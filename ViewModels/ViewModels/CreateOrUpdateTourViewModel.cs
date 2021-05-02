@@ -98,7 +98,6 @@ namespace ViewModels.ViewModels
             TargetArea = string.Empty;
             Description = string.Empty;
         }
-
         public override void Reset()
         {
             Clear();

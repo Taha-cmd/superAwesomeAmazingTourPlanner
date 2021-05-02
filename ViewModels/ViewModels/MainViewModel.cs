@@ -13,7 +13,7 @@ namespace ViewModels.ViewModels
     {
         // https://rachel53461.wordpress.com/2011/12/18/navigation-with-mvvm-2/
 
-        public MainViewModel() : base("MainWindow", "Main View Model")
+        public MainViewModel() : base("MainWindow", "Main View Model", Application.GetLogger())
         {
             ChangePageCommand = CommandFactory.CreateCommand<ChangePageCommand>(this);
             LoadTourCommand = CommandFactory.CreateCommand<LoadTourCommand>(this);
