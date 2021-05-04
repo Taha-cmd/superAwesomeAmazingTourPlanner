@@ -47,7 +47,7 @@ steps:
     repository: Taha-cmd/superAwesomeAmazingTourPlanner
     action: create
     target: '$(Build.SourceVersion)'
-    assets: dist
+    assets: dist.zip
     tagSource: manual
     tag: '$(Build.BuildNumber)'
     

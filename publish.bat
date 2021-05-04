@@ -1,6 +1,7 @@
 @echo off
 
 rmdir /S /Q dist
+del dist.zip
 
 mkdir dist
 mkdir dist\scripts
@@ -11,3 +12,5 @@ xcopy scripts dist\scripts
 
 
 dotnet publish superAwesomeAmazingTourPlanner -c Release -o dist
+
+tar.exe -c -f dist.zip dist
