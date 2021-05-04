@@ -34,8 +34,14 @@ namespace BusinessLogic
             ExportsFolderPath = conf["LocalStorage:Exports"];
             MapsApiKey = conf["Maps:Key"];
 
+
+#if !DEBUG
+                ExportsFolderPath = Path.Join("LocalStorage", Path.GetFileName(ExportsFolderPath));
+                ImagesFolderPath = Path.Join("LocalStorage", Path.GetFileName(ImagesFolderPath));
+#endif
+
             if (!Directory.Exists(ImagesFolderPath) || !Directory.Exists(ExportsFolderPath))
-                throw new Exception("path in config file does not exist");
+                throw new Exception("path in config file does not exist " + ImagesFolderPath + " or " + ExportsFolderPath);
         }
     }
 }

@@ -19,11 +19,7 @@ namespace UnitTests
         public void TestTourCreationValidation()
         {
             var manager = Application.GetToursManager();
-
-            Func<Task> func = async () => await manager.CreateTour(new Tour());
-
-            Assert.Throws<Exception>(() => func());
-            //Assert.Throws<Exception>(async () => await manager.CreateTour(new Tour()));
+            Assert.ThrowsAsync<Exception>(() => manager.CreateTour(new Tour()));
         } 
 
         [Test]
@@ -41,13 +37,8 @@ namespace UnitTests
         public void TestTourLogCreation()
         {
             var log = new TourLog();
-
             var manager = Application.GetToursManager();
-            Func<Task> func = async () => await manager.CreateTourLog("sometour", log);
-
-
-            // passing an async lambda ( async () => ) is async void, this throws an exception in NUnit
-            Assert.Throws<Exception>(() => func());
+            Assert.ThrowsAsync<Exception>(() => manager.CreateTourLog("sometour", log));
         } 
 
         [Test]
