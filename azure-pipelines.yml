@@ -48,6 +48,7 @@ steps:
     action: create
     target: '$(Build.SourceVersion)'
     assets: dist
-    tagSource: auto
+    tagSource: manual
+    tag: '$(Build.BuildNumber)'
     
 
