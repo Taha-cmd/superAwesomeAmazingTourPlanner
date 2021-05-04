@@ -31,7 +31,7 @@ steps:
   displayName: 'Run unit tests - $(buildConfiguration)'
   inputs:
     command: 'test'
-    arguments: '--no-build --configuration $(buildConfiguration) --collect "Code coverage"'
+    arguments: '--configuration --Debug --collect "Code coverage"'
     publishTestResults: true
     projects: 'UnitTests/UnitTests.csproj'
  
