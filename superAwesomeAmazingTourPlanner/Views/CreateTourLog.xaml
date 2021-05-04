@@ -57,7 +57,7 @@
                     Style="{StaticResource SubmitButton}" 
                     Content="Create Log"/>
 
-            <Button
+            <!--<Button
                 MaxWidth="150"
                 MinWidth="100"
                 Grid.Column="2" Grid.Row="5"
@@ -65,7 +65,7 @@
                 Content="{Binding TourName, StringFormat='return to {0}'}"
                 CommandParameter="{Binding TourName}"
                 Command="{Binding LoadTourCommand, Mode=OneWay, Source={StaticResource MainViewModel}}"
-                />
+                />-->
 
 
             <TextBlock
