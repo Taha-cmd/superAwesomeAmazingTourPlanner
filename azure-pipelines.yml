@@ -35,12 +35,19 @@ steps:
     publishTestResults: true
     projects: 'UnitTests/UnitTests.csproj'
  
-- task: DotNetCoreCLI@2
+- task: BatchScript@1
   displayName: 'Publish - $(buildConfiguration)'
   inputs:
-    command: 'publish'
-    arguments: '-c Release -r win10-x64 --self-contained false'
-    publishWebProjects: false
-    projects: '$(solution)'
+    filename: publish.bat
+    
+- task: GitHubRelease@0
+  displayName: 'Release to GitHub'
+  inputs:
+    gitHubConnection: Taha-cmd
+    repository: Taha-cmd/superAwesomeAmazingTourPlanner
+    action: create
+    target: '$(Build.SourceVersion)'
+    assets: dist
+    tagSource: auto
     
 
