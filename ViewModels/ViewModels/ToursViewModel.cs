@@ -51,7 +51,6 @@ namespace ViewModels.ViewModels
             items.ForEach(item => Data.Add(item));
             
         }
-        
         public void Filter(string filter)
         {
             Data.Clear();

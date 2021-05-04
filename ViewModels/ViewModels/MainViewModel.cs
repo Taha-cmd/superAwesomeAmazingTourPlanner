@@ -22,6 +22,7 @@ namespace ViewModels.ViewModels
             DeleteTourCommand = CommandFactory.CreateCommand<DeleteTourCommand>(this);
             LoadUpdateTourFormCommand = CommandFactory.CreateCommand<LoadUpdateTourFormCommand>(this);
             ExportTourCommand = CommandFactory.CreateCommand<ExportTourCommand>(this);
+            CopyTourCommand = CommandFactory.CreateCommand<CopyTourCommand>(this);
 
 
             ViewModels = new List<ViewModelBase>() 
@@ -46,6 +47,7 @@ namespace ViewModels.ViewModels
         public ICommand DeleteTourCommand { get; }
         public ICommand LoadUpdateTourFormCommand { get; }
         public ICommand ExportTourCommand { get; }
+        public ICommand CopyTourCommand { get; }
         public List<ViewModelBase> ViewModels { get; }
 
         public ViewModelBase CurrentViewModel

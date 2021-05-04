@@ -26,6 +26,9 @@ namespace BusinessLogic
             this.mapsClient = mapsClient;
             this.logger = Application.GetLogger();
         }
+
+ 
+
         public event EventHandler DataChanged;
         private void TriggerDataChangedEvent() => DataChanged?.Invoke(this, EventArgs.Empty);
 
@@ -46,6 +49,8 @@ namespace BusinessLogic
                 logger.Debug($"exporting tour {tour.Name}");
             });
         }
+
+
 
         public async Task Import(string path)
         {
@@ -71,6 +76,35 @@ namespace BusinessLogic
                 logger.Debug($"importing tour {tour.Name}");
             });
 
+            TriggerDataChangedEvent();
+        }
+
+        public async Task Copy(Tour tour)
+        {
+            var newTour = tour.Clone();
+
+            await Task.Run(() =>
+            {
+                if (tour.Name.Contains("Copy"))
+                {
+                    char prefix = (char)(((int)tour.Name.Last()) + 1);
+                    newTour.Name = newTour.Name.Substring(0, newTour.Name.Length - 1) +  prefix;
+                }   
+                else
+                {
+                    newTour.Name = newTour.Name + "Copy0";
+                }
+            });
+
+
+            if (toursRepo.TourExists(newTour.Name))
+                throw new Exception($"A copy of the tour {tour.Name} allready exists. A tour can be only copied once. Consider copying the copy");
+
+            string newPath = $"{Config.Instance.ImagesFolderPath}/{Guid.NewGuid()}.jpg";
+            newTour.Image = newPath;
+            File.Copy(tour.Image, newPath);
+
+            toursRepo.Create(newTour);
             TriggerDataChangedEvent();
         }
 
