@@ -43,7 +43,7 @@ steps:
 - task: GitHubRelease@0
   displayName: 'Release to GitHub'
   inputs:
-    gitHubConnection: Taha-cmd
+    gitHubConnection: TourPlanner
     repository: Taha-cmd/superAwesomeAmazingTourPlanner
     action: create
     target: '$(Build.SourceVersion)'
