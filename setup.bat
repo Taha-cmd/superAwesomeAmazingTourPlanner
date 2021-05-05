@@ -17,7 +17,7 @@ echo creating user
 psql -U postgres -f scripts\createUser.sql
 
 echo database
-set /p PGPASSWORD="enter the password for the Admin user: "
+set PGPASSWORD=123
 psql -U TourPlannerAdmin -d TourPlanner -f scripts\createDatabase.sql
 
 pause

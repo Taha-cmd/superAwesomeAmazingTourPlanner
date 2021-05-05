@@ -1,6 +1,8 @@
 ﻿using Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
 using ViewModels.Commands;
@@ -10,23 +12,19 @@ namespace ViewModels.ViewModels
 {
     public class CreateTourLogViewModel : ViewModelBase, IStatusDisplay
     {
+        private TourLog log = new TourLog();
+        public TourLog Log => log;
         public CreateTourLogViewModel(string tourName) : base("CreateTourLog", $"Create Tour Log for {tourName}")
         {
-            this.tourName = tourName;
+            log.TourName = tourName;
             createLogCommand = CommandFactory.CreateCommand<CreateTourLogCommand>(this);
             Operation = Title;
         }
 
         #region private fields
 
-        private readonly string tourName;
         private string statusMessage = string.Empty;
         private Status status = Status.Empty;
-        private DateTime dateTime = DateTime.Now;
-        private string report;
-        private float distance;
-        private float totalTime;
-        private int rating;
         private readonly ICommand createLogCommand;
 
         #endregion
@@ -34,35 +32,70 @@ namespace ViewModels.ViewModels
         #region properties
         public ICommand CreateTourLogCommand { get => createLogCommand; }
 
-        public string TourName
-        {
-            get => tourName;
-        }
+        public string TourName => log.TourName;
         public DateTime DateTime
         {
-            get => dateTime;
-            set => SetValue(ref dateTime, value, nameof(DateTime));
+            get => log.DateTime;
+            set => SetValue(log, value, nameof(DateTime));
         }
         public string Report 
         { 
-            get => report;
-            set => SetValue(ref report, value, nameof(Report));
+            get => log.Report;
+            set => SetValue(log, value, nameof(Report));
         }
-        public float Distance 
+        public double Distance 
         { 
-            get => distance;
-            set => SetValue(ref distance, value, nameof(Distance));
+            get => log.Distance;
+            set => SetValue(log, value, nameof(Distance));
         }
-        public float TotalTime 
+        public double TotalTime 
         { 
-            get => totalTime;
-            set => SetValue(ref totalTime, value, nameof(TotalTime));
+            get => log.TotalTime;
+            set => SetValue(log, value, nameof(TotalTime));
         }
         public int Rating 
         { 
-            get => rating;
-            set => SetValue(ref rating, value, nameof(Rating));
+            get => log.Rating;
+            set => SetValue(log, value, nameof(Rating));
         }
+        public bool HasMcDonalds
+        {
+            get => log.HasMcDonalds;
+            set
+            {
+                SetValue(log, value, nameof(HasMcDonalds));
+                Debug.WriteLine(HasMcDonalds);
+            }
+        }
+        public bool HasCampingSpots
+        {
+            get => log.HasCampingSpots;
+            set => SetValue(log, value, nameof(HasCampingSpots));
+        }
+        public string Author
+        {
+            get => log.Author;
+            set => SetValue(log, value, nameof(Author));
+        }
+        public string Accomodation
+        {
+            get => log.Accomodation;
+            set => SetValue(log, value, nameof(Accomodation));
+        }
+        public int Members
+        {
+            get => log.Members;
+            set => SetValue(log, value, nameof(Members));
+        }
+
+
+        // options for the comboboxes
+
+        public ObservableCollection<bool> HasMcDonaldsOptions { get; } = new ObservableCollection<bool>() { true, false };
+        public ObservableCollection<bool> HasCampingSpotsOptions { get; } = new ObservableCollection<bool>() { true, false };
+        public ObservableCollection<string> AccomodationOptions { get; } = new ObservableCollection<string>() { "hotel", "camping", "appartment" };
+        public ObservableCollection<int> RatingOptions { get; } = new ObservableCollection<int>() { 0,1,2,3,4,5,6,7,8,9,10 };
+
 
         public Status Status
         {
@@ -77,20 +110,8 @@ namespace ViewModels.ViewModels
 
         public string Operation { get; }
 
-        public TourLog Log
-        {
-            get
-            {
-                return new TourLog()
-                {
-                     DateTime = this.DateTime,
-                     Distance = this.Distance,
-                     Rating = this.Rating,
-                     Report = this.Report,
-                     TotalTime = this.TotalTime
-                };
-            }
-        }
+
+
         public void Clear()
         {
             Report = string.Empty;

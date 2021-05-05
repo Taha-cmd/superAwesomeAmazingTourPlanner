@@ -14,7 +14,12 @@ CREATE TABLE IF NOT EXISTS "log" (
   tourName varchar NOT NULL,
   report text NOT NULL,
   totalTime double precision NOT NULL,
-  rating int NOT NULL CONSTRAINT rating_limits CHECK (rating >= 0 and rating <= 10)
+  rating int NOT NULL CONSTRAINT rating_limits CHECK (rating >= 0 and rating <= 10),
+  author varchar NOT NULL,
+  hasMcDonalds boolean NOT NULL,
+  hasCampingSpots boolean NOT NULL,
+  accomodation varchar NOT NULL,
+  members smallint NOT NULL
 );
 
 ALTER TABLE "log" ADD FOREIGN KEY (tourName) REFERENCES "tour" (name);
