@@ -68,6 +68,15 @@
                     Content="Copy this tour"
                     />
 
+            <Button 
+                    MinWidth="200"
+                    MaxWidth="300"
+                    Style="{StaticResource SubmitButton}" 
+                    Command="{Binding GeneratePdfReportCommand, Source={StaticResource MainViewModel}}"
+                    CommandParameter="{Binding Tour}"
+                    Content="Generate Pdf Report"
+                    />
+
             <TextBlock
                 Foreground="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
                 Grid.ColumnSpan="3"
@@ -108,18 +117,10 @@
                 
 
                 <DataGrid.Columns>
-                    
-                    <DataGridTextColumn Header="Date" Binding="{Binding DateTime}"/>
-                    <DataGridTextColumn Header="Time" Binding="{Binding TotalTime}"/>
+
+                    <DataGridTextColumn Header="Author" Binding="{Binding Author}"/>
                     <DataGridTextColumn Header="Rating" Binding="{Binding Rating}"/>
-                    <DataGridTextColumn Header="Report" Binding="{Binding Report}" Width="*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                                <Setter Property="Padding" Value="1" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Date" Binding="{Binding DateTime}"/>
 
 
                     <!--detail? a seperate view?-->

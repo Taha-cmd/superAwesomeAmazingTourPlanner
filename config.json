@@ -14,5 +14,9 @@
 
 	"Maps": {
 		"Key": "ibhwVgZTL5tIgPF7JzeABz1rJkxGUpuE"
+	},
+
+	"Logging": {
+		"Level": "Debug" // ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF
 	}
 }

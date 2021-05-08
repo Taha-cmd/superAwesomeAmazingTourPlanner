@@ -54,6 +54,7 @@ namespace DataAccess
 
         public void Update(string tourName, string imagePath, Tour tour)
         {
+            // update will cascade to foreign key, we can safely update all values
             // update "log" set tourname = "newName" where tourname = "oldName"
             database.ExecuteNonQuery(updateTourSQL,
                 database.Param("newDescription", tour.Description),
@@ -64,8 +65,6 @@ namespace DataAccess
                 database.Param("newDistance", tour.Distance),
                 database.Param("newImagePath", tour.Image)
                 );
-
-            Update("log", "tourname", tourName, "tourname", tour.Name); // update all related logs
 
             // delete old image from filesystem
             File.Delete(imagePath);

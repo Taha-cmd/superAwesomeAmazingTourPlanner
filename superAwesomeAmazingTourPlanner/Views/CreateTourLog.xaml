@@ -14,7 +14,7 @@
 
     <StackPanel Background="{StaticResource BackgroundColor}">
 
-        <TextBlock Style="{StaticResource Title}" Text="{Binding TourName, StringFormat='Create a log for tour: {0}'}"/>
+        <TextBlock Style="{StaticResource Title}" Text="{Binding TourName, StringFormat=Create a log for tour: {0}}"/>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -55,22 +55,22 @@
             <TextBox  Grid.Column="2" Grid.Row="3" Text="{Binding Distnace}" Style="{StaticResource InputField}"/>-->
 
             <Label Grid.Column="1" Grid.Row="4"  Style="{StaticResource Label}" Content="Rating (0-10)"/>
-            <ComboBox Grid.Column="2" Grid.Row="4" ItemsSource="{Binding RatingOptions}" SelectedItem="{Binding Rating}"/>
+            <ComboBox Grid.Column="2" Grid.Row="4" ItemsSource="{Binding RatingOptions}" SelectedItem="{Binding Rating, UpdateSourceTrigger=PropertyChanged}"/>
             <!--<TextBox  Grid.Column="2" Grid.Row="4" Text="{Binding Rating, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>-->
 
             <Label Grid.Column="1" Grid.Row="5"  Style="{StaticResource Label}" Content="How many participants?"/>
             <TextBox  Grid.Column="2" Grid.Row="5" Text="{Binding Members, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>
 
             <Label Grid.Column="1" Grid.Row="6"  Style="{StaticResource Label}" Content="Where did you stay?"/>
-            <ComboBox Grid.Column="2" Grid.Row="6" ItemsSource="{Binding AccomodationOptions}" SelectedItem="{Binding Accomodation}"/>
+            <ComboBox Grid.Column="2" Grid.Row="6" ItemsSource="{Binding AccomodationOptions}" SelectedItem="{Binding Accomodation, UpdateSourceTrigger=PropertyChanged}"/>
             <!--<TextBox  Grid.Column="2" Grid.Row="6" Text="{Binding Accomodation, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>-->
 
             <Label Grid.Column="1" Grid.Row="7"  Style="{StaticResource Label}" Content="Was there a McDonald?"/>
-            <ComboBox Grid.Column="2" Grid.Row="7" ItemsSource="{Binding HasMcDonaldsOptions}" SelectedItem="{Binding HasMcDonalds, Converter={StaticResource StringToBoolConverter}}"/>
+            <ComboBox Grid.Column="2" Grid.Row="7" ItemsSource="{Binding HasMcDonaldsOptions}" SelectedItem="{Binding HasMcDonalds, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBoolConverter}}"/>
             <!--<TextBox  Grid.Column="2" Grid.Row="7" Text="{Binding HasMcDonalds, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>-->
 
             <Label Grid.Column="1" Grid.Row="8"  Style="{StaticResource Label}" Content="Was there camping spots?"/>
-            <ComboBox Grid.Column="2" Grid.Row="8" ItemsSource="{Binding HasCampingSpotsOptions}" SelectedItem="{Binding HasCampingSpots, Converter={StaticResource StringToBoolConverter}}"/>
+            <ComboBox Grid.Column="2" Grid.Row="8" ItemsSource="{Binding HasCampingSpotsOptions}" SelectedItem="{Binding HasCampingSpots, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBoolConverter}}"/>
             <!--<TextBox  Grid.Column="2" Grid.Row="8" Text="{Binding HasCampingSpots, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>-->
 
             <Button Grid.Column="1" Grid.Row="9" 

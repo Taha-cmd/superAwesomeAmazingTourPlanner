@@ -61,11 +61,7 @@ namespace ViewModels.ViewModels
         public bool HasMcDonalds
         {
             get => log.HasMcDonalds;
-            set
-            {
-                SetValue(log, value, nameof(HasMcDonalds));
-                Debug.WriteLine(HasMcDonalds);
-            }
+            set => SetValue(log, value, nameof(HasMcDonalds));
         }
         public bool HasCampingSpots
         {
@@ -118,6 +114,9 @@ namespace ViewModels.ViewModels
             TotalTime = 0;
             Rating = 0;
             DateTime = DateTime.Now;
+            Author = string.Empty;
+            Accomodation = string.Empty;
+            Members = 0;
         }
 
         public override void Reset()

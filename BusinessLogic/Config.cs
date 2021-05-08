@@ -14,6 +14,7 @@ namespace BusinessLogic
         public string ImagesFolderPath { get; private set; }
         public string ExportsFolderPath { get; private set; }
         public string MapsApiKey { get; private set; }
+        public string LoggingLevel { get; private set; }
 
         private Config() { }
         public void LoadAndParseConfigFile(string configFilePath)
@@ -33,6 +34,7 @@ namespace BusinessLogic
             ImagesFolderPath = conf["LocalStorage:Images"];
             ExportsFolderPath = conf["LocalStorage:Exports"];
             MapsApiKey = conf["Maps:Key"];
+            LoggingLevel = conf["Logging:Level"];
 
 
 #if !DEBUG

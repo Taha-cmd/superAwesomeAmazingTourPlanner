@@ -22,5 +22,5 @@ CREATE TABLE IF NOT EXISTS "log" (
   members smallint NOT NULL
 );
 
-ALTER TABLE "log" ADD FOREIGN KEY (tourName) REFERENCES "tour" (name);
+ALTER TABLE "log" ADD FOREIGN KEY (tourName) REFERENCES "tour" (name) ON UPDATE CASCADE;
 
