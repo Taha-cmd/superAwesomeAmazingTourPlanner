@@ -97,6 +97,7 @@ namespace ViewModels.ViewModels
             StartingArea = string.Empty;
             TargetArea = string.Empty;
             Description = string.Empty;
+            
         }
         public override void Reset()
         {

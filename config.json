@@ -9,10 +9,15 @@
 
 	"LocalStorage": {
 		"Images": "../../../../LocalStorage/Images",
-		"Exports": "../../../../LocalStorage/Exports"
+		"Exports": "../../../../LocalStorage/Exports",
+		"Reports": "../../../../LocalStorage/Reports"
 	},
 
 	"Maps": {
 		"Key": "ibhwVgZTL5tIgPF7JzeABz1rJkxGUpuE"
+	},
+
+	"Logging": {
+		"Level": "Debug" // ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF
 	}
 }

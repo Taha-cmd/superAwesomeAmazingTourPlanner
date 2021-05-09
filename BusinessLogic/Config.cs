@@ -13,7 +13,9 @@ namespace BusinessLogic
         public string DataBaseConnectionString { get; private set; }
         public string ImagesFolderPath { get; private set; }
         public string ExportsFolderPath { get; private set; }
+        public string ReportsFolderPath { get; private set; }
         public string MapsApiKey { get; private set; }
+        public string LoggingLevel { get; private set; }
 
         private Config() { }
         public void LoadAndParseConfigFile(string configFilePath)
@@ -32,16 +34,19 @@ namespace BusinessLogic
 
             ImagesFolderPath = conf["LocalStorage:Images"];
             ExportsFolderPath = conf["LocalStorage:Exports"];
+            ReportsFolderPath = conf["LocalStorage:Reports"];
             MapsApiKey = conf["Maps:Key"];
+            LoggingLevel = conf["Logging:Level"];
 
 
 #if !DEBUG
                 ExportsFolderPath = Path.Join("LocalStorage", Path.GetFileName(ExportsFolderPath));
                 ImagesFolderPath = Path.Join("LocalStorage", Path.GetFileName(ImagesFolderPath));
+                ReportsFolderPath = Path.Join("LocalStorage", Path.GetFileName(ReportsFolderPath));
 #endif
 
-            if (!Directory.Exists(ImagesFolderPath) || !Directory.Exists(ExportsFolderPath))
-                throw new Exception("path in config file does not exist " + ImagesFolderPath + " or " + ExportsFolderPath);
+            if (!Directory.Exists(ImagesFolderPath) || !Directory.Exists(ExportsFolderPath) || !Directory.Exists(ReportsFolderPath))
+                throw new Exception("path in config file does not exist " + ImagesFolderPath + " or " + ExportsFolderPath + " or " + ReportsFolderPath);
         }
     }
 }

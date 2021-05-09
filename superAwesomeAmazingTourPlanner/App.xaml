@@ -13,7 +13,8 @@
             <ViewModels:MainViewModel x:Key="MainViewModel"/>
             <Converters:MultiParamsConverter x:Key="MultiParamsConverter"/>
             <Converters:PathToBitMapImageConverter x:Key="PathToBitMapImageConverter"/>
-            
+            <Converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
+
             <SolidColorBrush x:Key="BackgroundColor">
                 <SolidColorBrush.Color>
                     <Color A="255" R="248" G="241" B="255"/>
@@ -48,9 +49,12 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type ViewModels:CreateTourLogViewModel}">
                 <local:CreateTourLog DataContext="{Binding}"/>
-            </DataTemplate> 
-            
-            <Style x:Key="Title" TargetType="TextBlock">
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type ViewModels:TourLogViewModel}">
+                <local:TourLog DataContext="{Binding }"/>
+            </DataTemplate>
+
+                <Style x:Key="Title" TargetType="TextBlock">
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="10"/>
                 <Setter Property="Margin" Value="10, 0"/>
@@ -102,6 +106,10 @@
                 <Setter Property="Margin" Value="10"/>
                 <Setter Property="Padding" Value="10"/>
                 <Setter Property="FontSize" Value="18"/>
+            </Style>
+
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
 
             <!-- this style was copied and modified from: https://gist.github.com/pocari/ef7778f1d67f568001e8-->

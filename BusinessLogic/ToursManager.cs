@@ -19,19 +19,33 @@ namespace BusinessLogic
     {
         private readonly IToursRepository toursRepo;
         private readonly IMapsApiClient mapsClient;
+        private readonly IPdfGenerator pdfGenerator;
         private readonly ILog logger;
-        public ToursManager(IToursRepository toursRepo, IMapsApiClient mapsClient)
+        public ToursManager(IToursRepository toursRepo, IMapsApiClient mapsClient, IPdfGenerator pdfGenerator)
         {
             this.toursRepo = toursRepo;
             this.mapsClient = mapsClient;
+            this.pdfGenerator = pdfGenerator;
             this.logger = Application.GetLogger();
         }
 
  
-
         public event EventHandler DataChanged;
         private void TriggerDataChangedEvent() => DataChanged?.Invoke(this, EventArgs.Empty);
 
+        public async Task GenerateReport(Tour tour)
+        {
+            if (!ValidateTour(tour))
+                throw new Exception("Invalid tour!");
+
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+
+            if (!routeInfo.RouteExists)
+                throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+
+
+            await Task.Run(() => pdfGenerator.GenerateReport(tour));
+        }
         public async Task Export(Tour tourOriginal)
         {
             Tour tour = tourOriginal.Clone();
@@ -50,31 +64,36 @@ namespace BusinessLogic
             });
         }
 
-
-
         public async Task Import(string path)
         {
-            await Task.Run(async () =>
+
+            Tour tour;
+
+            try
             {
-                Tour tour = JsonSerializer.Deserialize<Tour>(File.ReadAllText(path));
+                tour = JsonSerializer.Deserialize<Tour>(File.ReadAllText(path));
+            }
+            catch (Exception)
+            {
+                throw new Exception("error imprting tour, invalid file format!");
+            }
 
-                if (!ValidateTour(tour))
-                    throw new Exception("invalid tour! all fields must have a value!");
+            if (!ValidateTour(tour))
+                throw new Exception("invalid tour! all fields must have a value!");
 
-                if (toursRepo.TourExists(tour.Name))
-                    throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
+            if (toursRepo.TourExists(tour.Name))
+                throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
 
-                var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
 
-                if (!routeInfo.RouteExists)
-                    throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+            if (!routeInfo.RouteExists)
+                throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
 
-                string newPath = Path.Join(Config.Instance.ImagesFolderPath, Guid.NewGuid() + ".jpg");
-                File.Copy(tour.Image, newPath);
-                tour.Image = newPath;
-                toursRepo.Create(tour);
-                logger.Debug($"importing tour {tour.Name}");
-            });
+            string newPath = Path.Join(Config.Instance.ImagesFolderPath, Guid.NewGuid() + ".jpg");
+            File.Copy(tour.Image, newPath);
+            tour.Image = newPath;
+            toursRepo.Create(tour);
+            logger.Debug($"importing tour {tour.Name}");
 
             TriggerDataChangedEvent();
         }
@@ -183,14 +202,14 @@ namespace BusinessLogic
         #region TourLog Crud Methods
         public async Task CreateTourLog(string tourName, TourLog log)
         {
+            if (!ValidateTourLog(log))
+                throw new Exception("invalid tour log!");
+
+            if (!toursRepo.TourExists(tourName))
+                throw new Exception($"Tour {tourName} does not exist");
+
             await Task.Run(() =>
             {
-                if (!ValidateTourLog(log))
-                    throw new Exception("invalid tour log!");
-
-                if (!toursRepo.TourExists(tourName))
-                    throw new Exception($"Tour {tourName} does not exist");
-
                 toursRepo.AddLog(tourName, log);
                 logger.Debug($"creating tour log for {tourName}");
             });
@@ -207,7 +226,7 @@ namespace BusinessLogic
 
         public bool ValidateTourLog(TourLog log)
         {
-            return log.Rating >= 0 && log.Rating <= 10 && log.Report.HasValue() && log.TotalTime > 0;
+            return log.Rating >= 0 && log.Rating <= 10 && log.Report.HasValue() && log.TotalTime > 0 && log.Accomodation.HasValue() && log.Author.HasValue() && log.Members >= 0 && log.Members <= 100 && log.TourName.HasValue();
         }
         #endregion
     }

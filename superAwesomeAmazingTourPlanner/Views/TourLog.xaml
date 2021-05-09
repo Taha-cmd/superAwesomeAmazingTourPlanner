@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="superAwesomeAmazingTourPlanner.Views.TourLog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:superAwesomeAmazingTourPlanner.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer Padding="20, 10" Background="{StaticResource BackgroundColor}">
+        <StackPanel>
+            <TextBlock Style="{StaticResource Title}" Text="{Binding TourName}"/>
+
+            <Label Style="{StaticResource Label}" Content="Author"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding Author}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="Date"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding DateTime}"/>
+            </Border>
+
+
+            <Label Style="{StaticResource Label}" Content="Time spent on the tour"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding TotalTime}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="Rating (0-10)"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding Rating}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="Number of participants"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding Members}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="Accomodation type"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding Accomodation}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="Has McDonalds"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding HasMcDonalds}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="Has camping spots"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding HasCampingSpots}"/>
+            </Border>
+
+            <Label Style="{StaticResource Label}" Content="report"/>
+            <Border Padding="30, 0">
+                <TextBlock Text="{Binding Report}" TextWrapping="WrapWithOverflow"/>
+            </Border>
+
+        </StackPanel>
+        
+        
+    </ScrollViewer>
+</UserControl>

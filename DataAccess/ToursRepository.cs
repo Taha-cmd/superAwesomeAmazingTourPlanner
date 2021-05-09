@@ -27,8 +27,8 @@ namespace DataAccess
 
         private const string getTourSQL = "SELECT * FROM \"tour\" WHERE name=@name";
         private const string getLogsSQL = "SELECT * FROM \"log\" WHERE tourname=@tourname";
-        private const string addLogSql = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating) " +
-                                "VALUES (@date, @tourname, @report, @totaltime, @rating)";
+        private const string addLogSql = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) " +
+                                "VALUES (@date, @tourname, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)";
         public void Create(Tour tour)
         {
             database.ExecuteNonQuery(
@@ -54,6 +54,7 @@ namespace DataAccess
 
         public void Update(string tourName, string imagePath, Tour tour)
         {
+            // update will cascade to foreign key, we can safely update all values
             // update "log" set tourname = "newName" where tourname = "oldName"
             database.ExecuteNonQuery(updateTourSQL,
                 database.Param("newDescription", tour.Description),
@@ -64,8 +65,6 @@ namespace DataAccess
                 database.Param("newDistance", tour.Distance),
                 database.Param("newImagePath", tour.Image)
                 );
-
-            Update("log", "tourname", tourName, "tourname", tour.Name); // update all related logs
 
             // delete old image from filesystem
             File.Delete(imagePath);
@@ -103,8 +102,14 @@ namespace DataAccess
                     database.Param("tourname", tourName),
                     database.Param("report", log.Report),
                     database.Param("totaltime", log.TotalTime),
-                    database.Param("rating", log.Rating)
+                    database.Param("rating", log.Rating),
+                    database.Param("author", log.Author),
+                    database.Param("hasmcdonalds", log.HasMcDonalds),
+                    database.Param("hascampingspots", log.HasCampingSpots),
+                    database.Param("members", log.Members),
+                    database.Param("accomodation", log.Accomodation)
                     );
+
         }
 
 
@@ -129,7 +134,13 @@ namespace DataAccess
                 Rating = reader.GetValue<int>("rating"),
                 Report = reader.GetValue<string>("report"),
                 TotalTime = reader.GetValue<double>("totalTime"),
-                DateTime = reader.GetValue<DateTime>("date")
+                DateTime = reader.GetValue<DateTime>("date"),
+                TourName = reader.GetValue<string>("tourName"),
+                Author = reader.GetValue<string>("author"),
+                HasMcDonalds = reader.GetValue<bool>("hasMcDonalds"),
+                Accomodation = reader.GetValue<string>("accomodation"),
+                HasCampingSpots = reader.GetValue<bool>("hasCampingSpots"),
+                Members = reader.GetValue<int>("members")
             };
         }
 
