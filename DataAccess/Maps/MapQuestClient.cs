@@ -44,7 +44,12 @@ namespace DataAccess.Maps
                 File.WriteAllBytes(imagePath, staticMapResponse);
             }
 
-            return new MapsApiResponse(data.Distance, imagePath);
+            return new MapsApiResponse(MileToKiloMeter(data.Distance), imagePath);
+        }
+
+        private double MileToKiloMeter(double miles)
+        {
+            return Math.Round(miles * 1.60934, 2);
         }
     }
 }

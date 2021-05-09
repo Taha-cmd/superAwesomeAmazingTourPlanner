@@ -9,7 +9,8 @@
 
 	"LocalStorage": {
 		"Images": "../../../../LocalStorage/Images",
-		"Exports": "../../../../LocalStorage/Exports"
+		"Exports": "../../../../LocalStorage/Exports",
+		"Reports": "../../../../LocalStorage/Reports"
 	},
 
 	"Maps": {

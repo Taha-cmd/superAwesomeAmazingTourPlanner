@@ -38,8 +38,9 @@ namespace BusinessLogic
                 var database = new PostgresDatabase(Config.Instance.DataBaseConnectionString);
                 var toursRepo = new ToursRepository(database);
                 var mapsClient = new MapQuestClient(Config.Instance.MapsApiKey, Config.Instance.ImagesFolderPath);
+                var pdfGenerator = new PdfGenerator(Config.Instance.ReportsFolderPath);
 
-                manager = new ToursManager(toursRepo, mapsClient);
+                manager = new ToursManager(toursRepo, mapsClient, pdfGenerator);
             }
                 
 

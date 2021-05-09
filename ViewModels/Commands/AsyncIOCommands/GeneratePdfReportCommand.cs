@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
@@ -10,9 +11,9 @@ namespace ViewModels.Commands
     {
         private MainViewModel mainViewModel;
         public GeneratePdfReportCommand(object vm) => mainViewModel = (MainViewModel)vm;
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            await AsyncOperationWrapper((IStatusDisplay)mainViewModel.CurrentViewModel, () => mainViewModel.Manager.GenerateReport((Tour)parameter));
         }
     }
 }

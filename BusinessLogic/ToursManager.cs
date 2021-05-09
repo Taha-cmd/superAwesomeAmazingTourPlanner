@@ -19,19 +19,33 @@ namespace BusinessLogic
     {
         private readonly IToursRepository toursRepo;
         private readonly IMapsApiClient mapsClient;
+        private readonly IPdfGenerator pdfGenerator;
         private readonly ILog logger;
-        public ToursManager(IToursRepository toursRepo, IMapsApiClient mapsClient)
+        public ToursManager(IToursRepository toursRepo, IMapsApiClient mapsClient, IPdfGenerator pdfGenerator)
         {
             this.toursRepo = toursRepo;
             this.mapsClient = mapsClient;
+            this.pdfGenerator = pdfGenerator;
             this.logger = Application.GetLogger();
         }
 
  
-
         public event EventHandler DataChanged;
         private void TriggerDataChangedEvent() => DataChanged?.Invoke(this, EventArgs.Empty);
 
+        public async Task GenerateReport(Tour tour)
+        {
+            if (!ValidateTour(tour))
+                throw new Exception("Invalid tour!");
+
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+
+            if (!routeInfo.RouteExists)
+                throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
+
+
+            await Task.Run(() => pdfGenerator.GenerateReport(tour));
+        }
         public async Task Export(Tour tourOriginal)
         {
             Tour tour = tourOriginal.Clone();
@@ -49,8 +63,6 @@ namespace BusinessLogic
                 logger.Debug($"exporting tour {tour.Name}");
             });
         }
-
-
 
         public async Task Import(string path)
         {

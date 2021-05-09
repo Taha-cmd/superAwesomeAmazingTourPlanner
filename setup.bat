@@ -10,6 +10,7 @@ echo setting up folder structure
 rmdir /S /Q LocalStorage
 mkdir LocalStorage
 mkdir LocalStorage\Images
+mkdir LocalStorage\Reports
 mkdir LocalStorage\Exports
 mkdir LocalStorage\Exports\Images
 

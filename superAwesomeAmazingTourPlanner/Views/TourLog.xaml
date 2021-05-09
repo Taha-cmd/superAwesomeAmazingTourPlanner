@@ -53,7 +53,7 @@
 
             <Label Style="{StaticResource Label}" Content="report"/>
             <Border Padding="30, 0">
-                <TextBlock Text="{Binding Report}"/>
+                <TextBlock Text="{Binding Report}" TextWrapping="WrapWithOverflow"/>
             </Border>
 
         </StackPanel>
