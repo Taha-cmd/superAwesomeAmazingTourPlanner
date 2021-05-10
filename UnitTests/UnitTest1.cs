@@ -82,15 +82,6 @@ namespace UnitTests
         }
 
         [Test]
-        public void TestUpdateNotExistingTour()
-        {
-            Tour tour = new Tour();
-            var manager = Application.GetToursManager();
-
-            Assert.ThrowsAsync<Exception>(() => manager.UpdateTour("IDontExist", "InvalidPath", tour));
-        }
-
-        [Test]
         public void TestCreateTourViewModelCommandType()
         {
             var vm = new CreateOrUpdateTourViewModel();
