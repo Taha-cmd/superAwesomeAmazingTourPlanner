@@ -7,7 +7,7 @@ using ViewModels.ViewModels;
 
 namespace ViewModels.Commands
 {
-    class UpdateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
+    public class UpdateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
         private CreateOrUpdateTourViewModel viewModel;
         public UpdateTourCommand(object tourViewModel)

@@ -22,7 +22,7 @@ namespace BusinessLogic
         public void GenerateReport(Tour tour)
         {
             var document = new TourPdfDocument(tour);
-            document.GeneratePdf(Path.Join(saveDirectoryPath, DateTime.Now.ToString("MM/dd/yyyy") + "_" + tour.Name + "_report.pdf"));
+            document.GeneratePdf(Path.Join(saveDirectoryPath, Guid.NewGuid() + "_" + tour.Name + "_report.pdf"));
         }
     }
 }

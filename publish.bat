@@ -11,6 +11,6 @@ copy setup.bat dist
 xcopy scripts dist\scripts
 
 
-dotnet publish superAwesomeAmazingTourPlanner -c Release -o dist
+dotnet publish superAwesomeAmazingTourPlanner\superAwesomeAmazingTourPlanner.csproj -r win-x64 -c Release -o dist -p:PublishSingleFile=true --self-contained true
 
 tar.exe -c -f dist.zip dist
