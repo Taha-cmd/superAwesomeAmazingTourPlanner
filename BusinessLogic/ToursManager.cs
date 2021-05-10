@@ -48,6 +48,9 @@ namespace BusinessLogic
         }
         public async Task Export(Tour tourOriginal)
         {
+            if (!ValidateTour(tourOriginal))
+                throw new Exception("invalid tour! all fields must have a value!");
+
             Tour tour = tourOriginal.Clone();
 
             await Task.Run(async () =>
@@ -66,6 +69,8 @@ namespace BusinessLogic
 
         public async Task Import(string path)
         {
+            if (!File.Exists(path))
+                throw new Exception($"file {path} does not exist");
 
             Tour tour;
 
@@ -100,6 +105,9 @@ namespace BusinessLogic
 
         public async Task Copy(Tour tour)
         {
+            if (!ValidateTour(tour))
+                throw new Exception("invalid tour! all fields must have a value!");
+
             var newTour = tour.Clone();
 
             await Task.Run(() =>

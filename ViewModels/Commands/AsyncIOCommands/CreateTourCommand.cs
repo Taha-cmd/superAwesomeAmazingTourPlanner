@@ -10,7 +10,7 @@ using ViewModels.Enums;
 
 namespace ViewModels.Commands
 {
-    class CreateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
+    public class CreateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
         private CreateOrUpdateTourViewModel viewModel;
         public CreateTourCommand(object tourViewModel)
