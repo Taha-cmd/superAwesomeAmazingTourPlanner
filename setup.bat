@@ -12,7 +12,6 @@ mkdir LocalStorage
 mkdir LocalStorage\Images
 mkdir LocalStorage\Reports
 mkdir LocalStorage\Exports
-mkdir LocalStorage\Exports\Images
 
 echo creating user
 psql -U postgres -f scripts\createUser.sql

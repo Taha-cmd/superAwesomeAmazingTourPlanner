@@ -53,18 +53,13 @@ namespace BusinessLogic
 
             Tour tour = tourOriginal.Clone();
 
-            await Task.Run(async () =>
-            {
-                string imagePath = Path.Join(Config.Instance.ExportsFolderPath, "Images", Path.GetFileName(tour.Image)); // save a copy of the image as well
-                File.Copy(tour.Image, imagePath, true); // save a copy at the new path
+            tour.Image = null;
+            string path = Path.Join(Config.Instance.ExportsFolderPath, tour.Name + ".json");
+            string json = JsonSerializer.Serialize(tour);
 
-                tour.Image = imagePath;
-                string path = Path.Join(Config.Instance.ExportsFolderPath, tour.Name + ".json");
-                string json = JsonSerializer.Serialize(tour);
+            await File.WriteAllTextAsync(path, json);
+            logger.Debug($"exporting tour {tour.Name}");
 
-                await File.WriteAllTextAsync(path, json);
-                logger.Debug($"exporting tour {tour.Name}");
-            });
         }
 
         public async Task Import(string path)
@@ -89,14 +84,12 @@ namespace BusinessLogic
             if (toursRepo.TourExists(tour.Name))
                 throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
 
-            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea, true);
 
             if (!routeInfo.RouteExists)
                 throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
 
-            string newPath = Path.Join(Config.Instance.ImagesFolderPath, Guid.NewGuid() + ".jpg");
-            File.Copy(tour.Image, newPath);
-            tour.Image = newPath;
+            tour.Image = routeInfo.ImagePath;
             toursRepo.Create(tour);
             logger.Debug($"importing tour {tour.Name}");
 
