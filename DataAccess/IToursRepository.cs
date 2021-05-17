@@ -10,14 +10,21 @@ namespace DataAccess
     // in this case, the tours repoistory
     public interface IToursRepository
     {
-        // crud methods
+        // tour crud methods
 
         void Create(Tour tour);
         IEnumerable<Tour> GetTours(int? limit = null);
         Tour GetTour(string tourName);
         void Update(string tourName, string imagePath, Tour tour);
         void Delete(Tour tour);
-        void AddLog(string tourName, TourLog log);
         bool TourExists(string tourName);
+
+        // log crud methods
+        IEnumerable<TourLog> GetLogs(string tourName);
+        void AddLog(string tourName, TourLog log);
+        void DeleteLog(TourLog log);
+        void UpdateLog(TourLog log);
+        bool LogExists(int id);
+        
     }
 }

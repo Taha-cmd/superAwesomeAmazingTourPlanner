@@ -53,7 +53,7 @@ namespace ViewModels.ViewModels
 
         public ICommand SearchCommand { get; }
 
-        public ObservableCollection<TourLog> Logs { get; }
+        public ObservableCollection<TourLog> Logs { get; private set; }
 
         private Status status = Status.Empty;
         private string statusMessage = string.Empty;
@@ -69,6 +69,28 @@ namespace ViewModels.ViewModels
             this.tour = tour;
             Logs = new ObservableCollection<TourLog>(tour.Logs);
             SearchCommand = CommandFactory.CreateCommand<SearchCommand>(this);
+
+            Manager.DataChanged += (sender, args) =>
+            {
+                // known bug:
+                // DataChanged event will be triggered whenever something changes in the persistence layer (tour crud / log crud)
+                // when a tour is deleted, a cached tour viewModel will try to load the logs for this tour
+                // since the tour does not exist anymore, an exception will be thrown
+                // actual solution: make seperate events
+                // for now this will work
+                try
+                {
+                    tour.Logs = Manager.GetLogs(tour.Name); // actual data
+                    Logs.Clear(); // data to be displayed
+
+                    tour.Logs.ForEach(log => Logs.Add(log));
+                }
+                catch(Exception)
+                {
+
+                }
+
+            };
         }
 
         public void Filter(string filter)

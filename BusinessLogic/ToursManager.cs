@@ -10,8 +10,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using log4net;
-
-
+using System.Diagnostics;
 
 namespace BusinessLogic
 {
@@ -201,6 +200,11 @@ namespace BusinessLogic
         #endregion
 
         #region TourLog Crud Methods
+        public List<TourLog> GetLogs(string tourName)
+        {
+            return toursRepo.TourExists(tourName) ? toursRepo.GetLogs(tourName).ToList() : throw new Exception($"tour {tourName} does not exist");
+        }
+
         public async Task CreateTourLog(string tourName, TourLog log)
         {
             if (!ValidateTourLog(log))
@@ -215,6 +219,16 @@ namespace BusinessLogic
                 logger.Debug($"creating tour log for {tourName}");
             });
 
+            TriggerDataChangedEvent();
+        }
+
+        public async Task DeleteTourLog(TourLog log)
+        {
+            if (!toursRepo.LogExists(log.Id))
+                throw new Exception($"Log with id {log.Id} does not exist");
+
+            await Task.Run(() => toursRepo.DeleteLog(log));
+            logger.Info("Deleting log with id " + log.Id);
             TriggerDataChangedEvent();
         }
         #endregion

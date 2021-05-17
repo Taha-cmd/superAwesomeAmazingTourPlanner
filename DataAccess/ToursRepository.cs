@@ -29,6 +29,8 @@ namespace DataAccess
         private const string getLogsSQL = "SELECT * FROM \"log\" WHERE tourname=@tourname";
         private const string addLogSql = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) " +
                                 "VALUES (@date, @tourname, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)";
+
+        private const string deleteLogSql = "DELETE FROM \"log\" WHERE id=@id";
         public void Create(Tour tour)
         {
             database.ExecuteNonQuery(
@@ -111,6 +113,15 @@ namespace DataAccess
                     );
 
         }
+        public void DeleteLog(TourLog log)
+        {
+            database.ExecuteNonQuery(deleteLogSql, database.Param("id", log.Id));
+        }
+
+        public void UpdateLog(TourLog log)
+        {
+            throw new NotImplementedException();
+        }
 
 
         // DbDataReader is the common abstract class in c# that all database providers implement
@@ -131,6 +142,7 @@ namespace DataAccess
         {
             return new TourLog()
             {
+                Id = reader.GetValue<int>("id"),
                 Rating = reader.GetValue<int>("rating"),
                 Report = reader.GetValue<string>("report"),
                 TotalTime = reader.GetValue<double>("totalTime"),
@@ -145,5 +157,10 @@ namespace DataAccess
         }
 
         public bool TourExists(string tourName) => Exists("tour", "name", tourName);
+        public bool LogExists(int id) => Exists("log", "id", id);
+
+
+
+
     }
 }
