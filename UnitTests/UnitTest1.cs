@@ -84,15 +84,15 @@ namespace UnitTests
         [Test]
         public void TestCreateTourViewModelCommandType()
         {
-            var vm = new CreateOrUpdateTourViewModel();
-            Assert.IsTrue(vm.CreateOrUpdateTourCommand.GetType().Name == nameof(CreateTourCommand));
+            var vm = new TourFormViewModel();
+            Assert.IsTrue(vm.OperationCommand.GetType().Name == nameof(CreateTourCommand));
         }
 
         [Test]
         public void TestUpdateTourViewModelCommandType()
         {
-            var vm = new CreateOrUpdateTourViewModel(new Tour());
-            Assert.IsTrue(vm.CreateOrUpdateTourCommand.GetType().Name == nameof(UpdateTourCommand));
+            var vm = new TourFormViewModel(new Tour());
+            Assert.IsTrue(vm.OperationCommand.GetType().Name == nameof(UpdateTourCommand));
         }
 
 

@@ -2,6 +2,7 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
@@ -27,11 +28,11 @@ namespace ViewModels.ViewModels
             DeleteTourLogCommand = CommandFactory.CreateCommand<DeleteTourLogCommand>(this);
 
 
-            ViewModels = new List<ViewModelBase>() 
+            ViewModels = new List<ViewModelBase>()
             {
                 new HomeViewModel(),
                 new ToursViewModel(),
-                new CreateOrUpdateTourViewModel()
+                new TourFormViewModel()
             };
 
             CurrentViewModel = ViewModels[0];

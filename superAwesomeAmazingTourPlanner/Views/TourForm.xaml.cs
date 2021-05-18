@@ -20,9 +20,9 @@ namespace superAwesomeAmazingTourPlanner.Views
     /// <summary>
     /// Interaction logic for CreateTour.xaml
     /// </summary>
-    public partial class CreateTour : UserControl
+    public partial class TourForm : UserControl
     {
-        public CreateTour()
+        public TourForm()
         {
             InitializeComponent();
         }
@@ -36,7 +36,7 @@ namespace superAwesomeAmazingTourPlanner.Views
             if ((bool)result)
             {
                 string path = importWindow.FileName;
-                ((CreateOrUpdateTourViewModel)DataContext).ImportTourCommand.Execute(path);
+                ((TourFormViewModel)DataContext).ImportTourCommand.Execute(path);
             }
         }
 

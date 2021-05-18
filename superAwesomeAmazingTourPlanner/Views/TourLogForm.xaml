@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="superAwesomeAmazingTourPlanner.Views.CreateTourLog"
+﻿<UserControl x:Class="superAwesomeAmazingTourPlanner.Views.TourLogForm"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -74,10 +74,10 @@
             <!--<TextBox  Grid.Column="2" Grid.Row="8" Text="{Binding HasCampingSpots, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputField}"/>-->
 
             <Button Grid.Column="1" Grid.Row="9" 
-                    Command="{Binding CreateTourLogCommand}"
+                    Command="{Binding OperationCommand}"
                     CommandParameter="{Binding}"
                     Style="{StaticResource SubmitButton}" 
-                    Content="Create Log"/>
+                    Content="{Binding Operation}"/>
 
             <!--<Button
                 MaxWidth="150"

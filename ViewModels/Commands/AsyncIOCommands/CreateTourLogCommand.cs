@@ -12,15 +12,15 @@ namespace ViewModels.Commands
 {
     public class CreateTourLogCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
-        private readonly CreateTourLogViewModel viewModel;
+        private readonly TourLogFormViewModel viewModel;
 
         public CreateTourLogCommand(object parameter)
         {
-            viewModel = (CreateTourLogViewModel)parameter;
+            viewModel = (TourLogFormViewModel)parameter;
             RegisterAllProperties(viewModel);
         }
         // validate that the input is not empty
         public override bool CanExecute(object parameter) => viewModel.Report.HasValue() && viewModel.TotalTime != 0;   
-        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => viewModel.Manager.CreateTourLog(viewModel.TourName, viewModel.Log));
+        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => viewModel.Manager.CreateTourLog(viewModel.Log));
     }
 }

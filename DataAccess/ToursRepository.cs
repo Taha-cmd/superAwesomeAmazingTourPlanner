@@ -30,6 +30,11 @@ namespace DataAccess
         private const string addLogSql = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) " +
                                 "VALUES (@date, @tourname, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)";
 
+        private const string updateLogSql = "UPDATE \"log\" SET " +
+            "(date, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) =" +
+            "(@date, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)" +
+            "WHERE id=@id";
+
         private const string deleteLogSql = "DELETE FROM \"log\" WHERE id=@id";
         public void Create(Tour tour)
         {
@@ -120,7 +125,18 @@ namespace DataAccess
 
         public void UpdateLog(TourLog log)
         {
-            throw new NotImplementedException();
+            database.ExecuteNonQuery(updateLogSql,
+                    database.Param("date", log.DateTime),
+                    database.Param("report", log.Report),
+                    database.Param("totaltime", log.TotalTime),
+                    database.Param("rating", log.Rating),
+                    database.Param("author", log.Author),
+                    database.Param("hasmcdonalds", log.HasMcDonalds),
+                    database.Param("hascampingspots", log.HasCampingSpots),
+                    database.Param("members", log.Members),
+                    database.Param("accomodation", log.Accomodation),
+                    database.Param("id", log.Id)
+                    );
         }
 
 

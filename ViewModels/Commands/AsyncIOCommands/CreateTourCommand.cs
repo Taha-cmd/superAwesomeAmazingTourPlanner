@@ -12,10 +12,10 @@ namespace ViewModels.Commands
 {
     public class CreateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
-        private CreateOrUpdateTourViewModel viewModel;
+        private TourFormViewModel viewModel;
         public CreateTourCommand(object tourViewModel)
         {
-            viewModel = (CreateOrUpdateTourViewModel)tourViewModel;
+            viewModel = (TourFormViewModel)tourViewModel;
             RegisterAllProperties(viewModel);
         }
 

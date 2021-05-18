@@ -9,21 +9,20 @@ using ViewModels.Enums;
 
 namespace ViewModels.ViewModels
 {
-    public class CreateOrUpdateTourViewModel : ViewModelBase, IStatusDisplay
+    public class TourFormViewModel : ViewModelBase, IStatusDisplay
     {
-        public CreateOrUpdateTourViewModel() : base("CreateTour", "Create New Tour")
+        public TourFormViewModel() : base("CreateTour", "Create New Tour")
         {
-            CreateOrUpdateTourCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
+            OperationCommand = CommandFactory.CreateCommand<CreateTourCommand>(this);
             ImportTourCommand = CommandFactory.CreateCommand<ImportTourCommand>(this);
             Operation = Title;
             tour = new Tour();
         } 
 
-        public CreateOrUpdateTourViewModel(Tour tour) : base("CreateTour", $"Update Tour {tour.Name}")
+        public TourFormViewModel(Tour tour) : base("CreateTour", $"Update Tour {tour.Name}")
         {
-            CreateOrUpdateTourCommand = CommandFactory.CreateCommand<UpdateTourCommand>(this);
-            ImportTourCommand  = CommandFactory.CreateCommand<ImportTourCommand>(this);
-
+            OperationCommand = CommandFactory.CreateCommand<UpdateTourCommand>(this);
+            ImportTourCommand = CommandFactory.CreateCommand<ImportTourCommand>(this);
             this.tour = tour;
 
             Operation = Title;
@@ -31,7 +30,7 @@ namespace ViewModels.ViewModels
             oldImage = tour.Image;
 
         }
-        public ICommand CreateOrUpdateTourCommand { get; protected set; }
+        public ICommand OperationCommand { get; protected set; }
         public ICommand ImportTourCommand { get; }
 
 

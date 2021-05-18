@@ -7,62 +7,62 @@ namespace ViewModels.ViewModels
 {
     public class TourLogViewModel : ViewModelBase
     {
-        TourLog log { get; }
+        public TourLog Log { get; }
         public TourLogViewModel(TourLog log) : base("TourLog", $"tour log for {log.TourName}")
         {
-            this.log = log;
+            this.Log = log;
         }
 
-        public string TourName => log.TourName;
+        public string TourName => Log.TourName;
         public DateTime DateTime
         {
-            get => log.DateTime;
-            set => SetValue(log, value, nameof(DateTime));
+            get => Log.DateTime;
+            set => SetValue(Log, value, nameof(DateTime));
         }
         public string Report
         {
-            get => log.Report;
-            set => SetValue(log, value, nameof(Report));
+            get => Log.Report;
+            set => SetValue(Log, value, nameof(Report));
         }
         public double Distance
         {
-            get => log.Distance;
-            set => SetValue(log, value, nameof(Distance));
+            get => Log.Distance;
+            set => SetValue(Log, value, nameof(Distance));
         }
         public double TotalTime
         {
-            get => log.TotalTime;
-            set => SetValue(log, value, nameof(TotalTime));
+            get => Log.TotalTime;
+            set => SetValue(Log, value, nameof(TotalTime));
         }
         public int Rating
         {
-            get => log.Rating;
-            set => SetValue(log, value, nameof(Rating));
+            get => Log.Rating;
+            set => SetValue(Log, value, nameof(Rating));
         }
         public bool HasMcDonalds
         {
-            get => log.HasMcDonalds;
-            set => SetValue(log, value, nameof(HasMcDonalds));
+            get => Log.HasMcDonalds;
+            set => SetValue(Log, value, nameof(HasMcDonalds));
         }
         public bool HasCampingSpots
         {
-            get => log.HasCampingSpots;
-            set => SetValue(log, value, nameof(HasCampingSpots));
+            get => Log.HasCampingSpots;
+            set => SetValue(Log, value, nameof(HasCampingSpots));
         }
         public string Author
         {
-            get => log.Author;
-            set => SetValue(log, value, nameof(Author));
+            get => Log.Author;
+            set => SetValue(Log, value, nameof(Author));
         }
         public string Accomodation
         {
-            get => log.Accomodation;
-            set => SetValue(log, value, nameof(Accomodation));
+            get => Log.Accomodation;
+            set => SetValue(Log, value, nameof(Accomodation));
         }
         public int Members
         {
-            get => log.Members;
-            set => SetValue(log, value, nameof(Members));
+            get => Log.Members;
+            set => SetValue(Log, value, nameof(Members));
         }
     }
 }
