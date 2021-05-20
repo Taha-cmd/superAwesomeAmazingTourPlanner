@@ -2,6 +2,7 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
@@ -24,13 +25,14 @@ namespace ViewModels.ViewModels
             ExportTourCommand = CommandFactory.CreateCommand<ExportTourCommand>(this);
             CopyTourCommand = CommandFactory.CreateCommand<CopyTourCommand>(this);
             GeneratePdfReportCommand = CommandFactory.CreateCommand<GeneratePdfReportCommand>(this);
+            DeleteTourLogCommand = CommandFactory.CreateCommand<DeleteTourLogCommand>(this);
 
 
-            ViewModels = new List<ViewModelBase>() 
+            ViewModels = new List<ViewModelBase>()
             {
                 new HomeViewModel(),
                 new ToursViewModel(),
-                new CreateOrUpdateTourViewModel()
+                new TourFormViewModel()
             };
 
             CurrentViewModel = ViewModels[0];
@@ -50,6 +52,7 @@ namespace ViewModels.ViewModels
         public ICommand ExportTourCommand { get; }
         public ICommand CopyTourCommand { get; }
         public ICommand GeneratePdfReportCommand { get; }
+        public ICommand DeleteTourLogCommand { get; }
         public List<ViewModelBase> ViewModels { get; }
 
         public ViewModelBase CurrentViewModel

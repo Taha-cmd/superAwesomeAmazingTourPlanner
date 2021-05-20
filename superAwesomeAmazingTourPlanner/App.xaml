@@ -1,9 +1,9 @@
 ﻿<Application x:Class="superAwesomeAmazingTourPlanner.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ViewModels="clr-namespace:ViewModels.ViewModels;assembly=ViewModels"
              xmlns:Converters="clr-namespace:superAwesomeAmazingTourPlanner.Converters"
              xmlns:local="clr-namespace:superAwesomeAmazingTourPlanner.Views"
+             xmlns:ViewModels="clr-namespace:ViewModels.ViewModels;assembly=ViewModels"
              StartupUri="Views/MainWindow.xaml">
     
     <!--globl ressources-->
@@ -44,11 +44,11 @@
             <DataTemplate DataType="{x:Type ViewModels:TourViewModel}">
                 <local:Tour DataContext="{Binding}"/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type ViewModels:CreateOrUpdateTourViewModel}">
-                <local:CreateTour DataContext="{Binding}"/>
+            <DataTemplate DataType="{x:Type ViewModels:TourFormViewModel}">
+                <local:TourForm DataContext="{Binding}"/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type ViewModels:CreateTourLogViewModel}">
-                <local:CreateTourLog DataContext="{Binding}"/>
+            <DataTemplate DataType="{x:Type ViewModels:TourLogFormViewModel}">
+                <local:TourLogForm DataContext="{Binding}"/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type ViewModels:TourLogViewModel}">
                 <local:TourLog DataContext="{Binding }"/>

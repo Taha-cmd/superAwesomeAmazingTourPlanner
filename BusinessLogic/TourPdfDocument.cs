@@ -84,6 +84,8 @@ namespace BusinessLogic
                                 stack.Item().Padding(5).Text($"Total accomodations in {type}: {tour.Logs.Where(log => log.Accomodation == type).Count()}");
                             });
 
+                            stack.Item().Padding(5).Text($"Total time: {tour.Logs.Sum(log => log.TotalTime)}");
+                            stack.Item().Padding(5).Text($"Total KMs: {Math.Round(tour.Distance * tour.Logs.Count, 2)}");
                             stack.Item().Padding(5).Text($"Average time: {tour.Logs.Average(log => log.TotalTime)}");
                             stack.Item().Padding(5).Text($"Average rating: {tour.Logs.Average(log => log.Rating)}");
                             stack.Item().Padding(5).Text($"Average number of participants: {tour.Logs.Average(log => log.Members)}");

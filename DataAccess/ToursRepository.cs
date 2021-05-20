@@ -29,6 +29,13 @@ namespace DataAccess
         private const string getLogsSQL = "SELECT * FROM \"log\" WHERE tourname=@tourname";
         private const string addLogSql = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) " +
                                 "VALUES (@date, @tourname, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)";
+
+        private const string updateLogSql = "UPDATE \"log\" SET " +
+            "(date, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) =" +
+            "(@date, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)" +
+            "WHERE id=@id";
+
+        private const string deleteLogSql = "DELETE FROM \"log\" WHERE id=@id";
         public void Create(Tour tour)
         {
             database.ExecuteNonQuery(
@@ -111,6 +118,26 @@ namespace DataAccess
                     );
 
         }
+        public void DeleteLog(TourLog log)
+        {
+            database.ExecuteNonQuery(deleteLogSql, database.Param("id", log.Id));
+        }
+
+        public void UpdateLog(TourLog log)
+        {
+            database.ExecuteNonQuery(updateLogSql,
+                    database.Param("date", log.DateTime),
+                    database.Param("report", log.Report),
+                    database.Param("totaltime", log.TotalTime),
+                    database.Param("rating", log.Rating),
+                    database.Param("author", log.Author),
+                    database.Param("hasmcdonalds", log.HasMcDonalds),
+                    database.Param("hascampingspots", log.HasCampingSpots),
+                    database.Param("members", log.Members),
+                    database.Param("accomodation", log.Accomodation),
+                    database.Param("id", log.Id)
+                    );
+        }
 
 
         // DbDataReader is the common abstract class in c# that all database providers implement
@@ -131,6 +158,7 @@ namespace DataAccess
         {
             return new TourLog()
             {
+                Id = reader.GetValue<int>("id"),
                 Rating = reader.GetValue<int>("rating"),
                 Report = reader.GetValue<string>("report"),
                 TotalTime = reader.GetValue<double>("totalTime"),
@@ -145,5 +173,10 @@ namespace DataAccess
         }
 
         public bool TourExists(string tourName) => Exists("tour", "name", tourName);
+        public bool LogExists(int id) => Exists("log", "id", id);
+
+
+
+
     }
 }

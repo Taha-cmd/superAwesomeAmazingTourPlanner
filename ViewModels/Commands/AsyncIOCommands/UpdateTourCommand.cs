@@ -9,10 +9,10 @@ namespace ViewModels.Commands
 {
     public class UpdateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
-        private CreateOrUpdateTourViewModel viewModel;
+        private TourFormViewModel viewModel;
         public UpdateTourCommand(object tourViewModel)
         {
-            viewModel = (CreateOrUpdateTourViewModel)tourViewModel;
+            viewModel = (TourFormViewModel)tourViewModel;
             RegisterAllProperties(viewModel);
         }
         public override bool CanExecute(object parameter) => viewModel.Manager.ValidateTour(viewModel.Tour);

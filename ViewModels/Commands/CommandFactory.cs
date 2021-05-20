@@ -26,7 +26,9 @@ namespace ViewModels.Commands
                 nameof(ImportTourCommand)           => new ImportTourCommand(viewModel),
                 nameof(CopyTourCommand)             => new CopyTourCommand(viewModel),
                 nameof(GeneratePdfReportCommand)    => new GeneratePdfReportCommand(viewModel),
-                _ => throw new Exception($"command type [{typeof(TCommand).Name}] unknown"),
+                nameof(DeleteTourLogCommand)        => new DeleteTourLogCommand(viewModel),
+                nameof(UpdateTourLogCommand)        => new UpdateTourLogCommand(viewModel),
+                _ => throw new Exception($"command type [{typeof(TCommand).Name}] unknown")
             };
         }
     }

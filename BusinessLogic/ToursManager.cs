@@ -10,8 +10,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using log4net;
-
-
+using System.Diagnostics;
 
 namespace BusinessLogic
 {
@@ -53,18 +52,13 @@ namespace BusinessLogic
 
             Tour tour = tourOriginal.Clone();
 
-            await Task.Run(async () =>
-            {
-                string imagePath = Path.Join(Config.Instance.ExportsFolderPath, "Images", Path.GetFileName(tour.Image)); // save a copy of the image as well
-                File.Copy(tour.Image, imagePath, true); // save a copy at the new path
+            tour.Image = null;
+            string path = Path.Join(Config.Instance.ExportsFolderPath, tour.Name + ".json");
+            string json = JsonSerializer.Serialize(tour);
 
-                tour.Image = imagePath;
-                string path = Path.Join(Config.Instance.ExportsFolderPath, tour.Name + ".json");
-                string json = JsonSerializer.Serialize(tour);
+            await File.WriteAllTextAsync(path, json);
+            logger.Debug($"exporting tour {tour.Name}");
 
-                await File.WriteAllTextAsync(path, json);
-                logger.Debug($"exporting tour {tour.Name}");
-            });
         }
 
         public async Task Import(string path)
@@ -89,14 +83,12 @@ namespace BusinessLogic
             if (toursRepo.TourExists(tour.Name))
                 throw new Exception($"tour {tour.Name} allready exists. Names must be unique");
 
-            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea);
+            var routeInfo = await mapsClient.GetRouteInformation(tour.StartingArea, tour.TargetArea, true);
 
             if (!routeInfo.RouteExists)
                 throw new Exception($"no route found between {tour.StartingArea} and {tour.TargetArea}");
 
-            string newPath = Path.Join(Config.Instance.ImagesFolderPath, Guid.NewGuid() + ".jpg");
-            File.Copy(tour.Image, newPath);
-            tour.Image = newPath;
+            tour.Image = routeInfo.ImagePath;
             toursRepo.Create(tour);
             logger.Debug($"importing tour {tour.Name}");
 
@@ -110,26 +102,22 @@ namespace BusinessLogic
 
             var newTour = tour.Clone();
 
-            await Task.Run(() =>
+            if (tour.Name.Contains("Copy"))
             {
-                if (tour.Name.Contains("Copy"))
-                {
-                    char prefix = (char)(((int)tour.Name.Last()) + 1);
-                    newTour.Name = newTour.Name.Substring(0, newTour.Name.Length - 1) +  prefix;
-                }   
-                else
-                {
-                    newTour.Name = newTour.Name + "Copy0";
-                }
-            });
-
+                char prefix = (char)(((int)tour.Name.Last()) + 1);
+                newTour.Name = newTour.Name.Substring(0, newTour.Name.Length - 1) + prefix;
+            }
+            else
+            {
+                newTour.Name = newTour.Name + "Copy0";
+            }
 
             if (toursRepo.TourExists(newTour.Name))
                 throw new Exception($"A copy of the tour {tour.Name} allready exists. A tour can be only copied once. Consider copying the copy");
 
             string newPath = $"{Config.Instance.ImagesFolderPath}/{Guid.NewGuid()}.jpg";
             newTour.Image = newPath;
-            File.Copy(tour.Image, newPath);
+            await Task.Run(() => File.Copy(tour.Image, newPath));
 
             toursRepo.Create(newTour);
             TriggerDataChangedEvent();
@@ -157,19 +145,6 @@ namespace BusinessLogic
 
             TriggerDataChangedEvent();
         }
-        public Tour GetTour(string name) => toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
-        public List<Tour> GetTours(int? limit = null) => toursRepo.GetTours(limit).ToList();
-        public async Task DeleteTour(Tour tour)
-        {
-            await Task.Run(() =>
-              {
-                  toursRepo.Delete(tour);
-              });
-            logger.Debug($"deleting tour {tour.Name}");
-
-            // throws an exception when triggered from the task thread
-            TriggerDataChangedEvent();
-        }
 
         public async Task UpdateTour(string currentName, string currentImage, Tour tour)
         {
@@ -190,38 +165,72 @@ namespace BusinessLogic
             tour.Distance = routeInfo.Distance;
             tour.Image = routeInfo.ImagePath;
 
-            toursRepo.Update(currentName, currentImage, tour);
+            await Task.Run(() => toursRepo.Update(currentName, currentImage, tour));
 
             logger.Debug($"updating tour {tour.Name}");
             TriggerDataChangedEvent();
         }
-        #endregion
+        public Tour GetTour(string name)
+        {
+            return toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
+        }
 
-        #region probably useless stuff
-        public event EventHandler<TourAddedEventArgs> TourAdded;
-        public event EventHandler<TourDeletedEventArgs> TourDeleted;
-        public event EventHandler<TourUpdatedEventArgs> TourUpdated;
+        public List<Tour> GetTours(int? limit = null)
+        {
+            return toursRepo.GetTours(limit).ToList();
+        }
 
-        public void TriggerTourUpdatedEvent(string oldName, Tour tour) => TourUpdated?.Invoke(this, new TourUpdatedEventArgs(oldName, tour));
-        public void TriggerTourDeletedEvent(Tour tour) => TourDeleted?.Invoke(this, new TourDeletedEventArgs(tour));
-        public void TriggerTourAddedEvent(Tour tour) => TourAdded?.Invoke(this, new TourAddedEventArgs(tour));
+        public async Task DeleteTour(Tour tour)
+        {
+            if (!toursRepo.TourExists(tour.Name))
+                throw new Exception($"Tour {tour.Name} does not exist");
+
+            await Task.Run(() => toursRepo.Delete(tour));
+            logger.Debug($"deleting tour {tour.Name}");
+
+            // throws an exception when triggered from the task thread
+            TriggerDataChangedEvent();
+        }
+
         #endregion
 
         #region TourLog Crud Methods
-        public async Task CreateTourLog(string tourName, TourLog log)
+        public List<TourLog> GetLogs(string tourName)
+        {
+            return toursRepo.TourExists(tourName) ? toursRepo.GetLogs(tourName).ToList() : throw new Exception($"tour {tourName} does not exist");
+        }
+
+        public async Task CreateTourLog(TourLog log)
+        {
+            await CreateUpdateLogWrapper(log, () => toursRepo.AddLog(log.TourName, log));
+            logger.Debug($"creating tour log for {log.TourName}");
+        }
+
+        public async Task UpdateTourLog(TourLog log)
+        {
+            await CreateUpdateLogWrapper(log, () => toursRepo.UpdateLog(log));
+            logger.Debug($"updating tour log {log.Id} for {log.TourName}");
+        }
+
+        private async Task CreateUpdateLogWrapper(TourLog log, Action action)
         {
             if (!ValidateTourLog(log))
                 throw new Exception("invalid tour log!");
 
-            if (!toursRepo.TourExists(tourName))
-                throw new Exception($"Tour {tourName} does not exist");
+            if (!toursRepo.TourExists(log.TourName))
+                throw new Exception($"Tour {log.TourName} does not exist");
 
-            await Task.Run(() =>
-            {
-                toursRepo.AddLog(tourName, log);
-                logger.Debug($"creating tour log for {tourName}");
-            });
+            await Task.Run(() => { action(); });
 
+            TriggerDataChangedEvent();
+        }
+        public async Task DeleteTourLog(TourLog log)
+        {
+            if (!toursRepo.LogExists(log.Id))
+                throw new Exception($"Log with id {log.Id} does not exist");
+
+            await Task.Run(() => toursRepo.DeleteLog(log));
+            logger.Info("Deleting log with id " + log.Id);
             TriggerDataChangedEvent();
         }
         #endregion
@@ -236,6 +245,16 @@ namespace BusinessLogic
         {
             return log.Rating >= 0 && log.Rating <= 10 && log.Report.HasValue() && log.TotalTime > 0 && log.Accomodation.HasValue() && log.Author.HasValue() && log.Members >= 0 && log.Members <= 100 && log.TourName.HasValue();
         }
+        #endregion
+
+        #region unused code (for now (forever?))
+        public event EventHandler<TourAddedEventArgs> TourAdded;
+        public event EventHandler<TourDeletedEventArgs> TourDeleted;
+        public event EventHandler<TourUpdatedEventArgs> TourUpdated;
+
+        public void TriggerTourUpdatedEvent(string oldName, Tour tour) => TourUpdated?.Invoke(this, new TourUpdatedEventArgs(oldName, tour));
+        public void TriggerTourDeletedEvent(Tour tour) => TourDeleted?.Invoke(this, new TourDeletedEventArgs(tour));
+        public void TriggerTourAddedEvent(Tour tour) => TourAdded?.Invoke(this, new TourAddedEventArgs(tour));
         #endregion
     }
 }

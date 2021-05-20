@@ -6,6 +6,8 @@ namespace Models
 {
     public class TourLog : ModelBase, ICloneable<TourLog>
     {
+        public int Id { get; set; }
+
         public string TourName { get; set; } // the name references the tour (names are unique)
         public DateTime DateTime { get; set; } = DateTime.Now;
         public string Report { get; set; }

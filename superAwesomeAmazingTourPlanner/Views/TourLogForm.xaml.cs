@@ -18,9 +18,9 @@ namespace superAwesomeAmazingTourPlanner.Views
     /// <summary>
     /// Interaction logic for CreateTourLog.xaml
     /// </summary>
-    public partial class CreateTourLog : UserControl
+    public partial class TourLogForm : UserControl
     {
-        public CreateTourLog()
+        public TourLogForm()
         {
             InitializeComponent();
         }

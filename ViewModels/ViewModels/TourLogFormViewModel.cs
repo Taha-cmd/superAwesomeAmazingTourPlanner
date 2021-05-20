@@ -10,27 +10,34 @@ using ViewModels.Enums;
 
 namespace ViewModels.ViewModels
 {
-    public class CreateTourLogViewModel : ViewModelBase, IStatusDisplay
+    public class TourLogFormViewModel : ViewModelBase, IStatusDisplay
     {
         private TourLog log = new TourLog();
         public TourLog Log => log;
-        public CreateTourLogViewModel(string tourName) : base("CreateTourLog", $"Create Tour Log for {tourName}")
+        public TourLogFormViewModel(string tourName) : base("CreateTourLog", $"Create Tour Log for {tourName}")
         {
             log.TourName = tourName;
-            createLogCommand = CommandFactory.CreateCommand<CreateTourLogCommand>(this);
+            OperationCommand = CommandFactory.CreateCommand<CreateTourLogCommand>(this);
             Operation = Title;
+        }
+
+        public TourLogFormViewModel(TourLog log) : base("UpdateTourLog", $"Update Log {log.Id} for tour {log.TourName}")
+        {
+            this.log = log;
+            OperationCommand = CommandFactory.CreateCommand<UpdateTourLogCommand>(this);
+            Operation = Title;
+
         }
 
         #region private fields
 
         private string statusMessage = string.Empty;
         private Status status = Status.Empty;
-        private readonly ICommand createLogCommand;
 
         #endregion
 
         #region properties
-        public ICommand CreateTourLogCommand { get => createLogCommand; }
+        public ICommand OperationCommand { get; private set; }
 
         public string TourName => log.TourName;
         public DateTime DateTime
