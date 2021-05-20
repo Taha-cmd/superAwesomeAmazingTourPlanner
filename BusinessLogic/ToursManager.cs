@@ -165,15 +165,26 @@ namespace BusinessLogic
             tour.Distance = routeInfo.Distance;
             tour.Image = routeInfo.ImagePath;
 
-            toursRepo.Update(currentName, currentImage, tour);
+            await Task.Run(() => toursRepo.Update(currentName, currentImage, tour));
 
             logger.Debug($"updating tour {tour.Name}");
             TriggerDataChangedEvent();
         }
-        public Tour GetTour(string name) => toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
-        public List<Tour> GetTours(int? limit = null) => toursRepo.GetTours(limit).ToList();
+        public Tour GetTour(string name)
+        {
+            return toursRepo.TourExists(name) ? toursRepo.GetTour(name) : throw new Exception($"tour {name} does not exist");
+        }
+
+        public List<Tour> GetTours(int? limit = null)
+        {
+            return toursRepo.GetTours(limit).ToList();
+        }
+
         public async Task DeleteTour(Tour tour)
         {
+            if (!toursRepo.TourExists(tour.Name))
+                throw new Exception($"Tour {tour.Name} does not exist");
+
             await Task.Run(() => toursRepo.Delete(tour));
             logger.Debug($"deleting tour {tour.Name}");
 
@@ -181,7 +192,6 @@ namespace BusinessLogic
             TriggerDataChangedEvent();
         }
 
- 
         #endregion
 
         #region TourLog Crud Methods
