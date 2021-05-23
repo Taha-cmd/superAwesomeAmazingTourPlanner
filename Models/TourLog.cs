@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models
 {
-    public class TourLog : ModelBase, ICloneable<TourLog>
+    public class TourLog : ICloneable<TourLog>
     {
         public int Id { get; set; }
 

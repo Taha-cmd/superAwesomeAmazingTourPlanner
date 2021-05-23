@@ -248,13 +248,13 @@ namespace BusinessLogic
         #endregion
 
         #region unused code (for now (forever?))
-        public event EventHandler<TourAddedEventArgs> TourAdded;
-        public event EventHandler<TourDeletedEventArgs> TourDeleted;
-        public event EventHandler<TourUpdatedEventArgs> TourUpdated;
+        //public event EventHandler<TourAddedEventArgs> TourAdded;
+        //public event EventHandler<TourDeletedEventArgs> TourDeleted;
+        //public event EventHandler<TourUpdatedEventArgs> TourUpdated;
 
-        public void TriggerTourUpdatedEvent(string oldName, Tour tour) => TourUpdated?.Invoke(this, new TourUpdatedEventArgs(oldName, tour));
-        public void TriggerTourDeletedEvent(Tour tour) => TourDeleted?.Invoke(this, new TourDeletedEventArgs(tour));
-        public void TriggerTourAddedEvent(Tour tour) => TourAdded?.Invoke(this, new TourAddedEventArgs(tour));
+        //public void TriggerTourUpdatedEvent(string oldName, Tour tour) => TourUpdated?.Invoke(this, new TourUpdatedEventArgs(oldName, tour));
+        //public void TriggerTourDeletedEvent(Tour tour) => TourDeleted?.Invoke(this, new TourDeletedEventArgs(tour));
+        //public void TriggerTourAddedEvent(Tour tour) => TourAdded?.Invoke(this, new TourAddedEventArgs(tour));
         #endregion
     }
 }
