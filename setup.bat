@@ -20,6 +20,4 @@ echo database
 set PGPASSWORD=123
 psql -U TourPlannerAdmin -d TourPlanner -f scripts\createDatabase.sql
 
-Assets\rcedit.exe superAwesomeAmazingTourPlanner.exe --set-icon Assets/logo.ico
-
 pause
