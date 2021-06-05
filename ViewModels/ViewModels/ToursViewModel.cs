@@ -2,16 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Linq;
 using System.Windows.Input;
 using ViewModels.Commands;
-using System.Linq;
-using Extensions;
-using BusinessLogic;
-using BusinessLogic.CustomEventArgs;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Diagnostics;
 using ViewModels.Enums;
 
 namespace ViewModels.ViewModels

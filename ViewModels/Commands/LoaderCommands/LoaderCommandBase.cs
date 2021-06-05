@@ -7,7 +7,7 @@ namespace ViewModels.Commands
 {
     public class LoaderCommandBase : CommandBase
     {
-        private MainViewModel mainViewModel;
+        private readonly MainViewModel mainViewModel;
         public LoaderCommandBase(object param) => mainViewModel = (MainViewModel)param;
         public void LoadViewModel(object vm)
         {

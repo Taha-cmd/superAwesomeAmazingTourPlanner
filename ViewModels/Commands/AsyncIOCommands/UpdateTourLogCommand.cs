@@ -12,10 +12,10 @@ namespace ViewModels.Commands
     {
         private readonly TourLogFormViewModel viewModel;
         public UpdateTourLogCommand(object vm) => viewModel = (TourLogFormViewModel)vm;
-        
+        public override bool CanExecute(object parameter) => manager.ValidateTourLog(viewModel.Log);
         public async void Execute(object parameter)
         {
-            await AsyncOperationWrapper(viewModel, () => viewModel.Manager.UpdateTourLog(viewModel.Log));
+            await AsyncOperationWrapper(viewModel, () => manager.UpdateTourLog(viewModel.Log));
         }
     }
 }

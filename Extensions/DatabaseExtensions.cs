@@ -11,7 +11,7 @@ namespace Extensions
         public static T GetValue<T>(this DbDataReader reader, string key)
         {
             int index = reader.GetOrdinal(key);
-            return reader.IsDBNull(index) ? default(T) : reader.GetFieldValue<T>(index);
+            return reader.IsDBNull(index) ? default : reader.GetFieldValue<T>(index);
         }
     }
 }

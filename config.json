@@ -1,10 +1,10 @@
 {
 	"Database": {
-		"Server": "localhost",
-		"Port": "5432",
-		"Name": "TourPlanner",
-		"User": "TourPlannerAdmin",
-		"Password": "123"
+		"ConnectionString": "Server=localhost;Username=TourPlannerAdmin;Database=TourPlanner;Port=5432;Password=123;SSLMode=Prefer;"
+	},
+
+	"Assets": {
+		"Logo": "../../../../Assets/logo.jpg"
 	},
 
 	"LocalStorage": {
@@ -21,3 +21,6 @@
 		"Level": "Debug" // ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF
 	}
 }
+
+
+

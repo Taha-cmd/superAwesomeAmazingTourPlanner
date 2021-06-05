@@ -13,7 +13,7 @@ namespace ViewModels.Commands
         public GeneratePdfReportCommand(object vm) => mainViewModel = (MainViewModel)vm;
         public async void Execute(object parameter)
         {
-            await AsyncOperationWrapper((IStatusDisplay)mainViewModel.CurrentViewModel, () => mainViewModel.Manager.GenerateReport((Tour)parameter));
+            await AsyncOperationWrapper((IStatusDisplay)mainViewModel.CurrentViewModel, () => manager.GenerateReport((Tour)parameter));
         }
     }
 }

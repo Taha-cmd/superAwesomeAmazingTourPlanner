@@ -1,9 +1,9 @@
-﻿using System;
+﻿using BusinessLogic;
+using Models;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using BusinessLogic;
-using Models;
 using ViewModels.Commands;
 using ViewModels.Enums;
 

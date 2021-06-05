@@ -9,11 +9,11 @@ namespace ViewModels.Commands
 {
     public class CopyTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
-        private MainViewModel mainViewModel;
+        private readonly MainViewModel mainViewModel;
         public CopyTourCommand(object param) => mainViewModel = (MainViewModel)param;
         public async void Execute(object parameter)
         {
-            await AsyncOperationWrapper((IStatusDisplay)mainViewModel.CurrentViewModel, () => mainViewModel.Manager.Copy((Tour)parameter));
+            await AsyncOperationWrapper((IStatusDisplay)mainViewModel.CurrentViewModel, () => manager.Copy((Tour)parameter));
         }
     }
 }

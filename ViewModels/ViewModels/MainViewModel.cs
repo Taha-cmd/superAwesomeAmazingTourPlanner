@@ -1,10 +1,5 @@
 ﻿using BusinessLogic;
-using Models;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Text;
 using System.Windows.Input;
 using ViewModels.Commands;
 
@@ -16,16 +11,16 @@ namespace ViewModels.ViewModels
 
         public MainViewModel() : base("MainWindow", "Main View Model", Application.GetLogger())
         {
-            ChangePageCommand = CommandFactory.CreateCommand<ChangePageCommand>(this);
-            LoadTourCommand = CommandFactory.CreateCommand<LoadTourCommand>(this);
-            LoadTourLogFormCommand = CommandFactory.CreateCommand<LoadTourLogFormCommand>(this);
-            LoadLogCommand = CommandFactory.CreateCommand<LoadLogCommand>(this);
-            DeleteTourCommand = CommandFactory.CreateCommand<DeleteTourCommand>(this);
-            LoadUpdateTourFormCommand = CommandFactory.CreateCommand<LoadUpdateTourFormCommand>(this);
-            ExportTourCommand = CommandFactory.CreateCommand<ExportTourCommand>(this);
-            CopyTourCommand = CommandFactory.CreateCommand<CopyTourCommand>(this);
-            GeneratePdfReportCommand = CommandFactory.CreateCommand<GeneratePdfReportCommand>(this);
-            DeleteTourLogCommand = CommandFactory.CreateCommand<DeleteTourLogCommand>(this);
+            ChangePageCommand           = CommandFactory.CreateCommand<ChangePageCommand>(this);
+            LoadTourCommand             = CommandFactory.CreateCommand<LoadTourCommand>(this);
+            LoadTourLogFormCommand      = CommandFactory.CreateCommand<LoadTourLogFormCommand>(this);
+            LoadLogCommand              = CommandFactory.CreateCommand<LoadLogCommand>(this);
+            DeleteTourCommand           = CommandFactory.CreateCommand<DeleteTourCommand>(this);
+            LoadUpdateTourFormCommand   = CommandFactory.CreateCommand<LoadUpdateTourFormCommand>(this);
+            ExportTourCommand           = CommandFactory.CreateCommand<ExportTourCommand>(this);
+            CopyTourCommand             = CommandFactory.CreateCommand<CopyTourCommand>(this);
+            GeneratePdfReportCommand    = CommandFactory.CreateCommand<GeneratePdfReportCommand>(this);
+            DeleteTourLogCommand        = CommandFactory.CreateCommand<DeleteTourLogCommand>(this);
 
 
             ViewModels = new List<ViewModelBase>()

@@ -11,6 +11,9 @@ namespace ViewModels.Commands
     {
         private readonly MainViewModel viewModel;
         public ExportTourCommand(object param) => viewModel = (MainViewModel)param;
-        public async void Execute(object parameter) => await AsyncOperationWrapper((IStatusDisplay)viewModel.CurrentViewModel, () => viewModel.Manager.Export((Tour)parameter));
+        public async void Execute(object parameter)
+        {
+            await AsyncOperationWrapper((IStatusDisplay)viewModel.CurrentViewModel, () => manager.Export((Tour)parameter));
+        }
     }
 }

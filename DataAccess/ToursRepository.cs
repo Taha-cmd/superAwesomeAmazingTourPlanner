@@ -14,32 +14,33 @@ namespace DataAccess
     {
         public ToursRepository(IDatebase database) : base(database) { }
 
-        private const string createTourSQL = "INSERT INTO \"tour\" (name, description, startingArea, targetArea, distance, imagePath) " +
+        private const string SQL_CREATE_TOUR = "INSERT INTO \"tour\" (name, description, startingArea, targetArea, distance, imagePath) " +
                 "VALUES (@name, @description, @startingArea, @targetArea, @distance, @imagePath)";
 
-        private const string deleteTourSQL = "DELETE FROM \"tour\" WHERE name=@name";
-        private const string deleteLogSQL = "DELETE FROM \"log\" WHERE tourname=@name";
+        private const string SQL_DELETE_TOUR = "DELETE FROM \"tour\" WHERE name=@name";
+        
 
-        private const string updateTourSQL = "UPDATE \"tour\" SET " +
+        private const string SQL_UPDATE_TOUR = "UPDATE \"tour\" SET " +
                                 "(description, startingArea, targetArea, name, distance, imagepath) =" +
                                 "(@newDescription, @newStartingArea, @newTargetArea, @newName, @newDistance, @newImagePath)" +
                                 "WHERE name=@currentName";
 
-        private const string getTourSQL = "SELECT * FROM \"tour\" WHERE name=@name";
-        private const string getLogsSQL = "SELECT * FROM \"log\" WHERE tourname=@tourname";
-        private const string addLogSql = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) " +
+        private const string SQL_SELECT_TOUR = "SELECT * FROM \"tour\" WHERE name=@name";
+        private const string SQL_SELECT_LOGS = "SELECT * FROM \"log\" WHERE tourname=@tourname";
+        private const string SQL_CREATE_LOG = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) " +
                                 "VALUES (@date, @tourname, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)";
 
-        private const string updateLogSql = "UPDATE \"log\" SET " +
+        private const string SQL_UPDATE_LOG = "UPDATE \"log\" SET " +
             "(date, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) =" +
             "(@date, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)" +
             "WHERE id=@id";
 
-        private const string deleteLogSql = "DELETE FROM \"log\" WHERE id=@id";
+        private const string SQL_DELETE_LOG = "DELETE FROM \"log\" WHERE id=@id";
+        private const string SQL_DELETE_LOGS = "DELETE FROM \"log\" WHERE tourname=@name";
         public void Create(Tour tour)
         {
             database.ExecuteNonQuery(
-                    createTourSQL,
+                    SQL_CREATE_TOUR,
                     database.Param("name", tour.Name),
                     database.Param("description", tour.Description),
                     database.Param("startingArea", tour.StartingArea),
@@ -55,15 +56,15 @@ namespace DataAccess
         {
             // delete image from filesystem first
             File.Delete(tour.Image);
-            database.ExecuteNonQuery(deleteLogSQL, database.Param("name", tour.Name));
-            database.ExecuteNonQuery(deleteTourSQL, database.Param("name", tour.Name));
+            database.ExecuteNonQuery(SQL_DELETE_LOGS, database.Param("name", tour.Name));
+            database.ExecuteNonQuery(SQL_DELETE_TOUR, database.Param("name", tour.Name));
         }
 
         public void Update(string tourName, string imagePath, Tour tour)
         {
             // update will cascade to foreign key, we can safely update all values
             // update "log" set tourname = "newName" where tourname = "oldName"
-            database.ExecuteNonQuery(updateTourSQL,
+            database.ExecuteNonQuery(SQL_UPDATE_TOUR,
                 database.Param("newDescription", tour.Description),
                 database.Param("newStartingArea", tour.StartingArea),
                 database.Param("newTargetArea", tour.TargetArea),
@@ -92,19 +93,19 @@ namespace DataAccess
         }
         public Tour GetTour(string tourName)
         {
-            var tour = database.ExecuteQuery(getTourSQL, TourReader, database.Param("name", tourName)).First();
+            var tour = database.ExecuteQuery(SQL_SELECT_TOUR, TourReader, database.Param("name", tourName)).First();
             tour.Logs = GetLogs(tour.Name).ToList();
             return tour;
         }
 
         public IEnumerable<TourLog> GetLogs(string tourName)
         {
-            return database.ExecuteQuery(getLogsSQL, TourLogReader, database.Param("tourname", tourName));
+            return database.ExecuteQuery(SQL_SELECT_LOGS, TourLogReader, database.Param("tourname", tourName));
         }
 
         public void AddLog(string tourName, TourLog log)
         {
-            database.ExecuteNonQuery(addLogSql,
+            database.ExecuteNonQuery(SQL_CREATE_LOG,
                     database.Param("date", log.DateTime),
                     database.Param("tourname", tourName),
                     database.Param("report", log.Report),
@@ -120,12 +121,12 @@ namespace DataAccess
         }
         public void DeleteLog(TourLog log)
         {
-            database.ExecuteNonQuery(deleteLogSql, database.Param("id", log.Id));
+            database.ExecuteNonQuery(SQL_DELETE_LOG, database.Param("id", log.Id));
         }
 
         public void UpdateLog(TourLog log)
         {
-            database.ExecuteNonQuery(updateLogSql,
+            database.ExecuteNonQuery(SQL_UPDATE_LOG,
                     database.Param("date", log.DateTime),
                     database.Param("report", log.Report),
                     database.Param("totaltime", log.TotalTime),

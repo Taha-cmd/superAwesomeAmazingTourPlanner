@@ -36,6 +36,7 @@ namespace ViewModels.Commands
         //default behavior for canexecute
         virtual public bool CanExecute(object parameter) => true;
         protected ILog Logger { get; } = Application.GetLogger();
+        protected ToursManager manager = Application.GetToursManager();
 
         public event EventHandler CanExecuteChanged;
     }
