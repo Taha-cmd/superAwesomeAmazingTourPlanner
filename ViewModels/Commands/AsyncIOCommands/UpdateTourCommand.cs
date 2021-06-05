@@ -9,7 +9,9 @@ namespace ViewModels.Commands
 {
     public class UpdateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
+
         private readonly TourFormViewModel viewModel;
+
         public UpdateTourCommand(object tourViewModel)
         {
             viewModel = (TourFormViewModel)tourViewModel;

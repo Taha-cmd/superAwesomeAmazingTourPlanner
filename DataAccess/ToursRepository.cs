@@ -37,6 +37,7 @@ namespace DataAccess
 
         private const string SQL_DELETE_LOG = "DELETE FROM \"log\" WHERE id=@id";
         private const string SQL_DELETE_LOGS = "DELETE FROM \"log\" WHERE tourname=@name";
+
         public void Create(Tour tour)
         {
             database.ExecuteNonQuery(

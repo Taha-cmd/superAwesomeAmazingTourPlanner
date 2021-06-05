@@ -13,6 +13,7 @@ namespace ViewModels.Commands
     public class CreateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
         private readonly TourFormViewModel viewModel;
+
         public CreateTourCommand(object tourViewModel)
         {
             viewModel = (TourFormViewModel)tourViewModel;
