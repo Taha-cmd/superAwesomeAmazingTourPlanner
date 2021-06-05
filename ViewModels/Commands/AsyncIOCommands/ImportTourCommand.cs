@@ -10,6 +10,6 @@ namespace ViewModels.Commands
     {
         private readonly TourFormViewModel viewModel;
         public ImportTourCommand(object param) => viewModel = (TourFormViewModel)param;
-        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => viewModel.Manager.Import((string)parameter));
+        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => manager.Import((string)parameter));
     }
 }

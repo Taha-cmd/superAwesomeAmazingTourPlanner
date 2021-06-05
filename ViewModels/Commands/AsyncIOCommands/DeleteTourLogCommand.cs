@@ -14,7 +14,7 @@ namespace ViewModels.Commands
         public DeleteTourLogCommand(object vm) => viewModel = (MainViewModel)vm;
         public async void Execute(object parameter) 
         {
-            await AsyncOperationWrapper((IStatusDisplay)viewModel.CurrentViewModel, () => viewModel.Manager.DeleteTourLog((TourLog)parameter));
+            await AsyncOperationWrapper((IStatusDisplay)viewModel.CurrentViewModel, () => manager.DeleteTourLog((TourLog)parameter));
         }
     }
 }

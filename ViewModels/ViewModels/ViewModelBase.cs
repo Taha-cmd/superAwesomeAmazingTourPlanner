@@ -1,10 +1,7 @@
 ﻿using BusinessLogic;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using log4net;
-using System.Reflection;
+using System;
+using System.ComponentModel;
 
 namespace ViewModels.ViewModels
 {

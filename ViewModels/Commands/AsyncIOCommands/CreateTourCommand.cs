@@ -12,14 +12,15 @@ namespace ViewModels.Commands
 {
     public class CreateTourCommand : AsyncOperationWithStatusCommandBase, ICommand
     {
-        private TourFormViewModel viewModel;
+        private readonly TourFormViewModel viewModel;
+
         public CreateTourCommand(object tourViewModel)
         {
             viewModel = (TourFormViewModel)tourViewModel;
             RegisterAllProperties(viewModel);
         }
 
-        public override bool CanExecute(object parameter) => viewModel.Manager.ValidateTour(viewModel.Tour);
-        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => viewModel.Manager.CreateTour(viewModel.Tour));
+        public override bool CanExecute(object parameter) => manager.ValidateTour(viewModel.Tour);
+        public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => manager.CreateTour(viewModel.Tour));
     }
 }

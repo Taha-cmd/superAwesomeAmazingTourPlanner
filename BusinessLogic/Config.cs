@@ -16,7 +16,7 @@ namespace BusinessLogic
         public string ReportsFolderPath { get; private set; }
         public string MapsApiKey { get; private set; }
         public string LoggingLevel { get; private set; }
-
+        public string LogoPath { get; private set; }
         private Config() { }
         public void LoadAndParseConfigFile(string configFilePath)
         {
@@ -25,28 +25,24 @@ namespace BusinessLogic
 
             IConfiguration conf = new ConfigurationBuilder().AddJsonFile(Path.GetFullPath(configFilePath)).Build();
 
-            DataBaseConnectionString = $"Server={conf["Database:Server"]};" +
-                $"Username={conf["Database:User"]};" +
-                $"Database={conf["Database:Name"]};" +
-                $"Port={conf["Database:Port"]};" +
-                $"Password={conf["Database:Password"]};" +
-                $"SSLMode=Prefer";
-
+            DataBaseConnectionString = conf["Database:ConnectionString"];
             ImagesFolderPath = conf["LocalStorage:Images"];
             ExportsFolderPath = conf["LocalStorage:Exports"];
             ReportsFolderPath = conf["LocalStorage:Reports"];
             MapsApiKey = conf["Maps:Key"];
             LoggingLevel = conf["Logging:Level"];
+            LogoPath = conf["Assets:Logo"];
 
 
 #if !DEBUG
                 ExportsFolderPath = Path.Join("LocalStorage", Path.GetFileName(ExportsFolderPath));
                 ImagesFolderPath = Path.Join("LocalStorage", Path.GetFileName(ImagesFolderPath));
                 ReportsFolderPath = Path.Join("LocalStorage", Path.GetFileName(ReportsFolderPath));
+                LogoPath = Path.Join("Assets", Path.GetFileName(LogoPath));
 #endif
 
-            if (!Directory.Exists(ImagesFolderPath) || !Directory.Exists(ExportsFolderPath) || !Directory.Exists(ReportsFolderPath))
-                throw new Exception("path in config file does not exist " + ImagesFolderPath + " or " + ExportsFolderPath + " or " + ReportsFolderPath);
+            if (!Directory.Exists(ImagesFolderPath) || !Directory.Exists(ExportsFolderPath) || !Directory.Exists(ReportsFolderPath) || !File.Exists(LogoPath))
+                throw new Exception("path in config file does not exist " + ImagesFolderPath + " or " + ExportsFolderPath + " or " + ReportsFolderPath + " or " + LogoPath);
         }
     }
 }

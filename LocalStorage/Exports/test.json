@@ -1,3 +1,6 @@
+
+{"Name":"test","Description":"test tour","StartingArea":"Krems","TargetArea":"Wien","Distance":81.98,"Image":null,"Logs":[{"Id":1,"TourName":"test","DateTime":"2021-06-05T20:49:57.687401","Report":"not bad","Distance":0,"TotalTime":2,"Rating":8,"Author":"Taha","HasMcDonalds":true,"HasCampingSpots":true,"Accomodation":"hotel","Members":3},{"Id":2,"TourName":"test","DateTime":"2021-06-05T20:50:49.564567","Report":"meh","Distance":0,"TotalTime":2,"Rating":6,"Author":"John","HasMcDonalds":false,"HasCampingSpots":true,"Accomodation":"appartment","Members":3}]}
+=======
 {
   "Name": "test",
   "Description": "testing update cascade",
@@ -92,3 +95,4 @@
     }
   ]
 }
+

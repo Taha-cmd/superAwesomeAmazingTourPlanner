@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models
 {
-    public class Tour : ModelBase, ICloneable<Tour>
+    public class Tour :  ICloneable<Tour>
     {
         public string Name { get; set; }
         public string Description { get; set; }

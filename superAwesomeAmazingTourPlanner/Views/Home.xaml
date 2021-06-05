@@ -13,6 +13,8 @@
                 Style="{StaticResource Title}"
                 Text="{Binding Title}"
                 />
-        </StackPanel>
+
+        <Image Source="{Binding Logo, Converter={StaticResource PathToBitMapImageConverter}}" Stretch="None"/>
+    </StackPanel>
 
 </UserControl>

@@ -1,13 +1,6 @@
 ﻿using Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using QuestPDF;
-using QuestPDF.Helpers;
-using QuestPDF.Elements;
-using QuestPDF.Infrastructure;
 using QuestPDF.Fluent;
-using System.Diagnostics;
+using System;
 using System.IO;
 
 namespace BusinessLogic
