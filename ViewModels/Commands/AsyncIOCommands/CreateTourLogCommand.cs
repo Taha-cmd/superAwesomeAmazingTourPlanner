@@ -20,7 +20,9 @@ namespace ViewModels.Commands
             RegisterAllProperties(viewModel);
         }
         // validate that the input is not empty
+
         public override bool CanExecute(object parameter) => manager.ValidateTourLog(viewModel.Log);   
         public async void Execute(object parameter) => await AsyncOperationWrapper(viewModel, () => manager.CreateTourLog(viewModel.Log));
+
     }
 }

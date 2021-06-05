@@ -187,7 +187,7 @@ namespace BusinessLogic
 
             await Task.Run(() => toursRepo.Delete(tour));
             logger.Debug($"deleting tour {tour.Name}");
-
+          
             // throws an exception when triggered from the task thread
             TriggerDataChangedEvent();
         }
@@ -255,6 +255,7 @@ namespace BusinessLogic
         //public void TriggerTourUpdatedEvent(string oldName, Tour tour) => TourUpdated?.Invoke(this, new TourUpdatedEventArgs(oldName, tour));
         //public void TriggerTourDeletedEvent(Tour tour) => TourDeleted?.Invoke(this, new TourDeletedEventArgs(tour));
         //public void TriggerTourAddedEvent(Tour tour) => TourAdded?.Invoke(this, new TourAddedEventArgs(tour));
+
         #endregion
     }
 }

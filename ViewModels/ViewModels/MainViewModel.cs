@@ -11,6 +11,7 @@ namespace ViewModels.ViewModels
 
         public MainViewModel() : base("MainWindow", "Main View Model", Application.GetLogger())
         {
+
             ChangePageCommand           = CommandFactory.CreateCommand<ChangePageCommand>(this);
             LoadTourCommand             = CommandFactory.CreateCommand<LoadTourCommand>(this);
             LoadTourLogFormCommand      = CommandFactory.CreateCommand<LoadTourLogFormCommand>(this);
@@ -21,6 +22,7 @@ namespace ViewModels.ViewModels
             CopyTourCommand             = CommandFactory.CreateCommand<CopyTourCommand>(this);
             GeneratePdfReportCommand    = CommandFactory.CreateCommand<GeneratePdfReportCommand>(this);
             DeleteTourLogCommand        = CommandFactory.CreateCommand<DeleteTourLogCommand>(this);
+
 
 
             ViewModels = new List<ViewModelBase>()
