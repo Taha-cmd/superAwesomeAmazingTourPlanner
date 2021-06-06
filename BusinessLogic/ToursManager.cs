@@ -1,7 +1,7 @@
-﻿using BusinessLogic.CustomEventArgs;
-using DataAccess;
+﻿using DataAccess;
 using DataAccess.Maps;
 using Extensions;
+using log4net;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -9,8 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using log4net;
-using System.Diagnostics;
 
 namespace BusinessLogic
 {
@@ -105,11 +103,11 @@ namespace BusinessLogic
             if (tour.Name.Contains("Copy"))
             {
                 char prefix = (char)(((int)tour.Name.Last()) + 1);
-                newTour.Name = newTour.Name.Substring(0, newTour.Name.Length - 1) + prefix;
+                newTour.Name = newTour.Name[0..^1] + prefix;
             }
             else
             {
-                newTour.Name = newTour.Name + "Copy0";
+                newTour.Name += "Copy0";
             }
 
             if (toursRepo.TourExists(newTour.Name))
