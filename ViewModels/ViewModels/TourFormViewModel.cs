@@ -24,7 +24,6 @@ namespace ViewModels.ViewModels
             Operation = Title;
             oldName = Name;
             oldImage = tour.Image;
-
         }
         public ICommand OperationCommand { get; protected set; }
         public ICommand ImportTourCommand { get; }
