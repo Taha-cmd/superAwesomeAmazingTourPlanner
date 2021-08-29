@@ -4,6 +4,7 @@ using Extensions;
 using log4net;
 using System;
 using System.Runtime.CompilerServices;
+using SqlKata.Compilers;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -33,7 +34,7 @@ namespace BusinessLogic
                 ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).RaiseConfigurationChanged(EventArgs.Empty);
 
                 var database = new PostgresDatabase(Config.Instance.DataBaseConnectionString);
-                var toursRepo = new ToursRepository(database);
+                var toursRepo = new ToursRepository(database, new PostgresCompiler());
                 var mapsClient = new MapQuestClient(Config.Instance.MapsApiKey, Config.Instance.ImagesFolderPath);
                 var pdfGenerator = new PdfGenerator(Config.Instance.ReportsFolderPath);
 

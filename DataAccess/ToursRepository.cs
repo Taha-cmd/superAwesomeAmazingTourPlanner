@@ -1,78 +1,98 @@
 ﻿using Extensions;
 using Models;
-using Npgsql;
+using SqlKata;
+using SqlKata.Compilers;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
+
 namespace DataAccess
 {
+
+    // sql kata always names its parameters like this: p0, p1, p2, p3 ---
+    // the Query object will bind the values to the parameters, since I am only compiling the sql statement string,
+    // I need to bind the values to the parameters again. Thus, I cannot name the parameters
+    //ex: Query("table").Where("name", "john") will result in the query "select * from table where name = @p0"
+    // and the value john being bound to p0
+
+
+    // insert, update, delete: column names are passed as keys in an object and not as strings, pay attention to letter case
     public class ToursRepository : RepositoryBase, IToursRepository
     {
-        public ToursRepository(IDatebase database) : base(database) { }
+        public ToursRepository(IDatebase database, Compiler compiler) : base(database, compiler) { }
 
-        private const string SQL_CREATE_TOUR = "INSERT INTO \"tour\" (name, description, startingArea, targetArea, distance, imagePath) " +
-                "VALUES (@name, @description, @startingArea, @targetArea, @distance, @imagePath)";
+        private static readonly object tourDataContainer =
+            new { name = "p0", description = "p1", startingarea = "p2", targetarea = "p3", distance = "p4", imagepath = "p5" };
 
-        private const string SQL_DELETE_TOUR = "DELETE FROM \"tour\" WHERE name=@name";
-        
+        private static readonly object logDataContainer =
+            new
+            {
+                date = "p0",
+                tourname = "p1",
+                report = "p2",
+                totaltime = "p3",
+                rating = "p4",
+                author = "p5",
+                hasmcdonalds = "p6",
+                hascampingspots = "p7",
+                members = "p8",
+                accomodation = "p9"
+            };
 
-        private const string SQL_UPDATE_TOUR = "UPDATE \"tour\" SET " +
-                                "(description, startingArea, targetArea, name, distance, imagepath) =" +
-                                "(@newDescription, @newStartingArea, @newTargetArea, @newName, @newDistance, @newImagePath)" +
-                                "WHERE name=@currentName";
+        private readonly Query SELECT_TOUR_QUERY = new Query("tour").Where("name", "p0");
+        private readonly Query SELECT_TOURS_QUERY = new Query("tour");
+        private readonly Query SELECT_LOGS_QUERY = new Query("log").Where("tourname", "p0");
 
-        private const string SQL_SELECT_TOUR = "SELECT * FROM \"tour\" WHERE name=@name";
-        private const string SQL_SELECT_LOGS = "SELECT * FROM \"log\" WHERE tourname=@tourname";
-        private const string SQL_CREATE_LOG = "INSERT INTO \"log\" (date, tourname, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) " +
-                                "VALUES (@date, @tourname, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)";
+        private readonly Query DELETE_LOG_QUERY = new Query("log").Where("id", "p0").AsDelete();
+        private readonly Query DELETE_LOGS_QUERY = new Query("log").Where("tourname", "p0").AsDelete();
+        private readonly Query DELETE_TOUR_QUERY = new Query("tour").Where("name", "p0").AsDelete();
 
-        private const string SQL_UPDATE_LOG = "UPDATE \"log\" SET " +
-            "(date, report, totaltime, rating, author, hasmcdonalds, hascampingspots, members, accomodation) =" +
-            "(@date, @report, @totaltime, @rating, @author, @hasmcdonalds, @hascampingspots, @members, @accomodation)" +
-            "WHERE id=@id";
+        private readonly Query CREATE_TOUR_QUERY = new Query("tour").AsInsert(tourDataContainer);
+        private readonly Query CREATE_LOG_QUERY = new Query("log").AsInsert(logDataContainer);
 
-        private const string SQL_DELETE_LOG = "DELETE FROM \"log\" WHERE id=@id";
-        private const string SQL_DELETE_LOGS = "DELETE FROM \"log\" WHERE tourname=@name";
+        private readonly Query UPDATE_TOUR_QUERY = new Query("tour").Where("name", "p6").AsUpdate(tourDataContainer); // Where clause params comes last
+        private readonly Query UPDATE_LOG_QUERY = new Query("log").Where("id", "p10").AsUpdate(logDataContainer);
 
         public void Create(Tour tour)
         {
             database.ExecuteNonQuery(
-                    SQL_CREATE_TOUR,
-                    database.Param("name", tour.Name),
-                    database.Param("description", tour.Description),
-                    database.Param("startingArea", tour.StartingArea),
-                    database.Param("targetArea", tour.TargetArea),
-                    database.Param("distance", tour.Distance),
-                    database.Param("imagePath", tour.Image)
+                    queryCompiler.Compile(CREATE_TOUR_QUERY).Sql,
+                    database.Param("p0", tour.Name),
+                    database.Param("p1", tour.Description),
+                    database.Param("p2", tour.StartingArea),
+                    database.Param("p3", tour.TargetArea),
+                    database.Param("p4", tour.Distance),
+                    database.Param("p5", tour.Image)
                 );
 
-            // add logs
+            
+            // add logs to the database as well
             tour.Logs.ForEach(log => AddLog(tour.Name, log));
         }
         public void Delete(Tour tour)
         {
             // delete image from filesystem first
             File.Delete(tour.Image);
-            database.ExecuteNonQuery(SQL_DELETE_LOGS, database.Param("name", tour.Name));
-            database.ExecuteNonQuery(SQL_DELETE_TOUR, database.Param("name", tour.Name));
+            database.ExecuteNonQuery(queryCompiler.Compile(DELETE_LOGS_QUERY).Sql, database.Param("p0", tour.Name));
+            database.ExecuteNonQuery(queryCompiler.Compile(DELETE_TOUR_QUERY).Sql, database.Param("p0", tour.Name));
         }
 
         public void Update(string tourName, string imagePath, Tour tour)
         {
             // update will cascade to foreign key, we can safely update all values
             // update "log" set tourname = "newName" where tourname = "oldName"
-            database.ExecuteNonQuery(SQL_UPDATE_TOUR,
-                database.Param("newDescription", tour.Description),
-                database.Param("newStartingArea", tour.StartingArea),
-                database.Param("newTargetArea", tour.TargetArea),
-                database.Param("newName", tour.Name),
-                database.Param("currentName", tourName),
-                database.Param("newDistance", tour.Distance),
-                database.Param("newImagePath", tour.Image)
+            database.ExecuteNonQuery(
+                    queryCompiler.Compile(UPDATE_TOUR_QUERY).Sql,
+                    database.Param("p0", tour.Name), // the new tour Name
+                    database.Param("p1", tour.Description),
+                    database.Param("p2", tour.StartingArea),
+                    database.Param("p3", tour.TargetArea),
+                    database.Param("p4", tour.Distance),
+                    database.Param("p5", tour.Image),
+                    database.Param("p6", tourName) // the current tourName to identify the tour
                 );
 
             // delete old image from filesystem
@@ -81,12 +101,8 @@ namespace DataAccess
 
         public IEnumerable<Tour> GetTours(int? limit = null)
         {
-            string statement = $"SELECT * FROM \"tour\"";
-
-            if (!limit.IsNull())
-                statement += $" limit {limit}";
-
-            var tours = database.ExecuteQuery(statement, TourReader);
+            //Limit not working for now
+            var tours = database.ExecuteQuery(queryCompiler.Compile(SELECT_TOURS_QUERY).Sql, TourReader);
             tours.ToList().ForEach(tour => tour.Logs = GetLogs(tour.Name).ToList());
 
             return tours;
@@ -94,50 +110,52 @@ namespace DataAccess
         }
         public Tour GetTour(string tourName)
         {
-            var tour = database.ExecuteQuery(SQL_SELECT_TOUR, TourReader, database.Param("name", tourName)).First();
+            var tour = database.ExecuteQuery(queryCompiler.Compile(SELECT_TOUR_QUERY).Sql, TourReader, database.Param("p0", tourName)).First();
             tour.Logs = GetLogs(tour.Name).ToList();
             return tour;
         }
 
         public IEnumerable<TourLog> GetLogs(string tourName)
         {
-            return database.ExecuteQuery(SQL_SELECT_LOGS, TourLogReader, database.Param("tourname", tourName));
+            return database.ExecuteQuery(queryCompiler.Compile(SELECT_LOGS_QUERY).Sql, TourLogReader, database.Param("p0", tourName));
         }
 
         public void AddLog(string tourName, TourLog log)
         {
-            database.ExecuteNonQuery(SQL_CREATE_LOG,
-                    database.Param("date", log.DateTime),
-                    database.Param("tourname", tourName),
-                    database.Param("report", log.Report),
-                    database.Param("totaltime", log.TotalTime),
-                    database.Param("rating", log.Rating),
-                    database.Param("author", log.Author),
-                    database.Param("hasmcdonalds", log.HasMcDonalds),
-                    database.Param("hascampingspots", log.HasCampingSpots),
-                    database.Param("members", log.Members),
-                    database.Param("accomodation", log.Accomodation)
+            database.ExecuteNonQuery(queryCompiler.Compile(CREATE_LOG_QUERY).Sql,
+                    database.Param("p0", log.DateTime),
+                    database.Param("p1", tourName),
+                    database.Param("p2", log.Report),
+                    database.Param("p3", log.TotalTime),
+                    database.Param("p4", log.Rating),
+                    database.Param("p5", log.Author),
+                    database.Param("p6", log.HasMcDonalds),
+                    database.Param("p7", log.HasCampingSpots),
+                    database.Param("p8", log.Members),
+                    database.Param("p9", log.Accomodation)
                     );
 
         }
         public void DeleteLog(TourLog log)
         {
-            database.ExecuteNonQuery(SQL_DELETE_LOG, database.Param("id", log.Id));
+            database.ExecuteNonQuery(queryCompiler.Compile(DELETE_LOG_QUERY).Sql, database.Param("p0", log.Id));
         }
 
         public void UpdateLog(TourLog log)
         {
-            database.ExecuteNonQuery(SQL_UPDATE_LOG,
-                    database.Param("date", log.DateTime),
-                    database.Param("report", log.Report),
-                    database.Param("totaltime", log.TotalTime),
-                    database.Param("rating", log.Rating),
-                    database.Param("author", log.Author),
-                    database.Param("hasmcdonalds", log.HasMcDonalds),
-                    database.Param("hascampingspots", log.HasCampingSpots),
-                    database.Param("members", log.Members),
-                    database.Param("accomodation", log.Accomodation),
-                    database.Param("id", log.Id)
+            database.ExecuteNonQuery(
+                    queryCompiler.Compile(UPDATE_LOG_QUERY).Sql,
+                    database.Param("p0", log.DateTime),
+                    database.Param("p1", log.TourName),
+                    database.Param("p2", log.Report),
+                    database.Param("p3", log.TotalTime),
+                    database.Param("p4", log.Rating),
+                    database.Param("p5", log.Author),
+                    database.Param("p6", log.HasMcDonalds),
+                    database.Param("p7", log.HasCampingSpots),
+                    database.Param("p8", log.Members),
+                    database.Param("p9", log.Accomodation),
+                    database.Param("p10", log.Id)
                     );
         }
 

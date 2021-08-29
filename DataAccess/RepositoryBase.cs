@@ -1,12 +1,19 @@
 ﻿using System.Data.Common;
 using System.Linq;
+using SqlKata;
+using SqlKata.Compilers;
 
 namespace DataAccess
 {
     public class RepositoryBase
     {
-        protected IDatebase database;
-        public RepositoryBase(IDatebase database) => this.database = database;
+        protected readonly IDatebase database;
+        protected readonly Compiler queryCompiler;
+        public RepositoryBase(IDatebase database, Compiler compiler)
+        {
+            this.database = database;
+            this.queryCompiler = compiler;
+        }
 
 
         // generic method to retrieve one value
@@ -14,8 +21,10 @@ namespace DataAccess
         // if the filter returns more than one value, only the first one will be returned
         protected TValue GetValue<TValue, TFilter>(string table, string filter, TFilter filterValue, string columnToFetch, string filterOperator = "=")
         {
-            string statement = $"SELECT {columnToFetch} FROM \"{table}\" WHERE {filter} {filterOperator} @filterValue";
-            return database.ExecuteQuery(statement, (DbDataReader reader) => reader.GetFieldValue<TValue>(0), database.Param("filterValue", filterValue)).First();
+            //select vs selectRaw: https://sqlkata.com/docs/select
+            var query = new Query(table).SelectRaw(columnToFetch).Where(filter, filterOperator, filterValue);
+            string statement = queryCompiler.Compile(query).Sql;
+            return database.ExecuteQuery(statement, (DbDataReader reader) => reader.GetFieldValue<TValue>(0), database.Param("p0", filterValue)).First();
         }
 
         protected int Count<TFilter>(string table, string filter, TFilter filterValue, string filterOperator = "=")
@@ -26,14 +35,6 @@ namespace DataAccess
         protected bool Exists<TFilter>(string table, string filter, TFilter filterValue)
         {
             return Count(table, filter, filterValue) == 1;
-        }
-
-        //for now this only works with one value
-        //TODO: abstract it even more to update n Values (pass a list of tuples)
-        protected int Update<TFilter, TValue>(string table, string filter, TFilter filterValue, string column, TValue newValue, string filterOperator = "=")
-        {
-            string statement = $"UPDATE \"{table}\" SET {column}=@newValue WHERE {filter} {filterOperator} @filterValue";
-            return database.ExecuteNonQuery(statement, database.Param("newValue", newValue), database.Param("filterValue", filterValue));
         }
     }
 }
