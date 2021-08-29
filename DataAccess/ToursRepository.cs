@@ -42,19 +42,19 @@ namespace DataAccess
                 accomodation = "p9"
             };
 
-        private readonly Query SELECT_TOUR_QUERY = new Query("tour").Where("name", "p0");
-        private readonly Query SELECT_TOURS_QUERY = new Query("tour");
-        private readonly Query SELECT_LOGS_QUERY = new Query("log").Where("tourname", "p0");
+        private readonly Query SELECT_TOUR_QUERY    = new Query("tour").Where("name", "p0");
+        private readonly Query SELECT_TOURS_QUERY   = new Query("tour");
+        private readonly Query SELECT_LOGS_QUERY    = new Query("log").Where("tourname", "p0");
 
-        private readonly Query DELETE_LOG_QUERY = new Query("log").Where("id", "p0").AsDelete();
-        private readonly Query DELETE_LOGS_QUERY = new Query("log").Where("tourname", "p0").AsDelete();
-        private readonly Query DELETE_TOUR_QUERY = new Query("tour").Where("name", "p0").AsDelete();
+        private readonly Query DELETE_LOG_QUERY     = new Query("log").Where("id", "p0").AsDelete();
+        private readonly Query DELETE_LOGS_QUERY    = new Query("log").Where("tourname", "p0").AsDelete();
+        private readonly Query DELETE_TOUR_QUERY    = new Query("tour").Where("name", "p0").AsDelete();
 
-        private readonly Query CREATE_TOUR_QUERY = new Query("tour").AsInsert(tourDataContainer);
-        private readonly Query CREATE_LOG_QUERY = new Query("log").AsInsert(logDataContainer);
+        private readonly Query CREATE_TOUR_QUERY    = new Query("tour").AsInsert(tourDataContainer);
+        private readonly Query CREATE_LOG_QUERY     = new Query("log").AsInsert(logDataContainer);
 
-        private readonly Query UPDATE_TOUR_QUERY = new Query("tour").Where("name", "p6").AsUpdate(tourDataContainer); // Where clause params comes last
-        private readonly Query UPDATE_LOG_QUERY = new Query("log").Where("id", "p10").AsUpdate(logDataContainer);
+        private readonly Query UPDATE_TOUR_QUERY    = new Query("tour").Where("name", "p6").AsUpdate(tourDataContainer); // Where clause params comes last
+        private readonly Query UPDATE_LOG_QUERY     = new Query("log").Where("id", "p10").AsUpdate(logDataContainer);
 
         public void Create(Tour tour)
         {
