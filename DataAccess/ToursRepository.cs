@@ -165,12 +165,12 @@ namespace DataAccess
         {
             return new Tour()
             {
-                Name = reader.GetValue<string>("name"),
-                Description = reader.GetValue<string>("description"),
-                Distance = reader.GetValue<double>("distance"),
-                StartingArea = reader.GetValue<string>("startingArea"),
-                TargetArea = reader.GetValue<string>("targetArea"),
-                Image = reader.GetValue<string>("imagePath")
+                Name = database.TypeConverter.To<string>(reader.GetValue("name")),
+                Description = database.TypeConverter.To<string>(reader.GetValue("description")),
+                Distance = database.TypeConverter.To<double>(reader.GetValue("distance")),
+                StartingArea = database.TypeConverter.To<string>(reader.GetValue("startingArea")),
+                TargetArea = database.TypeConverter.To<string>(reader.GetValue("targetArea")),
+                Image = database.TypeConverter.To<string>(reader.GetValue("imagePath"))
             };
         }
 
@@ -178,25 +178,22 @@ namespace DataAccess
         {
             return new TourLog()
             {
-                Id = reader.GetValue<int>("id"),
-                Rating = reader.GetValue<int>("rating"),
-                Report = reader.GetValue<string>("report"),
-                TotalTime = reader.GetValue<double>("totalTime"),
-                DateTime = reader.GetValue<DateTime>("date"),
-                TourName = reader.GetValue<string>("tourName"),
-                Author = reader.GetValue<string>("author"),
-                HasMcDonalds = reader.GetValue<bool>("hasMcDonalds"),
-                Accomodation = reader.GetValue<string>("accomodation"),
-                HasCampingSpots = reader.GetValue<bool>("hasCampingSpots"),
-                Members = reader.GetValue<int>("members")
+                Id = database.TypeConverter.To<int>(reader.GetValue("id")),
+                Rating = database.TypeConverter.To<int>(reader.GetValue("rating")),
+                Report = database.TypeConverter.To<string>(reader.GetValue("report")),
+                TotalTime = database.TypeConverter.To<double>(reader.GetValue("totalTime")),
+                DateTime = database.TypeConverter.To<DateTime>(reader.GetValue("date")),
+                TourName = database.TypeConverter.To<string>(reader.GetValue("tourName")),
+                Author = database.TypeConverter.To<string>(reader.GetValue("author")),
+                HasMcDonalds = database.TypeConverter.To<bool>(reader.GetValue("hasMcDonalds")),
+                Accomodation = database.TypeConverter.To<string>(reader.GetValue("accomodation")),
+                HasCampingSpots = database.TypeConverter.To<bool>(reader.GetValue("hasCampingSpots")),
+                Members = database.TypeConverter.To<int>(reader.GetValue("members"))
             };
         }
 
         public bool TourExists(string tourName) => Exists("tour", "name", tourName);
         public bool LogExists(int id) => Exists("log", "id", id);
-
-
-
 
     }
 }

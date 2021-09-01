@@ -13,5 +13,6 @@ namespace DataAccess
         int ExecuteNonQuery(string statement, params DbParameter[] parameters);
         IEnumerable<TResult> ExecuteQuery<TResult>(string statement, Func<DbDataReader, TResult> rowReader, params DbParameter[] parameters);
         DbParameter Param<TValue>(string key, TValue value);
+        public ITypeConverter TypeConverter { get; }
     }
 }

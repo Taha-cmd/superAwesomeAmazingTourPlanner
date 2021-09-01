@@ -1,6 +1,7 @@
 {
 	"Database": {
-		"ConnectionString": "Server=localhost;Username=TourPlannerAdmin;Database=TourPlanner;Port=5432;Password=123;SSLMode=Prefer;"
+		//"ConnectionString": "Server=localhost;Username=TourPlannerAdmin;Database=TourPlanner;Port=5432;Password=123;SSLMode=Prefer;"
+		"ConnectionString": "Data Source=./testdb.db"
 	},
 
 	"Assets": {

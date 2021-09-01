@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -23,6 +24,7 @@ namespace ViewModels.Commands
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex);
                 form.StatusMessage = ex.Message;
                 form.Status = Status.Failure;
                 Logger.Error(ex.Message);

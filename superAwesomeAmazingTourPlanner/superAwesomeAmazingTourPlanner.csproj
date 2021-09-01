@@ -20,4 +20,9 @@
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
     <PackageReference Include="QuestPDF" Version="2021.5.2" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="testdb.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@ namespace DataAccess
     public class PostgresDatabase : IDatebase
     {
         private string connectionString;
+        public ITypeConverter TypeConverter { get; } = new PostgresTypeConverter();
         public PostgresDatabase(string conn) => connectionString = conn;
         public int ExecuteNonQuery(string statement, params DbParameter[] parameters)
         {

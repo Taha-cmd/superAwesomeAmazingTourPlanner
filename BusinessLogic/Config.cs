@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Diagnostics;
 
 namespace BusinessLogic
 {
@@ -20,6 +21,7 @@ namespace BusinessLogic
         private Config() { }
         public void LoadAndParseConfigFile(string configFilePath)
         {
+            Debug.WriteLine(DateTime.Now);
             if (!File.Exists(configFilePath))
                 throw new Exception($"could not find config file at {configFilePath}");
 

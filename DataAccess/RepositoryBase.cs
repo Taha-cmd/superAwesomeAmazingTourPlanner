@@ -27,14 +27,15 @@ namespace DataAccess
             return database.ExecuteQuery(statement, (DbDataReader reader) => reader.GetFieldValue<TValue>(0), database.Param("p0", filterValue)).First();
         }
 
-        protected int Count<TFilter>(string table, string filter, TFilter filterValue, string filterOperator = "=")
+        protected long Count<TFilter>(string table, string filter, TFilter filterValue, string filterOperator = "=")
         {
-            return GetValue<int, TFilter>(table, filter, filterValue, "COUNT(*)", filterOperator);
+            return GetValue<long, TFilter>(table, filter, filterValue, "COUNT(*)", filterOperator);
+            //
         }
 
         protected bool Exists<TFilter>(string table, string filter, TFilter filterValue)
         {
-            return Count(table, filter, filterValue) == 1;
+            return Count(table, filter, filterValue) >= 1;
         }
     }
 }

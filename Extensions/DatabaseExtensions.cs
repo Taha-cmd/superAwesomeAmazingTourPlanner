@@ -13,5 +13,14 @@ namespace Extensions
             int index = reader.GetOrdinal(key);
             return reader.IsDBNull(index) ? default : reader.GetFieldValue<T>(index);
         }
+
+        public static object GetValue(this DbDataReader reader, string key)
+        {
+            int index = reader.GetOrdinal(key);
+            return reader.IsDBNull(index) ? default : reader.GetValue(index);
+        }
+
+
+
     }
 }
