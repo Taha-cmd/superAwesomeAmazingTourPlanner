@@ -29,7 +29,7 @@ namespace DataAccess
 
         protected long Count<TFilter>(string table, string filter, TFilter filterValue, string filterOperator = "=")
         {
-            return GetValue<long, TFilter>(table, filter, filterValue, "COUNT(*)", filterOperator);
+            return GetValue<int, TFilter>(table, filter, filterValue, "COUNT(*)", filterOperator);
             //
         }
 

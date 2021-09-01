@@ -5,6 +5,8 @@ using log4net;
 using System;
 using System.Runtime.CompilerServices;
 using SqlKata.Compilers;
+using System.Data.SQLite;
+using Npgsql;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -33,7 +35,9 @@ namespace BusinessLogic
                 ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).Root.Level = LogManager.GetRepository().LevelMap[Config.Instance.LoggingLevel];
                 ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).RaiseConfigurationChanged(EventArgs.Empty);
 
-                var database = new SqliteDatabase(Config.Instance.DataBaseConnectionString);
+                var database = new Database<SQLiteConnection, SQLiteCommand, SQLiteParameter, TypeConverterBase>(Config.Instance.DataBaseConnectionString);
+                //var database = new Database<NpgsqlConnection, NpgsqlCommand, NpgsqlParameter, TypeConverterBase>(Config.Instance.DataBaseConnectionString);
+
                 var toursRepo = new ToursRepository(database, new SqliteCompiler());
                 var mapsClient = new MapQuestClient(Config.Instance.MapsApiKey, Config.Instance.ImagesFolderPath);
                 var pdfGenerator = new PdfGenerator(Config.Instance.ReportsFolderPath);
