@@ -7,4 +7,4 @@ if not exist %1LocalStorage\Reports  	mkdir %1LocalStorage\Reports
 if not exist %1LocalStorage\Exports  	mkdir %1LocalStorage\Exports
 if not exist %1Assets  					mkdir %1Assets
 
-if exist %2Assets ( xcopy /y %2Assets %1Assets ) else ( xcopy /y Assets %1Assets )
+xcopy /y %2Assets %1Assets

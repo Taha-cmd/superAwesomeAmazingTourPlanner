@@ -43,11 +43,11 @@
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="call setup.bat $(OutDir) $(SolutionDir)" />
+    <Exec Command="call setup.bat $(OutDir) .\" />
   </Target>
 
   <Target Name="PostPublish" AfterTargets="Publish">
-    <Exec Command="call setup.bat $(PublishDir) $(SolutionDir)" />
+    <Exec Command="call setup.bat $(PublishDir) .\" />
   </Target>
 
 

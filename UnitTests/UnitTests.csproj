@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="call $(SolutionDir)setup.bat $(OutDir) $(SolutionDir)" />
+    <Exec Command="call ..\superAwesomeAmazingTourPlanner\setup.bat $(OutDir) ..\superAwesomeAmazingTourPlanner\" />
   </Target>
 
 </Project>
