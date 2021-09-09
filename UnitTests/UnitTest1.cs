@@ -15,10 +15,10 @@ namespace UnitTests
 
     public class Tests
     {
-        private Tour validTour = new Tour() { Description = "1", TargetArea = "2", Name = "3", StartingArea = "4" };
-        private Tour invalidTour = new Tour() { Description = null, TargetArea = "2", Name = "3", StartingArea = "4" };
-        private TourLog validLog = new TourLog() { Accomodation = "hotel", Author = "John", DateTime = DateTime.Now, HasCampingSpots = true, HasMcDonalds = true, Members = 4, Rating = 3, TotalTime = 3.4, Report = "great", TourName = "randomTour" };
-        private TourLog invalidLog = new TourLog() { Accomodation = null };
+        private readonly Tour invalidTour = new() { Description = null, TargetArea = "2", Name = "3", StartingArea = "4" };
+        private readonly Tour validTour = new() { Description = "1", TargetArea = "2", Name = "3", StartingArea = "4" };
+        private readonly TourLog validLog = new() { Accomodation = "hotel", Author = "John", DateTime = DateTime.Now, HasCampingSpots = true, HasMcDonalds = true, Members = 4, Rating = 3, TotalTime = 3.4, Report = "great", TourName = "randomTour" };
+        private readonly TourLog invalidLog = new() { Accomodation = null };
 
 
         [SetUp]

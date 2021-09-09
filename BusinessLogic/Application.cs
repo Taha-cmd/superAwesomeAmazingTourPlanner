@@ -16,13 +16,8 @@ namespace BusinessLogic
     {
         private static ToursManager manager;
 
-        // when in release mode, look for config file in the current directory when the binaries are
-        
-        #if DEBUG
-            private const string configFilePath = "../../../../config.json";
-#else
-            private const string configFilePath = "config.json";
-#endif
+        // always copy config file to build dir
+        private const string configFilePath = "config.json";
 
         public static ToursManager GetToursManager()
         {

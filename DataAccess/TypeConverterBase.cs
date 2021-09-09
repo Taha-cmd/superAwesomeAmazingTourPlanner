@@ -6,5 +6,6 @@ namespace DataAccess
 {
     public class TypeConverterBase : ITypeConverter
     {
+
     }
 }

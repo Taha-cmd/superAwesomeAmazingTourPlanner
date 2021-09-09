@@ -45,7 +45,7 @@ steps:
   inputs:
     gitHubConnection: TourPlanner
     repository: Taha-cmd/superAwesomeAmazingTourPlanner
-    action: create
+    action: edit
     target: '$(Build.SourceVersion)'
     assets: dist.zip
     tagSource: manual

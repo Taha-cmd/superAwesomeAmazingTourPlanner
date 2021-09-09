@@ -24,10 +24,10 @@ namespace DataAccess
             //select vs selectRaw: https://sqlkata.com/docs/select
             var query = new Query(table).SelectRaw(columnToFetch).Where(filter, filterOperator, filterValue);
             string statement = queryCompiler.Compile(query).Sql;
-            return database.ExecuteQuery(statement, (DbDataReader reader) => reader.GetFieldValue<TValue>(0), database.Param("p0", filterValue)).First();
+            return database.ExecuteQuery(statement, (DbDataReader reader) => database.TypeConverter.To<TValue>(reader.GetValue(0)), database.Param("p0", filterValue)).First();
         }
 
-        protected long Count<TFilter>(string table, string filter, TFilter filterValue, string filterOperator = "=")
+        protected int Count<TFilter>(string table, string filter, TFilter filterValue, string filterOperator = "=")
         {
             return GetValue<int, TFilter>(table, filter, filterValue, "COUNT(*)", filterOperator);
             //

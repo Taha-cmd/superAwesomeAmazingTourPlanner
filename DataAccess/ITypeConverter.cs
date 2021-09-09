@@ -7,6 +7,7 @@ namespace DataAccess
 {
     public interface ITypeConverter
     {
+
         // this default implementation is working with postgres and sqlite
         // should different providers cause problems, we can implement a class implementing this interface and override the behavior
         public int ToInteger(object obj) => Convert.ToInt32(obj);

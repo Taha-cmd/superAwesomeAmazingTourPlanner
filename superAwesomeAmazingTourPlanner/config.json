@@ -1,17 +1,17 @@
 {
 	"Database": {
 		//"ConnectionString": "Server=localhost;Username=TourPlannerAdmin;Database=TourPlanner;Port=5432;Password=123;SSLMode=Prefer;"
-		"ConnectionString": "Data Source=./testdb.db"
+		"ConnectionString": "Data Source=./db.db"
 	},
 
 	"Assets": {
-		"Logo": "../../../../Assets/logo.jpg"
+		"Logo": "Assets/logo.jpg"
 	},
 
 	"LocalStorage": {
-		"Images": "../../../../LocalStorage/Images",
-		"Exports": "../../../../LocalStorage/Exports",
-		"Reports": "../../../../LocalStorage/Reports"
+		"Images": "LocalStorage/Images",
+		"Exports": "LocalStorage/Exports",
+		"Reports": "LocalStorage/Reports"
 	},
 
 	"Maps": {

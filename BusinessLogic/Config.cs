@@ -21,7 +21,6 @@ namespace BusinessLogic
         private Config() { }
         public void LoadAndParseConfigFile(string configFilePath)
         {
-            Debug.WriteLine(DateTime.Now);
             if (!File.Exists(configFilePath))
                 throw new Exception($"could not find config file at {configFilePath}");
 
@@ -35,13 +34,6 @@ namespace BusinessLogic
             LoggingLevel = conf["Logging:Level"];
             LogoPath = conf["Assets:Logo"];
 
-
-#if !DEBUG
-                ExportsFolderPath = Path.Join("LocalStorage", Path.GetFileName(ExportsFolderPath));
-                ImagesFolderPath = Path.Join("LocalStorage", Path.GetFileName(ImagesFolderPath));
-                ReportsFolderPath = Path.Join("LocalStorage", Path.GetFileName(ReportsFolderPath));
-                LogoPath = Path.Join("Assets", Path.GetFileName(LogoPath));
-#endif
 
             if (!Directory.Exists(ImagesFolderPath) || !Directory.Exists(ExportsFolderPath) || !Directory.Exists(ReportsFolderPath) || !File.Exists(LogoPath))
                 throw new Exception("path in config file does not exist " + ImagesFolderPath + " or " + ExportsFolderPath + " or " + ReportsFolderPath + " or " + LogoPath);

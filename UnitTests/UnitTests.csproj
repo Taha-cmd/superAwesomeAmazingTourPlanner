@@ -21,4 +21,16 @@
     <ProjectReference Include="..\superAwesomeAmazingTourPlanner\superAwesomeAmazingTourPlanner.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="$(SolutionDir)\config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="call $(SolutionDir)setup.bat $(OutDir) $(SolutionDir)" />
+  </Target>
+
 </Project>
